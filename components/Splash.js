@@ -6,12 +6,20 @@ import {
   View,
   Image
 } from 'react-native';
+import { Button } from 'react-native';
+import Header from './Header';
 
 type Props = {};
-export default class Splash extends Component<Props> {
+export default class Splash extends React.Component {
+  static navigationOptions = ({navigation}) =>{
+    return { };
+  };
+  
   render() {
+    //const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
+      <Header {...this.props} />
         <Image
           style={styles.image}
           source={require('../img/bbphicon.png')}
@@ -19,6 +27,12 @@ export default class Splash extends Component<Props> {
         <Text style={styles.text}>
           BloodBank PH
         </Text>
+        <Button
+          title="Go to Jane's profile"
+          onPress={() => {
+            //navigate('LoginScreen', { name: 'LoginScreens' })
+          }}
+        />
       </View>
     );
   }

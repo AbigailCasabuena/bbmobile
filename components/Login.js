@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {
-  Platform,
   StyleSheet,
   Text,
   View,
@@ -9,6 +8,8 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
+import Header from './Header';
+
 
 type Props = {};
 export default class Login extends Component<Props> {
@@ -20,9 +21,23 @@ export default class Login extends Component<Props> {
   onPress = () => {
     
   }
+
+  static navigationOptions = ({navigation}) =>{
+    let label = 'Login';
+    let icon = () => (
+      <Image 
+        source={require('../img/bbphicon.png')}
+        style={{width:30,height:30}}
+      />
+    );
+    return {label,icon};
+  };
+
+
   render() {
     return (
       <View style={styles.container}>
+        <Header {...this.props} />
         <Text style={styles.text}>
           BloodBank PH
         </Text>
