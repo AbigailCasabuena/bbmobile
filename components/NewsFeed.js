@@ -16,9 +16,10 @@ import Button from 'react-native-button';
 //YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
 type Props = {};
-export default class Login extends Component<Props> {
+export default class NewsFeed extends Component<Props> {
   /*constructor(props) {
     super(props)
+
   }*/
 
   onPress = () => {
@@ -29,7 +30,7 @@ export default class Login extends Component<Props> {
     let label = 'Login';
     let icon = () => (
       <Image 
-        source={require('../img/bngtn.jpg')}
+        source={require('../img/bbphicon.png')}
         style={{width:30,height:30}}
       />
     );
@@ -41,51 +42,12 @@ export default class Login extends Component<Props> {
     const { navigate } = this.props.navigation;
     return (
       <View style={styles.container1}>
-        <KeyboardAvoidingView style={styles.style1}
-        keyboardVerticalOffset={-500}>
+        <Header {...this.props} />
         <View style={styles.container2}>
           <Text style={styles.text}>
             BloodBank PH
           </Text>
-          <TextInput style={styles.un}
-            keyboardType= 'email-address'
-            placeholder='username/email'>
-          </TextInput> 
-          <TextInput style={styles.un}
-            placeholder='password'
-            secureTextEntry={true}>
-          </TextInput>
-          <View style={styles.forview}>
-            <TouchableOpacity
-            style={styles.button}
-            onPress={this.onPress}
-            >
-              <Text style={styles.buttontext}>Forgot Password?</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.signview}>
-            <TouchableOpacity
-            style={{backgroundColor: '#B81E12',
-                  padding: 15,}}
-            onPress={() => {
-              navigate('Home', { name: 'HomeScreens' })
-            }}
-            >
-              <Text style={styles.signtext}>Sign in</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.accview}>
-            <Button
-            style={styles.button}
-            onPress={() => {
-              navigate('SignUpScreen', { name: 'SignUpScreens' })
-            }}
-            >
-              <Text style={styles.buttontext}>Don't have an account?</Text>
-            </Button>
-          </View>
         </View>
-        </KeyboardAvoidingView>
       </View>
     );
   }
@@ -133,10 +95,10 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     paddingBottom: 50
   },
-  /*buttonsign: {
+  buttonsign: {
     backgroundColor: '#B81E12',
     padding: 15,
-  },*/
+  },
   signtext: {
     color: 'white'
   },

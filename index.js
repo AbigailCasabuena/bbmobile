@@ -1,8 +1,13 @@
-import { AppRegistry, Dimensions} from 'react-native';
+import { AppRegistry, Dimensions,Text,View} from 'react-native';
 //import {StackNavigator} from 'react-navigation';
-import {DrawerNavigator} from 'react-navigation';
+import {DrawerNavigator,DrawerItems} from 'react-navigation';
+
 import Splash from './components/Splash';
 import Login from './components/Login';
+import SignUp from './components/SignUp';
+import NewsFeed from './components/NewsFeed';
+
+import React, { Component } from 'react';
 /*import Login from './components/Login';
 import Splash from './components/Splash';
 import Login from './components/Login';
@@ -30,7 +35,10 @@ class Main extends Component {
         return screen
     }
 }*/
-import {SplashScreen ,LoginScreen} from './screen';
+import {SplashScreen ,LoginScreen,SignUpScreen,NewsScreen} from './screen';
+
+//import { YellowBox } from 'react-native';
+//YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
 /*const App = StackNavigator({
     "SplashScreen": {
@@ -46,27 +54,71 @@ import {SplashScreen ,LoginScreen} from './screen';
     headerVisible: false,
   }
  });*/
+ const DrawerContent = (props) => (
+    <View>
+      <View
+        style={{
+          backgroundColor: '#f50057',
+          height: 140,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Text style={{ color: 'white', fontSize: 30 }}>
+          Header
+        </Text>
+      </View>
+      <DrawerItems {...props} />
+    </View>
+  )
+
  var {height, width} = Dimensions.get('window');
 
  let routeConfigs = {
     SplashScreen: {
         path: '/splash',
-        screen: Splash
+        screen: Splash,
+        navigationOptions: {
+            drawerLockMode: 'locked-closed', 
+            drawerLabel: () => null
+        }
     },
-    LoginScreen: {
+    Login: {
         path: '/',
-        screen: Login
-    }
+        screen: Login,
+        navigationOptions: {
+            drawerLockMode: 'locked-closed', 
+            drawerLabel: () => null
+        }
+    },
+    SignUpScreen: {
+        path: '/signup',
+        screen: SignUp,
+        navigationOptions: {
+            drawerLockMode: 'locked-closed', 
+            drawerLabel: () => null
+        }
+    },
+    Home: {
+        path: '/home',
+        screen: NewsFeed
+    },
  };
 
  let drawernav = {
      initialRouteName: SplashScreen,
-     drawerWidth: width/2,
+     drawerWidth: (width/2) + (width/4),
      drawerPosition: 'left',
      drawerOpenRoute: 'DrawerOpen',
      drawerCloseRoute: 'DrawerClose',
      drawerToggleRoute: 'DrawerToggle',
-     
+     contentComponent: DrawerContent,
+     contentOptions: {
+        labelStyle: {
+          fontFamily: 'SomeFont',
+          color: '#000',
+        },
+      }
  };
 
  const App = DrawerNavigator(routeConfigs,drawernav);

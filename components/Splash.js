@@ -15,11 +15,24 @@ export default class Splash extends React.Component {
     return { };
   };
   
+  constructor(props){
+    super(props);
+    //const { navigatex } = this.props.navigation;
+    this.state = {current: 'Splash'};
+    setTimeout(()=>{
+      //navigatex('LoginScreen', { name: 'LoginScreens' })
+      this.setState({current: 'Login'})
+    },3000);
+  }
   render() {
-    //const { navigate } = this.props.navigation;
+    const { navigate } = this.props.navigation;
+    const {current} = this.state
+    if(current == 'Login'){
+      navigate('Login', { name: 'LoginScreens' })
+    }
     return (
       <View style={styles.container}>
-      <Header {...this.props} />
+      
         <Image
           style={styles.image}
           source={require('../img/bbphicon.png')}
@@ -27,12 +40,12 @@ export default class Splash extends React.Component {
         <Text style={styles.text}>
           BloodBank PH
         </Text>
-        <Button
+        {/*<Button
           title="Go to Jane's profile"
           onPress={() => {
-            //navigate('LoginScreen', { name: 'LoginScreens' })
+            navigate('Login', { name: 'LoginScreens' })
           }}
-        />
+        />*/}
       </View>
     );
   }

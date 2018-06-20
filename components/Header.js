@@ -11,10 +11,12 @@ export default class Header extends Component {
     render(){
         return (
             <View style={{
-                height: 90,
+                height: 50,
+                marginTop: 5,
+                marginBottom: 5,
                 flexDirection: 'row',
                 justifyContent: 'flex-start',
-                alignItems: 'center'
+                alignItems: 'center',
             }}> 
                 <TouchableHighlight style={{marginLeft: 10}}
                     onPress={() => {
@@ -27,6 +29,7 @@ export default class Header extends Component {
                     />
                 
                 </TouchableHighlight>  
+                <Text> BloodBank </Text>
             </View>
         );
     }
