@@ -6,6 +6,9 @@ import Splash from './components/Splash';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
 import NewsFeed from './components/NewsFeed';
+import ForgotPassword from './components/ForgotPassword';
+import ForgotPassword2 from './components/ForgotPassword2';
+import ForgotPassword3 from './components/ForgotPassword3';
 
 import React, { Component } from 'react';
 /*import Login from './components/Login';
@@ -35,25 +38,7 @@ class Main extends Component {
         return screen
     }
 }*/
-import {SplashScreen ,LoginScreen,SignUpScreen,NewsScreen} from './screen';
-
-//import { YellowBox } from 'react-native';
-//YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
-
-/*const App = StackNavigator({
-    "SplashScreen": {
-        screen: Splash,
-    },
-    "LoginScreen": {
-        screen: Login,
-    },
-},
-{
-  headerMode: 'none',
-  navigationOptions: {
-    headerVisible: false,
-  }
- });*/
+import {SplashScreen ,LoginScreen,SignUpScreen,NewsScreen,ForgotScreen,Forgot2Screen,Forgot3Screen} from './screen';
  const DrawerContent = (props) => (
     <View>
       <View
@@ -102,6 +87,30 @@ import {SplashScreen ,LoginScreen,SignUpScreen,NewsScreen} from './screen';
     Home: {
         path: '/home',
         screen: NewsFeed
+    },
+    ForgotScreen: {
+        path: '/forgot',
+        screen: ForgotPassword,
+        navigationOptions: {
+            drawerLockMode: 'locked-closed', 
+            drawerLabel: () => null
+        }
+    },
+    Forgot2Screen: {
+        path: '/forgot2',
+        screen: ForgotPassword2,
+        navigationOptions: {
+            drawerLockMode: 'locked-closed', 
+            drawerLabel: () => null
+        }
+    },
+    Forgot3Screen: {
+        path: '/forgot3',
+        screen: ForgotPassword3,
+        navigationOptions: {
+            drawerLockMode: 'locked-closed', 
+            drawerLabel: () => null
+        }
     },
  };
 

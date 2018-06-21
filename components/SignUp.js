@@ -36,18 +36,20 @@ class FloatingLabelInput extends Component {
       position: 'absolute',
       left: 0,
       top: !isFocused ? 18 : 0,
-      fontSize: !isFocused ? 20 : 14,
-      color: !isFocused ? '#aaa' : '#000',
+      fontSize: !isFocused ? 16 : 14,
+      color: '#aaa',
+      marginLeft: 35,
+      marginTop: 5,
     };
     return (
-      <View style={{ paddingTop: 18 }}>
+      <View style={{ paddingTop: 18,flexDirection:'row',alignItems:'center',justifyContent:'center',}}>
         <Text style={labelStyle}>
           {label}
         </Text>
         <TextInput
           {...props}
           onChangeText={ (cont) => this.setState({cont})}
-          style={{width:100,fontSize: 20, color: '#000', borderBottomColor: '#555' }}
+          style={{width:'84%',fontSize: 16, color: '#000',}}
           onFocus={this.handleFocus}
           onBlur={this.handleBlur}
         />
@@ -73,9 +75,20 @@ export default class SignUp extends React.Component {
           <Text style={styles.headtext}>Sign Up</Text>
         </View>
         <FloatingLabelInput
-          label="Email"
+          label="Name"
           onChange={this.handleTextChange}
         />
+        <FloatingLabelInput
+          label="Password"
+          secureTextEntry={true}
+          onChange={this.handleTextChange}
+        />
+        <FloatingLabelInput
+          label="Re-enter Password"
+          secureTextEntry={true}
+          onChange={this.handleTextChange}
+        />
+        
       </View>
     );
   }
@@ -91,7 +104,7 @@ const styles = StyleSheet.create({
   },
   header: {
     width: '100%',
-    height: '10%',
+    height: '8%',
     backgroundColor: '#B81E12',
     flexDirection: 'row',
     alignItems: 'center',
@@ -99,7 +112,7 @@ const styles = StyleSheet.create({
   },
   headtext: {
     color: 'white',
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
   },
   image:{

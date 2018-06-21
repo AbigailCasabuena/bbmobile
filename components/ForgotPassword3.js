@@ -12,30 +12,13 @@ import {
 } from 'react-native';
 import Header from './Header';
 import Button from 'react-native-button';
-//import { YellowBox } from 'react-native';
-//YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
 type Props = {};
-export default class Login extends Component<Props> {
-  /*constructor(props) {
-    super(props)
-  }*/
-
+export default class ForgotPassword3 extends Component<Props> {
+ 
   onPress = () => {
     
   }
-
-  /*static navigationOptions = ({navigation}) =>{
-    let label = 'Login';
-    let icon = () => (
-      <Image 
-        source={require('../img/bngtn.jpg')}
-        style={{width:30,height:30}}
-      />
-    );
-    return {label,icon};
-  };*/
-
 
   render() {
     const { navigate } = this.props.navigation;
@@ -45,45 +28,25 @@ export default class Login extends Component<Props> {
         keyboardVerticalOffset={-500}>
         <View style={styles.container2}>
           <Text style={styles.text}>
-            BloodBank PH
+            Password Reset
           </Text>
+          <Text style={{textAlign:'left',color:'black'}}>Enter your new password: </Text>
           <TextInput style={styles.un}
-            keyboardType= 'email-address'
-            placeholder='username/email'>
-          </TextInput> 
-          <TextInput style={styles.un}
-            placeholder='password'
+            placeholder='Password'
             secureTextEntry={true}>
           </TextInput>
-          <View style={styles.forview}>
-            <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              navigate('ForgotScreen', { name: 'ForgotScreens' })
-            }}
-            >
-              <Text style={styles.buttontext}>Forgot Password?</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.signview}>
-            <TouchableOpacity
-            style={{backgroundColor: '#B81E12',
-                  padding: 15,}}
-            onPress={() => {
-              navigate('Home', { name: 'HomeScreens' })
-            }}
-            >
-              <Text style={styles.signtext}>Sign in</Text>
-            </TouchableOpacity>
-          </View>
+          <TextInput style={styles.un}
+            placeholder='Re-enter Password'
+            secureTextEntry={true}>
+          </TextInput>
           <View style={styles.accview}>
             <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              navigate('SignUpScreen', { name: 'SignUpScreens' })
+              navigate('Forgot2Screen', { name: 'Forgot2Screens' })
             }}
             >
-              <Text style={styles.buttontext}>Don't have an account?</Text>
+              <Text style={styles.buttontext}>Submit</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -116,6 +79,7 @@ const styles = StyleSheet.create({
     color: '#B81E12',
     fontSize: 20,
     fontWeight: 'bold',
+    paddingBottom: 20,
   },
   forview: {
     width: '70%',
@@ -123,13 +87,11 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: 'center',
-    backgroundColor: 'transparent',
+    backgroundColor: '#B81E12',
     padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ECE6E6',
   },
   buttontext: {
-    color: 'black'
+    color: 'white'
   },
   signview: {
     width: '70%',
@@ -137,10 +99,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     paddingBottom: 50
   },
-  /*buttonsign: {
-    backgroundColor: '#B81E12',
-    padding: 15,
-  },*/
   signtext: {
     color: 'white'
   },
