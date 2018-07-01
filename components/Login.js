@@ -17,9 +17,14 @@ import Button from 'react-native-button';
 
 type Props = {};
 export default class Login extends Component<Props> {
-  /*constructor(props) {
+  constructor(props) {
     super(props)
-  }*/
+    //this.mydate = 0;
+    //this.date = 0;
+  }
+  //static date;
+  //static month;
+  //static year;
 
   onPress = () => {
     
@@ -35,7 +40,12 @@ export default class Login extends Component<Props> {
     );
     return {label,icon};
   };*/
-
+  
+  /*componentDidMount(){
+    date = new Date().getDate();
+    month = new Date().getMonth() + 1;
+    year = new Date().getFullYear();
+  }*/
 
   render() {
     const { navigate } = this.props.navigation;
@@ -78,10 +88,12 @@ export default class Login extends Component<Props> {
           </View>
           <View style={styles.accview}>
             <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              navigate('SignUpScreen', { name: 'SignUpScreens' })
-            }}
+              style={styles.button}
+              onPress={() => {
+                navigate('SignUpScreen', { name: 'SignUpScreens' })
+                //mydate = date +3;
+                //Alert.alert(mydate + '-' + month + '-' + year);
+              }}
             >
               <Text style={styles.buttontext}>Don't have an account?</Text>
             </TouchableOpacity>

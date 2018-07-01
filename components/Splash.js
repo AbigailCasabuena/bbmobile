@@ -22,7 +22,7 @@ export default class Splash extends React.Component {
     setTimeout(()=>{
       //navigatex('LoginScreen', { name: 'LoginScreens' })
       this.setState({current: 'Login'})
-    },3000);
+    },1000);
   }
   render() {
     const { navigate } = this.props.navigation;
