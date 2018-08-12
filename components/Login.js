@@ -4,11 +4,8 @@ import {
   Text,
   View,
   TextInput,
-  Image,
   TouchableOpacity,
-  Alert,
   KeyboardAvoidingView,
-  ScrollView,
 } from 'react-native';
 import Header from './Header';
 import Button from 'react-native-button';
@@ -18,9 +15,15 @@ import Button from 'react-native-button';
 type Props = {};
 export default class Login extends Component<Props> {
   constructor(props) {
-    super(props)
+    //super(props)
     //this.mydate = 0;
     //this.date = 0;
+    super(props);
+    this.state = {
+      username: '',
+      password: '',
+    }
+
   }
   //static date;
   //static month;
@@ -59,11 +62,17 @@ export default class Login extends Component<Props> {
           </Text>
           <TextInput style={styles.un}
             keyboardType= 'email-address'
-            placeholder='username/email'>
+            placeholder='username/email'
+            onChangeText={ (username) => this.setState({username}) }
+            autoCapitalize = 'none'
+          >
           </TextInput> 
           <TextInput style={styles.un}
             placeholder='password'
-            secureTextEntry={true}>
+            secureTextEntry={true}
+            onChangeText={ (password) => this.setState({password}) }
+            autoCapitalize = 'none'
+          >
           </TextInput>
           <View style={styles.forview}>
             <TouchableOpacity
@@ -79,9 +88,10 @@ export default class Login extends Component<Props> {
             <TouchableOpacity
             style={{backgroundColor: '#B81E12',
                   padding: 15,}}
-            onPress={() => {
+            /*onPress={() => {
               navigate('Home', { name: 'HomeScreens' })
-            }}
+            }}*/
+            onPress={this.login}
             >
               <Text style={styles.signtext}>Sign in</Text>
             </TouchableOpacity>
@@ -102,6 +112,70 @@ export default class Login extends Component<Props> {
         </KeyboardAvoidingView>
       </View>
     );
+  }
+
+  login = () => {
+      /*fetch('http://192.168.43.18:3000/api/userauth', {
+              method: 'POST',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                username: this.state.username,
+                password: this.state.password,
+              })
+
+      })
+      .then((response) => response.json())
+      .then((res) => {
+          if (res !==null) {
+              //alert("Welcome " + s);
+              alert('Hello ' + this.state.username);
+              //AsyncStorage.setItem('user', res);
+              this.props.navigation.navigate('Home');
+          }
+          else {
+            alert(res.message);
+          }
+      })
+      .done();*/
+      //alert('annyeong');
+      fetch('http://192.168.43.18:3000/users/login', {
+              method: 'POST',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                username: this.state.username,
+                password: this.state.password,
+              })
+
+      })
+      //.then((response) => response.json())
+      /*.then((res) => {
+          alert('hellooo');
+          if (res !== null) {
+              //alert("Welcome " + s);
+              alert('Hello ' + res.username);
+              //AsyncStorage.setItem('user', res);
+              this.props.navigation.navigate('Home');
+          }
+          else {
+            alert(res.message);
+          }
+      })*/
+      .then((response) => {
+        if (response.status === 200) {
+            //alert('Hello' + response.username);
+            this.props.navigation.navigate('Home');
+        }
+        else {
+          alert("error");
+        }
+    })  
+    .done();
   }
 }
 

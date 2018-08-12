@@ -4,11 +4,8 @@ import {
   Text,
   View,
   TextInput,
-  Image,
   TouchableOpacity,
-  Alert,
   KeyboardAvoidingView,
-  ScrollView,
 } from 'react-native';
 import Header from './Header';
 import Button from 'react-native-button';

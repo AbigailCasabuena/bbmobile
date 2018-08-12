@@ -9,6 +9,7 @@ import NewsFeed from './components/NewsFeed';
 import ForgotPassword from './components/ForgotPassword';
 import ForgotPassword2 from './components/ForgotPassword2';
 import ForgotPassword3 from './components/ForgotPassword3';
+//import ModalExample from './components/ModalExample';
 
 import React, { Component } from 'react';
 /*import Login from './components/Login';

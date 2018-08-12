@@ -1,19 +1,24 @@
 import React, { Component } from 'react';
 import {
-  Platform,
   StyleSheet,
   Text,
   View,
-  Image,
   TextInput,
   KeyboardAvoidingView,
-  TouchableOpacity
+  TouchableOpacity,
+  TouchableHighlight,
+  Modal,
+  Dimensions,
 } from 'react-native';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import DatePicker from 'react-native-datepicker';
+//import ModalExample from './ModalExample';
+//import BloodBanksModal from './BloodBanksModal';
+//import Modal from 'react-native-modalbox';
 //import FloatingLabel from 'react-native-floating-labels';
-
+//var me = new ModalExample();
 type Props = {};
+var screen= Dimensions.get('window');
 
 var radio_props = [
   {label: 'Male          ', value: 'M' },
@@ -72,6 +77,56 @@ class FloatingLabelInput extends Component {
   }
 }
 
+/*class ModalExample extends Component {
+  state = {
+    modalVisible: false,
+  };
+
+  setModalVisible(visible) {
+    this.setState({modalVisible: visible});
+  }
+
+  render() {
+    return (
+      <View style={{marginTop: 22,backgroundColor:'blue'}}>
+        <Modal
+        style={{
+            justifyContent: 'center',
+            showRadius: 10, 
+          }}
+          animationType="slide"
+          transparent={false}
+          visible={this.state.modalVisible}
+          onRequestClose={() => {
+            alert('Modal has been closed.');
+          }}>
+          <View style={{marginTop: 22,width: 300,
+            height: 300,
+            backgroundColor: 'red'}}>
+            <View>
+              <Text>Hello World!</Text>
+
+              <TouchableHighlight
+                onPress={() => {
+                  this.setModalVisible(!this.state.modalVisible);
+                }}>
+                <Text>Hide Modal</Text>
+              </TouchableHighlight>
+            </View>
+          </View>
+        </Modal>
+
+        <TouchableHighlight
+          onPress={() => {
+            this.setModalVisible(true);
+          }}>
+          <Text>Show Modal</Text>
+        </TouchableHighlight>
+      </View>
+    );
+  }
+}*/
+
 export default class SignUp extends React.Component {
   static navigationOptions = ({navigation}) =>{
     return { };
@@ -84,12 +139,15 @@ export default class SignUp extends React.Component {
     var maxyear = year -18;
     this.state = {value: 'M', date:"1-1-2000",
       mindate:"1-1-" + minyear,
-      maxdate:"12-31-" + maxyear};
+      maxdate:"12-31-" + maxyear,};
   }
-  
+  /*setModalVisible(visible) {
+    this.setState({modalVisible: visible});
+  }*/
   onBlur() {
     console.log('#####: onBlur');
   }
+
   render() {
     //let x = this.state.mindate + "";
     //let y = this.state.maxdate + "";
@@ -123,9 +181,12 @@ export default class SignUp extends React.Component {
           style={styles.radbutton}
           selectedButtonColor={'#B81E12'}
           onPress={(value) => {
-            this.setState({value:value})}
-            //alert(this.mindate);
-          }
+            this.setState({value:value})
+            //this.props.refs.modal.showModal();
+            //this.setModalVisible(true);
+            //me.setModalVisible(true);
+
+          }}
           outerCircleSize={1}
           innerCircleSize={0.5}
         />
