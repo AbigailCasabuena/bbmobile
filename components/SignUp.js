@@ -77,56 +77,6 @@ class FloatingLabelInput extends Component {
   }
 }
 
-/*class ModalExample extends Component {
-  state = {
-    modalVisible: false,
-  };
-
-  setModalVisible(visible) {
-    this.setState({modalVisible: visible});
-  }
-
-  render() {
-    return (
-      <View style={{marginTop: 22,backgroundColor:'blue'}}>
-        <Modal
-        style={{
-            justifyContent: 'center',
-            showRadius: 10, 
-          }}
-          animationType="slide"
-          transparent={false}
-          visible={this.state.modalVisible}
-          onRequestClose={() => {
-            alert('Modal has been closed.');
-          }}>
-          <View style={{marginTop: 22,width: 300,
-            height: 300,
-            backgroundColor: 'red'}}>
-            <View>
-              <Text>Hello World!</Text>
-
-              <TouchableHighlight
-                onPress={() => {
-                  this.setModalVisible(!this.state.modalVisible);
-                }}>
-                <Text>Hide Modal</Text>
-              </TouchableHighlight>
-            </View>
-          </View>
-        </Modal>
-
-        <TouchableHighlight
-          onPress={() => {
-            this.setModalVisible(true);
-          }}>
-          <Text>Show Modal</Text>
-        </TouchableHighlight>
-      </View>
-    );
-  }
-}*/
-
 export default class SignUp extends React.Component {
   static navigationOptions = ({navigation}) =>{
     return { };
@@ -139,13 +89,19 @@ export default class SignUp extends React.Component {
     var maxyear = year -18;
     this.state = {value: 'M', date:"1-1-2000",
       mindate:"1-1-" + minyear,
-      maxdate:"12-31-" + maxyear,};
+      maxdate:"12-31-" + maxyear,
+      modalVisible: false,
+    };
   }
   /*setModalVisible(visible) {
     this.setState({modalVisible: visible});
   }*/
   onBlur() {
     console.log('#####: onBlur');
+  }
+
+  toggleModal(visible) {
+    this.setState({ modalVisible: visible });
   }
 
   render() {
@@ -156,6 +112,23 @@ export default class SignUp extends React.Component {
         <View style={styles.header}>
           <Text style={styles.headtext}>Sign Up</Text>
         </View>
+        <Modal animationType = {"slide"} transparent = {true}
+               visible = {this.state.modalVisible}
+               onRequestClose = {() => {this.toggleModal(false)}}>
+               <View style={styles.modalview}>
+                  <View style = {styles.modal}>
+                      <TouchableOpacity 
+                        style={{backgroundColor: 'white',
+                        padding: 15,}}
+                        onPress = {() => {
+                          this.toggleModal(false)
+                          //this.setState({modalVisible: false});
+                        }}>
+                        <Text style = {styles.text}>Close Modal</Text>
+                      </TouchableOpacity>
+                  </View>
+               </View>
+        </Modal>
         <FloatingLabelInput
           label="Name"
           onChange={this.handleTextChange}
@@ -246,7 +219,7 @@ export default class SignUp extends React.Component {
             style={{backgroundColor: '#B81E12',
                   padding: 15,}}
             onPress={() => {
-              
+              this.toggleModal(true)
             }}
             >
               <Text style={styles.createtext}>Create Account</Text>
@@ -318,4 +291,23 @@ const styles = StyleSheet.create({
   createtext: {
     color: 'white'
   },
+  modalview: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+   },
+   modal: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: 'blue',
+      flexDirection: 'row',
+      padding: 10,
+      height: 120,
+      marginTop: 10,
+      width: 300,
+   },
+   text: {
+      color: 'white',
+      marginTop: 10
+   },
 });
