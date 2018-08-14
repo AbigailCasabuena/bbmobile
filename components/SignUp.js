@@ -90,7 +90,7 @@ export default class SignUp extends React.Component {
     this.state = {value: 'M', date:"1-1-2000",
       mindate:"1-1-" + minyear,
       maxdate:"12-31-" + maxyear,
-      modalVisible: false,
+      //modalVisible: false,
     };
   }
   /*setModalVisible(visible) {
@@ -100,9 +100,9 @@ export default class SignUp extends React.Component {
     console.log('#####: onBlur');
   }
 
-  toggleModal(visible) {
+  /*toggleModal(visible) {
     this.setState({ modalVisible: visible });
-  }
+  }*/
 
   render() {
     //let x = this.state.mindate + "";
@@ -112,23 +112,6 @@ export default class SignUp extends React.Component {
         <View style={styles.header}>
           <Text style={styles.headtext}>Sign Up</Text>
         </View>
-        <Modal animationType = {"slide"} transparent = {true}
-               visible = {this.state.modalVisible}
-               onRequestClose = {() => {this.toggleModal(false)}}>
-               <View style={styles.modalview}>
-                  <View style = {styles.modal}>
-                      <TouchableOpacity 
-                        style={{backgroundColor: 'white',
-                        padding: 15,}}
-                        onPress = {() => {
-                          this.toggleModal(false)
-                          //this.setState({modalVisible: false});
-                        }}>
-                        <Text style = {styles.text}>Close Modal</Text>
-                      </TouchableOpacity>
-                  </View>
-               </View>
-        </Modal>
         <FloatingLabelInput
           label="Name"
           onChange={this.handleTextChange}

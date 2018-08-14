@@ -6,30 +6,11 @@ import {
   TextInput,
   TouchableOpacity,
   KeyboardAvoidingView,
-  BackHandler,
 } from 'react-native';
-import Login from './Login';
 
 type Props = {};
-export default class ForgotPassword extends Component<Props> {
-  
-  /*componentDidMount() {
-    BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
-  }
-
-  componentWillUnmount() {
-    BackHandler.removeEventListener("hardwareBackPress", this.onBackPress);
-  }
-
-  onBackPress= ()=>{
-    this.props.navigation.goBack();
-    return false;
-    //return true;
-    //this.props.navigation.goBack('Login');
-    //navigate('Login', { name: 'LoginScreens' });
-    //goBack();
-  }*/
-
+export default class SelectBloodBanks extends Component<Props> {
+ 
   render() {
     const { navigate } = this.props.navigation;
     return (
@@ -63,11 +44,6 @@ export default class ForgotPassword extends Component<Props> {
 }
 
 const styles = StyleSheet.create({
-  headerview: {
-    width: '100%',
-    height: 40,
-    backgroundColor: 'black',
-  },
   style1: {
     flex: 1,
   },

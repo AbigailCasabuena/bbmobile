@@ -33,22 +33,7 @@ export default class Login extends Component<Props> {
     
   }
 
-  /*static navigationOptions = ({navigation}) =>{
-    let label = 'Login';
-    let icon = () => (
-      <Image 
-        source={require('../img/bngtn.jpg')}
-        style={{width:30,height:30}}
-      />
-    );
-    return {label,icon};
-  };*/
-  
-  /*componentDidMount(){
-    date = new Date().getDate();
-    month = new Date().getMonth() + 1;
-    year = new Date().getFullYear();
-  }*/
+  sName = "Login";
 
   render() {
     const { navigate } = this.props.navigation;
@@ -78,7 +63,7 @@ export default class Login extends Component<Props> {
             <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              navigate('ForgotScreen', { name: 'ForgotScreens' })
+              navigate('Forgot', { name: 'ForgotScreens' })
             }}
             >
               <Text style={styles.buttontext}>Forgot Password?</Text>
@@ -177,6 +162,7 @@ export default class Login extends Component<Props> {
     })  
     .done();
   }
+
 }
 
 const styles = StyleSheet.create({

@@ -1,6 +1,6 @@
 import { AppRegistry, Dimensions,Text,View} from 'react-native';
 //import {StackNavigator} from 'react-navigation';
-import {DrawerNavigator,DrawerItems} from 'react-navigation';
+import {DrawerNavigator,DrawerItems,StackNavigator} from 'react-navigation';
 
 import Splash from './components/Splash';
 import Login from './components/Login';
@@ -9,6 +9,7 @@ import NewsFeed from './components/NewsFeed';
 import ForgotPassword from './components/ForgotPassword';
 import ForgotPassword2 from './components/ForgotPassword2';
 import ForgotPassword3 from './components/ForgotPassword3';
+//import Stack from './components/StackNav1';
 //import ModalExample from './components/ModalExample';
 
 import React, { Component } from 'react';
@@ -40,6 +41,27 @@ class Main extends Component {
     }
 }*/
 import {SplashScreen ,LoginScreen,SignUpScreen,NewsScreen,ForgotScreen,Forgot2Screen,Forgot3Screen} from './screen';
+
+const StackNav = StackNavigator({
+    ForgotScreen: {
+        screen: ForgotPassword,
+        navigationOptions: ({navigation}) => ({
+            headerLeft : null,
+            headerRight: null,
+        })
+    },
+    Forgot2Screen: {
+        screen: ForgotPassword2,
+    },
+    Forgot3Screen: {
+        screen: ForgotPassword3,
+    }
+},{
+    initialRouteName: 'ForgotScreen'
+})
+
+
+
  const DrawerContent = (props) => (
     <View>
       <View
@@ -89,7 +111,10 @@ import {SplashScreen ,LoginScreen,SignUpScreen,NewsScreen,ForgotScreen,Forgot2Sc
         path: '/home',
         screen: NewsFeed
     },
-    ForgotScreen: {
+    Forgot: {
+        screen: StackNav
+    }
+    /*ForgotScreen: {
         path: '/forgot',
         screen: ForgotPassword,
         navigationOptions: {
@@ -112,7 +137,7 @@ import {SplashScreen ,LoginScreen,SignUpScreen,NewsScreen,ForgotScreen,Forgot2Sc
             drawerLockMode: 'locked-closed', 
             drawerLabel: () => null
         }
-    },
+    },*/
  };
 
  let drawernav = {
