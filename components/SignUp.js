@@ -10,24 +10,33 @@ import {
   Modal,
   Dimensions,
 } from 'react-native';
-import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
+//import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import DatePicker from 'react-native-datepicker';
-//import ModalExample from './ModalExample';
-//import BloodBanksModal from './BloodBanksModal';
-//import Modal from 'react-native-modalbox';
-//import FloatingLabel from 'react-native-floating-labels';
-//var me = new ModalExample();
+import RadioForm from 'react-native-radio-form';
 type Props = {};
+
 var screen= Dimensions.get('window');
 
-var radio_props = [
-  {label: 'Male          ', value: 'M' },
-  {label: 'Female', value: 'F' ,marginLeft: 35},
+const radio_props = [
+  {
+    label: 'Male',
+    value: 'Male'
+  },
+  {
+    label: 'Female',
+    value: 'Female'
+  }
 ];
 
-var radio_props2 = [
-  {label: 'Yes          ', value: 'Yes' },
-  {label: 'No', value: 'No' ,marginLeft: 35},
+const radio_props2 = [
+  {
+    label: 'Yes',
+    value: 'Yes'
+  },
+  {
+    label: 'No',
+    value: 'No'
+  }
 ];
 
 class FloatingLabelInput extends Component {
@@ -54,8 +63,8 @@ class FloatingLabelInput extends Component {
     const labelStyle = {
       position: 'absolute',
       left: 0,
-      top: !isFocused ? 18 : 0,
-      fontSize: !isFocused ? 16 : 14,
+      top: !isFocused ? 16 : 0,
+      fontSize: !isFocused ? 15 : 13,
       color: '#aaa',
       marginLeft: 35,
       marginTop: 3,
@@ -78,18 +87,19 @@ class FloatingLabelInput extends Component {
 }
 
 export default class SignUp extends React.Component {
-  static navigationOptions = ({navigation}) =>{
-    return { };
-  };
+  static navigationOptions = {
+    header: null
+  }
   
   constructor(props){
     super(props);
     var year = new Date().getFullYear();
     var minyear = year - 70;
     var maxyear = year -18;
-    this.state = {value: 'M', date:"1-1-2000",
+    this.state = {valuegender: '', date:"1-1-2000",
       mindate:"1-1-" + minyear,
       maxdate:"12-31-" + maxyear,
+      valuedonation: 'No',
       //modalVisible: false,
     };
   }
@@ -100,13 +110,16 @@ export default class SignUp extends React.Component {
     console.log('#####: onBlur');
   }
 
-  /*toggleModal(visible) {
-    this.setState({ modalVisible: visible });
-  }*/
-
   render() {
+    const { navigate } = this.props.navigation;
     //let x = this.state.mindate + "";
     //let y = this.state.maxdate + "";
+    _onSelect = (item) => {
+      //alert('Item: ' + item.value);
+      if(item.value == 'Yes'){
+        navigate('BloodBanksScreen',{name:'BloodBanksScreen'});
+      }
+    };
     return (
       <KeyboardAvoidingView style={styles.container}>
         <View style={styles.header}>
@@ -127,25 +140,23 @@ export default class SignUp extends React.Component {
           onChange={this.handleTextChange}
         />
         <Text style={styles.radlabel}>Gender</Text>
-        <RadioForm
-          radio_props={radio_props}
-          initial={0}
-          formHorizontal={true}
-          labelHorizontal={true}
-          buttonColor={'#B81E12'}
-          animation={true}
-          style={styles.radbutton}
-          selectedButtonColor={'#B81E12'}
-          onPress={(value) => {
-            this.setState({value:value})
-            //this.props.refs.modal.showModal();
-            //this.setModalVisible(true);
-            //me.setModalVisible(true);
-
-          }}
-          outerCircleSize={1}
-          innerCircleSize={0.5}
-        />
+        <View style={{height: 40}}>
+          <RadioForm
+            style={styles.radbutton}
+            initial={0}
+            dataSource={radio_props}
+            formHorizontal={true}
+            labelHorizontal={true}
+            itemShowKey="label"
+            itemRealKey="value"
+            onPress={(item) => {
+              //_onSelect(item);
+            }}
+            circleSize={20}
+            outerColor="#B81E12"
+            innerColor="#B81E12"
+          />
+        </View>
         <Text style={styles.radlabel}>Birthday</Text>
         <DatePicker
           style={{width: 240}}
@@ -180,29 +191,30 @@ export default class SignUp extends React.Component {
           onChange={this.handleTextChange}
           keyboardType='numeric'
         />
-        <Text style={styles.radlabel}>Have you donated blood?</Text>
-        <RadioForm
-          radio_props={radio_props2}
-          initial={0}
-          formHorizontal={true}
-          labelHorizontal={true}
-          buttonColor={'#B81E12'}
-          animation={true}
-          style={styles.radbutton}
-          selectedButtonColor={'#B81E12'}
-          onPress={(value) => {
-            this.setState({value:value})}
-            //alert(this.mindate);
-          }
-          outerCircleSize={1}
-          innerCircleSize={0.5}
-        />
+        <Text style={styles.radlabel}>Have you donated blood previously?</Text>
+        <View style={{height: 40}}>
+          <RadioForm
+            style={styles.radbutton}
+            initial={1}
+            dataSource={radio_props2}
+            formHorizontal={true}
+            labelHorizontal={true}
+            itemShowKey="label"
+            itemRealKey="value"
+            onPress={(item) => {
+              _onSelect(item);
+            }}
+            circleSize={20}
+            outerColor="#B81E12"
+            innerColor="#B81E12"
+          />
+        </View>
         <View style={styles.createview}>
             <TouchableOpacity
             style={{backgroundColor: '#B81E12',
                   padding: 15,}}
             onPress={() => {
-              this.toggleModal(true)
+              //navigate('BloodBanksScreen', { name: 'BloodBanksScreen' })
             }}
             >
               <Text style={styles.createtext}>Create Account</Text>
@@ -262,8 +274,7 @@ const styles = StyleSheet.create({
     paddingBottom: 3,
   },
   radbutton: {
-    fontSize: 16,
-    marginLeft: 35,
+    marginLeft: 20,
   },
   createview: {
     width: '100%',

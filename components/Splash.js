@@ -3,7 +3,8 @@ import {
   StyleSheet,
   Text,
   View,
-  Image
+  Image,
+  AsyncStorage
 } from 'react-native';
 import { Button } from 'react-native';
 import Header from './Header';
@@ -17,18 +18,32 @@ export default class Splash extends React.Component {
   constructor(props){
     super(props);
     //const { navigatex } = this.props.navigation;
-    this.state = {current: 'Splash'};
+    this.state = {current: 'Splash', done: false};
+    /*AsyncStorage.getItem("screencheck").then((value) => {
+      if(value == true){
+        this.props.navigation.navigate('Login');
+       }
+    })
+    .then(res => {
+    
+    });*/
     setTimeout(()=>{
       //navigatex('LoginScreen', { name: 'LoginScreens' })
-      this.setState({current: 'Login'})
+      this.setState({current: 'Login', done: true});
     },1000);
   }
   render() {
     const { navigate } = this.props.navigation;
     const {current} = this.state
+    const {done} = this.state
     if(current == 'Login'){
       navigate('Login', { name: 'LoginScreens' })
+      //.setState({done: true});
+      AsyncStorage.setItem('screencheck', true);
     }
+    /*if(done == true){
+      navigate('Login', { name: 'LoginScreens' })
+    }*/
     return (
       <View style={styles.container}>
       

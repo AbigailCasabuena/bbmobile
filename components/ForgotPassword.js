@@ -12,24 +12,10 @@ import Login from './Login';
 
 type Props = {};
 export default class ForgotPassword extends Component<Props> {
+  static navigationOptions = {
+    header: null
+  }
   
-  /*componentDidMount() {
-    BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
-  }
-
-  componentWillUnmount() {
-    BackHandler.removeEventListener("hardwareBackPress", this.onBackPress);
-  }
-
-  onBackPress= ()=>{
-    this.props.navigation.goBack();
-    return false;
-    //return true;
-    //this.props.navigation.goBack('Login');
-    //navigate('Login', { name: 'LoginScreens' });
-    //goBack();
-  }*/
-
   render() {
     const { navigate } = this.props.navigation;
     return (

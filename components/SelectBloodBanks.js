@@ -6,11 +6,12 @@ import {
   TextInput,
   TouchableOpacity,
   KeyboardAvoidingView,
+  CheckBox,
 } from 'react-native';
 
 type Props = {};
 export default class SelectBloodBanks extends Component<Props> {
- 
+
   render() {
     const { navigate } = this.props.navigation;
     return (
@@ -19,21 +20,21 @@ export default class SelectBloodBanks extends Component<Props> {
         keyboardVerticalOffset={-500}>
         <View style={styles.container2}>
           <Text style={styles.text}>
-            Password Reset
+            Blood Banks
           </Text>
-          <Text style={{textAlign:'left',color:'black'}}>Enter your email address: </Text>
-          <TextInput style={styles.un}
-            keyboardType= 'email-address'
-            placeholder='email'>
-          </TextInput> 
+          <Text style={{textAlign:'justify',color:'black',fontSize:15,marginLeft:15, marginRight:10,}}>
+          Please check all the blood banks where you have already donated.</Text>
+          
+        
+
           <View style={styles.accview}>
             <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              navigate('Forgot2Screen', { name: 'Forgot2Screens' })
+              navigate('SignUpScreen', { name: 'SignUpScreens' })
             }}
             >
-              <Text style={styles.buttontext}>Submit</Text>
+              <Text style={styles.buttontext}>Done</Text>
             </TouchableOpacity>
           </View>
         </View>

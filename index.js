@@ -9,6 +9,7 @@ import NewsFeed from './components/NewsFeed';
 import ForgotPassword from './components/ForgotPassword';
 import ForgotPassword2 from './components/ForgotPassword2';
 import ForgotPassword3 from './components/ForgotPassword3';
+import SelectBloodBanks from './components/SelectBloodBanks';
 //import Stack from './components/StackNav1';
 //import ModalExample from './components/ModalExample';
 
@@ -42,13 +43,9 @@ class Main extends Component {
 }*/
 import {SplashScreen ,LoginScreen,SignUpScreen,NewsScreen,ForgotScreen,Forgot2Screen,Forgot3Screen} from './screen';
 
-const StackNav = StackNavigator({
+const ForgotStack = StackNavigator({
     ForgotScreen: {
         screen: ForgotPassword,
-        navigationOptions: ({navigation}) => ({
-            headerLeft : null,
-            headerRight: null,
-        })
     },
     Forgot2Screen: {
         screen: ForgotPassword2,
@@ -60,7 +57,16 @@ const StackNav = StackNavigator({
     initialRouteName: 'ForgotScreen'
 })
 
-
+const SignUpStack = StackNavigator({
+    SignUpScreen: {
+        screen: SignUp,
+    },
+    BloodBanksScreen: {
+        screen: SelectBloodBanks,
+    },
+},{
+    initialRouteName: 'SignUpScreen'
+})
 
  const DrawerContent = (props) => (
     <View>
@@ -83,14 +89,14 @@ const StackNav = StackNavigator({
  var {height, width} = Dimensions.get('window');
 
  let routeConfigs = {
-    SplashScreen: {
+    /*SplashScreen: {
         path: '/splash',
         screen: Splash,
         navigationOptions: {
             drawerLockMode: 'locked-closed', 
             drawerLabel: () => null
         }
-    },
+    },*/
     Login: {
         path: '/',
         screen: Login,
@@ -100,8 +106,14 @@ const StackNav = StackNavigator({
         }
     },
     SignUpScreen: {
-        path: '/signup',
-        screen: SignUp,
+        screen: SignUpStack,
+        navigationOptions: {
+            drawerLockMode: 'locked-closed', 
+            drawerLabel: () => null
+        }
+    },
+    Forgot: {
+        screen: ForgotStack,
         navigationOptions: {
             drawerLockMode: 'locked-closed', 
             drawerLabel: () => null
@@ -111,37 +123,11 @@ const StackNav = StackNavigator({
         path: '/home',
         screen: NewsFeed
     },
-    Forgot: {
-        screen: StackNav
-    }
-    /*ForgotScreen: {
-        path: '/forgot',
-        screen: ForgotPassword,
-        navigationOptions: {
-            drawerLockMode: 'locked-closed', 
-            drawerLabel: () => null
-        }
-    },
-    Forgot2Screen: {
-        path: '/forgot2',
-        screen: ForgotPassword2,
-        navigationOptions: {
-            drawerLockMode: 'locked-closed', 
-            drawerLabel: () => null
-        }
-    },
-    Forgot3Screen: {
-        path: '/forgot3',
-        screen: ForgotPassword3,
-        navigationOptions: {
-            drawerLockMode: 'locked-closed', 
-            drawerLabel: () => null
-        }
-    },*/
+    
  };
 
  let drawernav = {
-     initialRouteName: SplashScreen,
+     //initialRouteName
      drawerWidth: (width/2) + (width/4),
      drawerPosition: 'left',
      drawerOpenRoute: 'DrawerOpen',
