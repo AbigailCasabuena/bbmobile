@@ -9,10 +9,12 @@ import {
   TouchableHighlight,
   Modal,
   Dimensions,
+  ScrollView
 } from 'react-native';
 //import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import DatePicker from 'react-native-datepicker';
 import RadioForm from 'react-native-radio-form';
+import {INFO} from '../state/SignUpInfo';
 type Props = {};
 
 var screen= Dimensions.get('window');
@@ -96,10 +98,17 @@ export default class SignUp extends React.Component {
     var year = new Date().getFullYear();
     var minyear = year - 70;
     var maxyear = year -18;
+    const name= 'name';
+    //alert('hello ' + INFO[name].value);
+    var nameval = INFO[name].value;
+    //alert(nameval);
     this.state = {valuegender: '', date:"1-1-2000",
       mindate:"1-1-" + minyear,
       maxdate:"12-31-" + maxyear,
       valuedonation: 'No',
+      donatedbefore: 1,
+      name: nameval + ''
+      //name: INFO[name].value,
       //modalVisible: false,
     };
   }
@@ -117,17 +126,21 @@ export default class SignUp extends React.Component {
     _onSelect = (item) => {
       //alert('Item: ' + item.value);
       if(item.value == 'Yes'){
-        navigate('BloodBanksScreen',{name:'BloodBanksScreen'});
+        this.setState({donatedbefore: 0}, ()=>{
+          navigate('BloodBanksScreen',{name:'BloodBanksScreen', donatedbefore: this.state.donatedbefore});
+        });
       }
     };
     return (
-      <KeyboardAvoidingView style={styles.container}>
+      <ScrollView style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.headtext}>Sign Up</Text>
         </View>
         <FloatingLabelInput
           label="Name"
-          onChange={this.handleTextChange}
+          //onChange={this.handleTextChange}
+          defaultValue= {this.state.name}
+          onChangeText={ (name) => this.setState({name}) }
         />
         <FloatingLabelInput
           label="Password"
@@ -195,7 +208,7 @@ export default class SignUp extends React.Component {
         <View style={{height: 40}}>
           <RadioForm
             style={styles.radbutton}
-            initial={1}
+            initial={this.state.donatedbefore}
             dataSource={radio_props2}
             formHorizontal={true}
             labelHorizontal={true}
@@ -212,7 +225,7 @@ export default class SignUp extends React.Component {
         <View style={styles.createview}>
             <TouchableOpacity
             style={{backgroundColor: '#B81E12',
-                  padding: 15,}}
+                  padding: 15,marginBottom: 100}}
             onPress={() => {
               //navigate('BloodBanksScreen', { name: 'BloodBanksScreen' })
             }}
@@ -220,7 +233,7 @@ export default class SignUp extends React.Component {
               <Text style={styles.createtext}>Create Account</Text>
             </TouchableOpacity>
           </View>
-      </KeyboardAvoidingView>
+      </ScrollView>
     );
   }
 }
@@ -228,10 +241,8 @@ export default class SignUp extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     backgroundColor: 'white',
     flexDirection: 'column',
-    justifyContent: 'flex-start',
   },
   header: {
     width: '100%',

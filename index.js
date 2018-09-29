@@ -1,6 +1,8 @@
 import { AppRegistry, Dimensions,Text,View} from 'react-native';
 //import {StackNavigator} from 'react-navigation';
 import {DrawerNavigator,DrawerItems,StackNavigator} from 'react-navigation';
+//import { createStore, combineReducers } from 'redux';
+//import { connect } from 'react-redux';
 
 import Splash from './components/Splash';
 import Login from './components/Login';
@@ -14,33 +16,6 @@ import SelectBloodBanks from './components/SelectBloodBanks';
 //import ModalExample from './components/ModalExample';
 
 import React, { Component } from 'react';
-/*import Login from './components/Login';
-import Splash from './components/Splash';
-import Login from './components/Login';
-import Home from './components/Home';
-import HomeScreen from './components/HomeScreen';
-import React, {Component} from 'react';
-
-class Main extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            current: 'Splash'
-        };
-        console.log('Tska');
-
-        setTimeout(()=>{
-            this.setState({current: 'Login'})
-            console.log('hello');
-        },3000)
-    }
-
-    render(){
-        const {current} = this.state;
-        let screen = current === 'Splash' ? <Splash /> : <Home />
-        return screen
-    }
-}*/
 import {SplashScreen ,LoginScreen,SignUpScreen,NewsScreen,ForgotScreen,Forgot2Screen,Forgot3Screen} from './screen';
 
 const ForgotStack = StackNavigator({
@@ -142,6 +117,7 @@ const SignUpStack = StackNavigator({
       }
  };
 
- const App = DrawerNavigator(routeConfigs,drawernav);
+const App = DrawerNavigator(routeConfigs,drawernav);
+
 
 AppRegistry.registerComponent('bbmobile', () => App);
