@@ -65,7 +65,7 @@ export default class SelectBloodBanks extends Component<Props> {
               }}
               isChecked={this.state.isChecked1}
               label={"National Blood Center (PRC Tower)"}
-              labelStyle={{fontSize: 16}}
+              labelStyle={{fontSize: 14}}
             />
 
             <CheckBox
@@ -77,7 +77,7 @@ export default class SelectBloodBanks extends Component<Props> {
               }}
               isChecked={this.state.isChecked2}
               label={"National Blood Center (Manila)"}
-              labelStyle={{fontSize: 16}}
+              labelStyle={{fontSize: 14}}
             />
 
             <CheckBox
@@ -89,7 +89,7 @@ export default class SelectBloodBanks extends Component<Props> {
               }}
               isChecked={this.state.isChecked3}
               label={"Caloocan City Blood Collecting Unit/ Blood Station"}
-              labelStyle={{fontSize: 16}}
+              labelStyle={{fontSize: 14}}
             />
 
             <CheckBox
@@ -101,7 +101,7 @@ export default class SelectBloodBanks extends Component<Props> {
               }}
               isChecked={this.state.isChecked4}
               label={"Pasay City Blood Collecting Unit/ Blood Station"}
-              labelStyle={{fontSize: 16}}
+              labelStyle={{fontSize: 14}}
             />
 
             <CheckBox
@@ -113,7 +113,7 @@ export default class SelectBloodBanks extends Component<Props> {
               }}
               isChecked={this.state.isChecked5}
               label={"Quezon City Blood Collecting Unit/ Blood Station"}
-              labelStyle={{fontSize: 16}}
+              labelStyle={{fontSize: 14}}
             />
 
             <CheckBox
@@ -125,7 +125,7 @@ export default class SelectBloodBanks extends Component<Props> {
               }}
               isChecked={this.state.isChecked6}
               label={"Rizal Blood Collecting Unit/ Blood Station"}
-              labelStyle={{fontSize: 16}}
+              labelStyle={{fontSize: 14}}
             />
 
             <CheckBox
@@ -137,7 +137,7 @@ export default class SelectBloodBanks extends Component<Props> {
               }}
               isChecked={this.state.isChecked7}
               label={"Valenzuela City Blood Collecting Unit/ Blood Station"}
-              labelStyle={{fontSize: 16}}
+              labelStyle={{fontSize: 14}}
             />
           </View>
 
@@ -151,7 +151,7 @@ export default class SelectBloodBanks extends Component<Props> {
               style={styles.button}
               onPress={() => {
                 //navigate('SignUpScreen', { name: 'SignUpScreens' })
-                alert('hello ' + this.props.navigation.state.params.donatedbefore);
+                //alert('hello ' + this.props.navigation.state.params.donatedbefore);
                 navigate('SignUpScreen', { name: 'SignUpScreens' , donatedbefore: this.props.navigation.state.params.donatedbefore})
               }}
               >
@@ -199,6 +199,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#B81E12',
     padding: 10,
+    marginTop: 30,
   },
   buttontext: {
     color: 'white'

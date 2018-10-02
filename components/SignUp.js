@@ -9,7 +9,8 @@ import {
   TouchableHighlight,
   Modal,
   Dimensions,
-  ScrollView
+  ScrollView,
+  AsyncStorage
 } from 'react-native';
 //import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import DatePicker from 'react-native-datepicker';
@@ -42,6 +43,21 @@ const radio_props2 = [
 ];
 
 class FloatingLabelInput extends Component {
+  /*state = {
+    isFocused: false,
+    cont: '',
+  };
+
+  handleFocus = () => this.setState({ isFocused: true });
+  handleBlurName = () => {
+    const {cont} = this.state;
+    if(!(cont=='')){
+      this.setState({ isFocused: true });
+    }
+    else{
+      this.setState({ isFocused: false });
+    }
+  }*/
   state = {
     isFocused: false,
     cont: '',
@@ -49,8 +65,7 @@ class FloatingLabelInput extends Component {
 
   handleFocus = () => this.setState({ isFocused: true });
   handleBlur = () => {
-    const {cont} = this.state;
-    if(!(cont=='')){
+    if(!(AsyncStorage.getItem('SignName')=='') || !(AsyncStorage.getItem('SignName') == null)){
       this.setState({ isFocused: true });
     }
     else{
@@ -71,6 +86,7 @@ class FloatingLabelInput extends Component {
       marginLeft: 35,
       marginTop: 3,
     };
+
     return (
       <View style={{ paddingTop: 10,flexDirection:'row',alignItems:'center',justifyContent:'center',}}>
         <Text style={labelStyle}>
@@ -78,7 +94,7 @@ class FloatingLabelInput extends Component {
         </Text>
         <TextInput
           {...props}
-          onChangeText={ (cont) => this.setState({cont})}
+          //onChangeText={ (cont) => this.setState({cont})}
           style={{width:'84%',fontSize: 16, color: '#000',}}
           onFocus={this.handleFocus}
           onBlur={this.handleBlur}
@@ -98,16 +114,21 @@ export default class SignUp extends React.Component {
     var year = new Date().getFullYear();
     var minyear = year - 70;
     var maxyear = year -18;
-    const name= 'name';
+    //const name= 'name';
     //alert('hello ' + INFO[name].value);
-    var nameval = INFO[name].value;
+    //var nameval = INFO[name].value;
     //alert(nameval);
     this.state = {valuegender: '', date:"1-1-2000",
       mindate:"1-1-" + minyear,
       maxdate:"12-31-" + maxyear,
       valuedonation: 'No',
       donatedbefore: 1,
-      name: nameval + ''
+      nameinput: '', defname: '',
+      pw: '', defpw: '',
+      repw: '', defrepw: '',
+      gender: 0, 
+      emailadd: '', defemail: '',
+      phonenum: '',
       //name: INFO[name].value,
       //modalVisible: false,
     };
@@ -115,22 +136,76 @@ export default class SignUp extends React.Component {
   /*setModalVisible(visible) {
     this.setState({modalVisible: visible});
   }*/
+
   onBlur() {
     console.log('#####: onBlur');
   }
 
+  /*defValueMethod = () =>{
+    if(this.state.name != null || this.state.name != ''){
+      return this.state.name;
+    }
+  }*/
+
+  _storeData = async () => {
+    try {
+      await AsyncStorage.setItem('SignName', this.state.nameinput);
+    } catch (error) {
+      // Error saving data
+    }
+  }
+
+  _retrieveData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('SignName');
+      if (value !== null || value !== '') {
+        // We have data!!
+        //alert(value);
+        this.setState({nameinput: value});
+      }
+     } catch (error) {
+       // Error retrieving data
+     }
+  }
+
+  _handleBlurName = () =>{
+    if(!(AsyncStorage.getItem('SignName')=='') || !(AsyncStorage.getItem('SignName') == null)){
+      this.setState({ isFocused: true });
+    }
+    else{
+      this.setState({ isFocused: false });
+    }
+  }
+
+  componentDidMount(){
+    this._retrieveData();
+  }
+
   render() {
     const { navigate } = this.props.navigation;
+    //const {namef} = this.state.name;
+    var {height, width} = Dimensions.get('window');
     //let x = this.state.mindate + "";
     //let y = this.state.maxdate + "";
     _onSelect = (item) => {
       //alert('Item: ' + item.value);
       if(item.value == 'Yes'){
         this.setState({donatedbefore: 0}, ()=>{
+          /*try {
+            alert(this.state.nameinput)
+            AsyncStorage.setItem('SignName', this.state.nameinput);
+            //alert(namef);
+          } catch (error) {
+            console.log('error');
+          }*/
+          this._storeData();
           navigate('BloodBanksScreen',{name:'BloodBanksScreen', donatedbefore: this.state.donatedbefore});
         });
       }
     };
+
+    
+
     return (
       <ScrollView style={styles.container}>
         <View style={styles.header}>
@@ -138,14 +213,34 @@ export default class SignUp extends React.Component {
         </View>
         <FloatingLabelInput
           label="Name"
-          //onChange={this.handleTextChange}
-          defaultValue= {this.state.name}
-          onChangeText={ (name) => this.setState({name}) }
+          value={this.state.nameinput}
+          onChangeText={(text) => this.setState({nameinput: text})}
+          defaultValue={this.state.nameinput}
+          /*onBlur={() => {
+            this._retrieveData();
+            const {cont} = this.state.nameinput;
+            if(!(cont=='')){
+              this.setState({ isFocused: true });
+            }
+            else{
+              this.setState({ isFocused: false });
+            }
+          }}*/
         />
         <FloatingLabelInput
           label="Password"
           secureTextEntry={true}
           onChange={this.handleTextChange}
+          onBlur={this.handleBlur}
+          /*onBlur={() => {
+            const {cont} = this.state;
+            if(!(cont=='')){
+              this.setState({ isFocused: true });
+            }
+            else{
+              this.setState({ isFocused: false });
+            }
+          }}*/
         />
         <FloatingLabelInput
           label="Re-enter Password"
@@ -199,11 +294,22 @@ export default class SignUp extends React.Component {
           onChange={this.handleTextChange}
           keyboardType= 'email-address'
         />
-        <FloatingLabelInput
-          label="Phone Number"
-          onChange={this.handleTextChange}
-          keyboardType='numeric'
-        />
+        <View style={{ marginLeft: 35, flexDirection: 'column', alignItems: 'flex-start'}}>
+          <Text style={{color: '#aaa'}}>Phone Number</Text>
+          <View style={{flexDirection: 'row', alignItems: 'flex-start'}}>
+            <TextInput
+              defaultValue={'+639'}
+              editable={false}
+            />
+            <TextInput
+              style={{width: width - 100}}
+              label="Phone Number"
+              defaultValue={this.state.phonenum}
+              onChange={this.handleTextChange}
+              keyboardType='numeric'
+            />
+          </View>
+        </View>
         <Text style={styles.radlabel}>Have you donated blood previously?</Text>
         <View style={{height: 40}}>
           <RadioForm
@@ -227,7 +333,8 @@ export default class SignUp extends React.Component {
             style={{backgroundColor: '#B81E12',
                   padding: 15,marginBottom: 100}}
             onPress={() => {
-              //navigate('BloodBanksScreen', { name: 'BloodBanksScreen' })
+              this._retrieveData();
+              alert(this.state.nameinput);
             }}
             >
               <Text style={styles.createtext}>Create Account</Text>
