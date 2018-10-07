@@ -65,7 +65,14 @@ class FloatingLabelInput extends Component {
 
   handleFocus = () => this.setState({ isFocused: true });
   handleBlur = () => {
-    if(!(AsyncStorage.getItem('SignName')=='') || !(AsyncStorage.getItem('SignName') == null)){
+    /*if(!(AsyncStorage.getItem('SignName')=='') || !(AsyncStorage.getItem('SignName') == null)){
+      this.setState({ isFocused: false });
+    }
+    else{
+      this.setState({ isFocused: true });
+    }*/
+    const {cont} = this.state;
+    if(!(cont=='')){
       this.setState({ isFocused: true });
     }
     else{
@@ -168,14 +175,14 @@ export default class SignUp extends React.Component {
      }
   }
 
-  _handleBlurName = () =>{
+  /*_handleBlurName = () =>{
     if(!(AsyncStorage.getItem('SignName')=='') || !(AsyncStorage.getItem('SignName') == null)){
       this.setState({ isFocused: true });
     }
     else{
       this.setState({ isFocused: false });
     }
-  }
+  }*/
 
   componentDidMount(){
     this._retrieveData();
@@ -213,9 +220,10 @@ export default class SignUp extends React.Component {
         </View>
         <FloatingLabelInput
           label="Name"
-          value={this.state.nameinput}
           onChangeText={(text) => this.setState({nameinput: text})}
           defaultValue={this.state.nameinput}
+          onFocus={this.handleFocus}
+          onBlur={this.handleBlur}
           /*onBlur={() => {
             this._retrieveData();
             const {cont} = this.state.nameinput;
@@ -231,8 +239,9 @@ export default class SignUp extends React.Component {
           label="Password"
           secureTextEntry={true}
           onChange={this.handleTextChange}
+          onFocus={this.handleFocus}
           onBlur={this.handleBlur}
-          /*onBlur={() => {
+            /*onBlur={() => {
             const {cont} = this.state;
             if(!(cont=='')){
               this.setState({ isFocused: true });
