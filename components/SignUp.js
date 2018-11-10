@@ -10,7 +10,8 @@ import {
   Modal,
   Dimensions,
   ScrollView,
-  AsyncStorage
+  AsyncStorage,
+  Picker
 } from 'react-native';
 //import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import DatePicker from 'react-native-datepicker';
@@ -43,21 +44,6 @@ const radio_props2 = [
 ];
 
 class FloatingLabelInput extends Component {
-  /*state = {
-    isFocused: false,
-    cont: '',
-  };
-
-  handleFocus = () => this.setState({ isFocused: true });
-  handleBlurName = () => {
-    const {cont} = this.state;
-    if(!(cont=='')){
-      this.setState({ isFocused: true });
-    }
-    else{
-      this.setState({ isFocused: false });
-    }
-  }*/
   state = {
     isFocused: false,
     cont: '',
@@ -87,8 +73,8 @@ class FloatingLabelInput extends Component {
     const labelStyle = {
       position: 'absolute',
       left: 0,
-      top: !isFocused ? 16 : 0,
-      fontSize: !isFocused ? 15 : 13,
+      top: 0,
+      fontSize: 13,
       color: '#aaa',
       marginLeft: 35,
       marginTop: 3,
@@ -125,64 +111,120 @@ export default class SignUp extends React.Component {
     //alert('hello ' + INFO[name].value);
     //var nameval = INFO[name].value;
     //alert(nameval);
-    this.state = {valuegender: '', date:"1-1-2000",
+    this.state = {valuegender: '', date:'',
       mindate:"1-1-" + minyear,
       maxdate:"12-31-" + maxyear,
       valuedonation: 'No',
-      donatedbefore: 1,
-      nameinput: '', defname: '',
-      pw: '', defpw: '',
-      repw: '', defrepw: '',
-      gender: 0, 
-      emailadd: '', defemail: '',
+      donatedbefore: 'No',
+      nameinput: '',
+      pw: '',
+      repw: '',
+      gender: '0', 
+      emailadd: '',
       phonenum: '',
+      pickgen: 'Male',
       //name: INFO[name].value,
       //modalVisible: false,
     };
   }
-  /*setModalVisible(visible) {
-    this.setState({modalVisible: visible});
-  }*/
 
   onBlur() {
     console.log('#####: onBlur');
   }
 
-  /*defValueMethod = () =>{
-    if(this.state.name != null || this.state.name != ''){
-      return this.state.name;
-    }
-  }*/
-
   _storeData = async () => {
     try {
       await AsyncStorage.setItem('SignName', this.state.nameinput);
     } catch (error) {
-      // Error saving data
+      alert('error store name');
+    }
+    try{
+      await AsyncStorage.setItem('SignPword', this.state.pw);
+    } catch (error) {
+      alert('error store pw');
+    }
+    try{
+      await AsyncStorage.setItem('SignRepword', this.state.repw);
+    } catch (error) {
+      alert('error store repw');
+    }
+    try{
+      await AsyncStorage.setItem('Pickgen', this.state.pickgen);
+    } catch (error) {
+      alert('error store pickgen');
+    }
+    try{
+      await AsyncStorage.setItem('Date', this.state.date);
+    } catch (error) {
+      alert('error store date');
+    }
+    try{
+      await AsyncStorage.setItem('Email', this.state.emailadd);
+    } catch (error) {
+      alert('error store email');
+    }
+    try{
+      await AsyncStorage.setItem('Phonenum', this.state.phonenum);
+    } catch (error) {
+      alert('error store phone num');
+    }
+    try{
+      await AsyncStorage.setItem('Donatedbefore', this.state.donatedbefore);
+    } catch (error) {
+      alert('error store donated before');
     }
   }
 
   _retrieveData = async () => {
     try {
-      const value = await AsyncStorage.getItem('SignName');
-      if (value !== null || value !== '') {
-        // We have data!!
-        //alert(value);
-        this.setState({nameinput: value});
-      }
+      const value1 = await AsyncStorage.getItem('SignName');
+      this.setState({nameinput: value1});
+    } catch (error) {
+      alert('error retrieve name');
+    }
+    try{
+      const value2 = await AsyncStorage.getItem('SignPword');
+      this.setState({pw: value2});
+    } catch (error) {
+      alert('error retrieve pw');
+    }
+    try{
+      const value3 = await AsyncStorage.getItem('SignRepword');
+      this.setState({repw: value3});
+    } catch (error) {
+      alert('error retrieve repw');
+    }
+    try{
+      const value4 = await AsyncStorage.getItem('Date');
+      this.setState({date: value4});
+    } catch (error) {
+      alert('error retrieve date');
+    }
+    try{
+      const value8 = await AsyncStorage.getItem('Pickgen');
+      this.setState({pickgen: value8});
      } catch (error) {
-       // Error retrieving data
+       alert('error retrieve pickgen');
      }
+    try{
+      const value5 = await AsyncStorage.getItem('Email');
+      this.setState({emailadd: value5});
+    } catch (error) {
+      alert('error retrieve email');
+    }
+    try{
+      const value6 = await AsyncStorage.getItem('Phonenum');
+      this.setState({phonenum: value6});
+    } catch (error) {
+      alert('error retrieve phonenum');
+    }
+    try{
+      const value9 = await AsyncStorage.getItem('Donatedbefore');
+      this.setState({donatedbefore: value9});
+    } catch (error) {
+      alert('error retrieve donated before');
+    }
   }
-
-  /*_handleBlurName = () =>{
-    if(!(AsyncStorage.getItem('SignName')=='') || !(AsyncStorage.getItem('SignName') == null)){
-      this.setState({ isFocused: true });
-    }
-    else{
-      this.setState({ isFocused: false });
-    }
-  }*/
 
   componentDidMount(){
     this._retrieveData();
@@ -192,26 +234,15 @@ export default class SignUp extends React.Component {
     const { navigate } = this.props.navigation;
     //const {namef} = this.state.name;
     var {height, width} = Dimensions.get('window');
-    //let x = this.state.mindate + "";
-    //let y = this.state.maxdate + "";
-    _onSelect = (item) => {
-      //alert('Item: ' + item.value);
-      if(item.value == 'Yes'){
-        this.setState({donatedbefore: 0}, ()=>{
-          /*try {
-            alert(this.state.nameinput)
-            AsyncStorage.setItem('SignName', this.state.nameinput);
-            //alert(namef);
-          } catch (error) {
-            console.log('error');
-          }*/
+    _onSelect = (itemValue) => {
+      this.setState({donatedbefore: itemValue})
+      if(itemValue == 'Yes'){
+        this.setState({donatedbefore: 'Yes'}, ()=>{
           this._storeData();
           navigate('BloodBanksScreen',{name:'BloodBanksScreen', donatedbefore: this.state.donatedbefore});
         });
       }
-    };
-
-    
+    }
 
     return (
       <ScrollView style={styles.container}>
@@ -222,58 +253,27 @@ export default class SignUp extends React.Component {
           label="Name"
           onChangeText={(text) => this.setState({nameinput: text})}
           defaultValue={this.state.nameinput}
-          onFocus={this.handleFocus}
-          onBlur={this.handleBlur}
-          /*onBlur={() => {
-            this._retrieveData();
-            const {cont} = this.state.nameinput;
-            if(!(cont=='')){
-              this.setState({ isFocused: true });
-            }
-            else{
-              this.setState({ isFocused: false });
-            }
-          }}*/
         />
         <FloatingLabelInput
           label="Password"
           secureTextEntry={true}
-          onChange={this.handleTextChange}
-          onFocus={this.handleFocus}
-          onBlur={this.handleBlur}
-            /*onBlur={() => {
-            const {cont} = this.state;
-            if(!(cont=='')){
-              this.setState({ isFocused: true });
-            }
-            else{
-              this.setState({ isFocused: false });
-            }
-          }}*/
+          onChangeText={(text) => this.setState({pw: text})}
+          defaultValue={this.state.pw}
         />
         <FloatingLabelInput
           label="Re-enter Password"
           secureTextEntry={true}
-          onChange={this.handleTextChange}
+          onChangeText={(text) => this.setState({repw: text})}
+          defaultValue={this.state.repw}
         />
         <Text style={styles.radlabel}>Gender</Text>
-        <View style={{height: 40}}>
-          <RadioForm
-            style={styles.radbutton}
-            initial={0}
-            dataSource={radio_props}
-            formHorizontal={true}
-            labelHorizontal={true}
-            itemShowKey="label"
-            itemRealKey="value"
-            onPress={(item) => {
-              //_onSelect(item);
-            }}
-            circleSize={20}
-            outerColor="#B81E12"
-            innerColor="#B81E12"
-          />
-        </View>
+        <Picker
+          selectedValue={this.state.pickgen}
+          style={{ height: 50, width: 100, marginLeft: 35}}
+          onValueChange={(itemValue, itemIndex) => this.setState({pickgen: itemValue})}>
+          <Picker.Item label="Male" value="Male"/>
+          <Picker.Item label="Female" value="Female"/>
+        </Picker>
         <Text style={styles.radlabel}>Birthday</Text>
         <DatePicker
           style={{width: 240}}
@@ -300,7 +300,8 @@ export default class SignUp extends React.Component {
         />
         <FloatingLabelInput
           label="Email Address"
-          onChange={this.handleTextChange}
+          onChangeText={(text) => this.setState({emailadd: text})}
+          defaultValue={this.state.emailadd}
           keyboardType= 'email-address'
         />
         <View style={{ marginLeft: 35, flexDirection: 'column', alignItems: 'flex-start'}}>
@@ -313,37 +314,30 @@ export default class SignUp extends React.Component {
             <TextInput
               style={{width: width - 100}}
               label="Phone Number"
+              onChangeText={(text) => this.setState({phonenum: text})}
               defaultValue={this.state.phonenum}
-              onChange={this.handleTextChange}
               keyboardType='numeric'
             />
           </View>
         </View>
         <Text style={styles.radlabel}>Have you donated blood previously?</Text>
-        <View style={{height: 40}}>
-          <RadioForm
-            style={styles.radbutton}
-            initial={this.state.donatedbefore}
-            dataSource={radio_props2}
-            formHorizontal={true}
-            labelHorizontal={true}
-            itemShowKey="label"
-            itemRealKey="value"
-            onPress={(item) => {
-              _onSelect(item);
-            }}
-            circleSize={20}
-            outerColor="#B81E12"
-            innerColor="#B81E12"
-          />
-        </View>
+        <Picker
+          selectedValue={this.state.donatedbefore}
+          style={{ height: 50, width: 100, marginLeft: 35}}
+          onValueChange={(itemValue, itemIndex) => _onSelect(itemValue)}>
+          <Picker.Item label="Yes" value="Yes"/>
+          <Picker.Item label="No" value="No"/>
+        </Picker>
         <View style={styles.createview}>
             <TouchableOpacity
             style={{backgroundColor: '#B81E12',
                   padding: 15,marginBottom: 100}}
             onPress={() => {
-              this._retrieveData();
-              alert(this.state.nameinput);
+              //this._retrieveData();
+              //alert(this.state.nameinput);
+              if(this.state.pw != this.state.repw){
+                alert('Password error');
+              }
             }}
             >
               <Text style={styles.createtext}>Create Account</Text>
@@ -362,7 +356,7 @@ const styles = StyleSheet.create({
   },
   header: {
     width: '100%',
-    height: '8%',
+    height: '6%',
     backgroundColor: '#B81E12',
     flexDirection: 'row',
     alignItems: 'center',
@@ -370,7 +364,7 @@ const styles = StyleSheet.create({
   },
   headtext: {
     color: 'white',
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
   },
   image:{

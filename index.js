@@ -12,6 +12,7 @@ import ForgotPassword from './components/ForgotPassword';
 import ForgotPassword2 from './components/ForgotPassword2';
 import ForgotPassword3 from './components/ForgotPassword3';
 import SelectBloodBanks from './components/SelectBloodBanks';
+import trycheck from './components/trycheck';
 //import Stack from './components/StackNav1';
 //import ModalExample from './components/ModalExample';
 
@@ -37,7 +38,7 @@ const SignUpStack = StackNavigator({
         screen: SignUp,
     },
     BloodBanksScreen: {
-        screen: SelectBloodBanks,
+        screen: trycheck,
     },
 },{
     initialRouteName: 'SignUpScreen'

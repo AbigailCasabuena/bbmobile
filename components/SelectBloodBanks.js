@@ -8,8 +8,10 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import CheckBox from 'react-native-checkbox';
-import SignUp from './SignUp';
-import {INFO} from '../state/SignUpInfo';
+//import { Container, Header, Content, ListItem, CheckBox, Text, Body } from 'native-base';
+
+var bloodBankArray = [];
+var count = 0;
 
 type Props = {};
 export default class SelectBloodBanks extends Component<Props> {
@@ -29,10 +31,7 @@ export default class SelectBloodBanks extends Component<Props> {
 
   render() {
     const { navigate } = this.props.navigation;
-    //const name = 'name';
-    //alert(INFO[name].value);
-    //INFO[name].value = 'abigail';
-    //alert(INFO[name].value);
+
     return (
       <View style={styles.container1}>
         <KeyboardAvoidingView style={styles.style1}
@@ -54,91 +53,120 @@ export default class SelectBloodBanks extends Component<Props> {
             flex: 1,
             flexDirection: 'column',
             justifyContent: 'flex-start',
-            marginLeft: 10,
           }}>
-            <CheckBox
-              style={{flex: 1, padding: 10, paddingBottom: 20}}
-              onClick={()=>{
-                this.setState({
-                  isChecked1: !this.state.isChecked1
-                })
+          <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+                alert('hello');
               }}
-              isChecked={this.state.isChecked1}
+              >
+                <CheckBox
+              style={{flex: 1, paddingBottom: 20}}
+              
               label={"National Blood Center (PRC Tower)"}
-              labelStyle={{fontSize: 14}}
-            />
-
-            <CheckBox
-              style={{flex: 1, padding: 10, paddingBottom: 20}}
-              onClick={()=>{
-                this.setState({
-                  isChecked2: !this.state.isChecked2
-                })
-              }}
-              isChecked={this.state.isChecked2}
-              label={"National Blood Center (Manila)"}
-              labelStyle={{fontSize: 14}}
-            />
-
-            <CheckBox
-              style={{flex: 1, padding: 10, paddingBottom: 20}}
-              onClick={()=>{
-                this.setState({
-                  isChecked3: !this.state.isChecked3
-                })
-              }}
-              isChecked={this.state.isChecked3}
-              label={"Caloocan City Blood Collecting Unit/ Blood Station"}
-              labelStyle={{fontSize: 14}}
-            />
-
-            <CheckBox
-              style={{flex: 1, padding: 10, paddingBottom: 20}}
-              onClick={()=>{
-                this.setState({
-                  isChecked4: !this.state.isChecked4
-                })
-              }}
-              isChecked={this.state.isChecked4}
-              label={"Pasay City Blood Collecting Unit/ Blood Station"}
-              labelStyle={{fontSize: 14}}
-            />
-
-            <CheckBox
-              style={{flex: 1, padding: 10, paddingBottom: 20}}
-              onClick={()=>{
-                this.setState({
-                  isChecked5: !this.state.isChecked5
-                })
-              }}
-              isChecked={this.state.isChecked5}
-              label={"Quezon City Blood Collecting Unit/ Blood Station"}
-              labelStyle={{fontSize: 14}}
-            />
-
-            <CheckBox
-              style={{flex: 1, padding: 10, paddingBottom: 20}}
-              onClick={()=>{
-                this.setState({
-                  isChecked6: !this.state.isChecked6
-                })
-              }}
-              isChecked={this.state.isChecked6}
-              label={"Rizal Blood Collecting Unit/ Blood Station"}
-              labelStyle={{fontSize: 14}}
-            />
-
-            <CheckBox
-              style={{flex: 1, padding: 10, paddingBottom: 20}}
-              onClick={()=>{
-                this.setState({
-                  isChecked7: !this.state.isChecked7
-                })
-              }}
-              isChecked={this.state.isChecked7}
-              label={"Valenzuela City Blood Collecting Unit/ Blood Station"}
-              labelStyle={{fontSize: 14}}
-            />
+              />
+              </TouchableOpacity>
+           
+            
+              <View style={{
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              marginLeft: 20
+            }}>
+              <CheckBox
+                style={{flex: 1, paddingBottom: 20}}
+                onClick={()=>{
+                  this.setState({
+                    isChecked2: !this.state.isChecked2
+                  })
+                }}
+                isChecked={this.state.isChecked2}
+                label={"National Blood Center (Manila)"}
+              />
+            </View>
+            <View style={{
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              marginLeft: 20
+            }}>
+              <CheckBox
+                style={{flex: 1, paddingBottom: 20}}
+                onClick={()=>{
+                  this.setState({
+                    isChecked3: !this.state.isChecked3
+                  })
+                }}
+                isChecked={this.state.isChecked3}
+                label={"Caloocan City BCU/ BS"}
+              />
+            </View>
+            <View style={{
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              marginLeft: 20
+            }}>
+              <CheckBox
+                style={{flex: 1, paddingBottom: 20}}
+                onClick={()=>{
+                  this.setState({
+                    isChecked4: !this.state.isChecked4
+                  })
+                }}
+                isChecked={this.state.isChecked4}
+                label={"Pasay City BCU/ BS"}
+              />
+            </View>
+            <View style={{
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              marginLeft: 20
+            }}>
+              <CheckBox
+                style={{flex: 1, paddingBottom: 20}}
+                onClick={()=>{
+                  this.setState({
+                    isChecked5: !this.state.isChecked5
+                  })
+                }}
+                isChecked={this.state.isChecked5}
+                label={"Quezon City BCU/ BS"}
+              />
+            </View>
+            <View style={{
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              marginLeft: 20
+            }}>
+              <CheckBox
+                style={{flex: 1, paddingBottom: 20}}
+                onClick={()=>{
+                  this.setState({
+                    isChecked6: !this.state.isChecked6
+                  })
+                }}
+                isChecked={this.state.isChecked6}
+                label={"Rizal BCU/ BS"}
+              />
+            </View>
+            <View style={{
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              marginLeft: 20,
+            }}>
+              <CheckBox
+                style={{flex: 1, paddingBottom: 20}}
+                onClick={()=>{
+                  this.setState({
+                    isChecked7: !this.state.isChecked7
+                  })
+                  _alert();
+                }}
+                isChecked={this.state.isChecked7}
+                label={"Valenzuela City BCU/ BS"}
+              />
+            </View>
+              */
+            }
           </View>
 
             <View style={{
@@ -152,7 +180,8 @@ export default class SelectBloodBanks extends Component<Props> {
               onPress={() => {
                 //navigate('SignUpScreen', { name: 'SignUpScreens' })
                 //alert('hello ' + this.props.navigation.state.params.donatedbefore);
-                navigate('SignUpScreen', { name: 'SignUpScreens' , donatedbefore: this.props.navigation.state.params.donatedbefore})
+                //navigate('SignUpScreen', { name: 'SignUpScreens'})
+                alert(this.state.isChecked1);
               }}
               >
                 <Text style={styles.buttontext}>Done</Text>
