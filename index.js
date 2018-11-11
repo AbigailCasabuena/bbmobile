@@ -1,4 +1,4 @@
-import { AppRegistry, Dimensions,Text,View} from 'react-native';
+import { AppRegistry, Dimensions,Text,View,AsyncStorage} from 'react-native';
 //import {StackNavigator} from 'react-navigation';
 import {DrawerNavigator,DrawerItems,StackNavigator} from 'react-navigation';
 //import { createStore, combineReducers } from 'redux';
@@ -18,6 +18,46 @@ import trycheck from './components/trycheck';
 
 import React, { Component } from 'react';
 import {SplashScreen ,LoginScreen,SignUpScreen,NewsScreen,ForgotScreen,Forgot2Screen,Forgot3Screen} from './screen';
+
+var initial = '';
+var uname = '';
+//var value = "";
+
+/*if(!(AsyncStorage.getItem('LoggedUser') == '' || AsyncStorage.getItem('LoggedUser') == null)){
+    initial = 'Home';
+}
+else{
+    initial = 'Login';
+}*/
+
+/*if(AsyncStorage.getItem('Logged') == 'true'){
+    //value = AsyncStorage.getItem("LoggedUser");
+    initial = 'Home';
+}
+else{
+    initial = 'Login';
+}*/
+
+_retrieveData = async () => {
+    //alert('myaw');
+    try {
+      const value1 = await AsyncStorage.getItem('Logged');
+      const value2 = await AsyncStorage.getItem('LoggedUser');
+      if(value1 == 'true'){
+        initial = 'Home';
+        uname = value2;
+        //this.props.navigation.navigate('Home');
+      }
+      else{
+        initial = 'Login';
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+}
+
+this._retrieveData();
+//alert(initial);
 
 const ForgotStack = StackNavigator({
     ForgotScreen: {
@@ -48,14 +88,14 @@ const SignUpStack = StackNavigator({
     <View>
       <View
         style={{
-          backgroundColor: '#f50057',
+          backgroundColor: '#B81E12',
           height: 140,
           alignItems: 'center',
           justifyContent: 'center',
         }}
       >
         <Text style={{ color: 'white', fontSize: 30 }}>
-          Header
+          {uname}
         </Text>
       </View>
       <DrawerItems {...props} />
@@ -115,7 +155,8 @@ const SignUpStack = StackNavigator({
           fontFamily: 'SomeFont',
           color: '#000',
         },
-      }
+      },
+      initialRouteName: initial
  };
 
 const App = DrawerNavigator(routeConfigs,drawernav);

@@ -191,7 +191,7 @@ export default class SignUp extends React.Component {
     }
     try {
       const valueuname = await AsyncStorage.getItem('SignUsername');
-      this.setState({usernamet: valueuname});
+      this.setState({username: valueuname});
     } catch (error) {
       alert('error retrieve username');
     }
@@ -250,7 +250,7 @@ export default class SignUp extends React.Component {
     _onSelect = (itemValue) => {
       this.setState({donatedbefore: itemValue})
       if(itemValue == 'Yes'){
-        this.setState({donatedbefore: 'Yes'}, ()=>{
+        this.setState({donatedbefore: 'Yes', createbutton: true}, ()=>{
           this._storeData();
           navigate('BloodBanksScreen',{name:'BloodBanksScreen', donatedbefore: this.state.donatedbefore});
         });
@@ -345,8 +345,8 @@ export default class SignUp extends React.Component {
           selectedValue={this.state.donatedbefore}
           style={{ height: 50, width: 100, marginLeft: 35}}
           onValueChange={(itemValue, itemIndex) => _onSelect(itemValue)}>
-          <Picker.Item label="Yes" value="Yes"/>
           <Picker.Item label="No" value="No"/>
+          <Picker.Item label="Yes" value="Yes"/>
         </Picker>
         <View style={styles.createview}>
             <TouchableOpacity
@@ -394,7 +394,23 @@ export default class SignUp extends React.Component {
           })
           .then((response) => {
             if (response.status === 200) {
-              //alert('Hello' + response.username);
+              try{
+                AsyncStorage.setItem('LoggedUser', this.state.username);
+              } catch (error) {
+                alert('error store user');
+              }
+              this.setState({
+                nameinput: '',
+                username: '',
+                pw: '',
+                repw: '',
+                pickgen: 'Male',
+                date: '',
+                emailadd: '',
+                phonenum: '',
+                donated_before: 'No'
+              });
+              this._storeData();
               alert("User account has been created.")
             }else if(response.status === 400){
               alert("Invalid email address.")

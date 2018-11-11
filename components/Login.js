@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   KeyboardAvoidingView,
+  AsyncStorage,
 } from 'react-native';
 import Header from './Header';
 import Button from 'react-native-button';
@@ -34,6 +35,38 @@ export default class Login extends Component<Props> {
   }
 
   sName = "Login";
+
+  componentDidMount(){
+    this._retrieveData();
+  }
+
+  _storeData = async () => {
+    try {
+      alert(this.state.username)
+      await AsyncStorage.setItem('LoggedUser', String(this.state.username));
+      await AsyncStorage.setItem('Logged', String(true));
+      //alert(this.state.username);
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
+  _retrieveData = async () => {
+    try {
+      /*const value1 = await AsyncStorage.getItem('LoggedUser');
+      if(!(value1 == null || value1 == '')){
+        this.props.navigation.navigate('Home');
+      }*/
+      const value1 = await AsyncStorage.getItem('Logged');
+      const value2 = await AsyncStorage.getItem('LoggedUser');
+      if(value1 == 'true'){
+        alert(value2);
+        this.props.navigation.navigate('Home');
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  }
 
   render() {
     const { navigate } = this.props.navigation;
@@ -154,6 +187,7 @@ export default class Login extends Component<Props> {
       .then((response) => {
         if (response.status === 200) {
             //alert('Hello' + response.username);
+            this._storeData();
             this.props.navigation.navigate('Home');
         }
         else {
