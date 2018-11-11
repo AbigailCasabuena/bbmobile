@@ -47,7 +47,7 @@ export default class Login extends Component<Props> {
           </Text>
           <TextInput style={styles.un}
             keyboardType= 'email-address'
-            placeholder='username/email'
+            placeholder='username'
             onChangeText={ (username) => this.setState({username}) }
             autoCapitalize = 'none'
           >
@@ -133,8 +133,8 @@ export default class Login extends Component<Props> {
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({
-                username: this.state.username,
-                password: this.state.password,
+                user_username: this.state.username,
+                user_password: this.state.password,
               })
 
       })
@@ -157,7 +157,7 @@ export default class Login extends Component<Props> {
             this.props.navigation.navigate('Home');
         }
         else {
-          alert("error");
+          alert("Invalid username and/or password.");
         }
     })  
     .done();

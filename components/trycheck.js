@@ -21,60 +21,86 @@ export default class trycheck extends Component {
     //Adding Items To Array.
     // Showing the complete Array on Screen Using Alert.
     this.setState({isChecked1: !this.state.isChecked1})
-    if(this.state.isChecked1 == true){
+    if(this.state.isChecked1 == false){
       SampleArray.push("National Blood Center (PRC Tower)");
     }else{
-      SampleArray.pop("National Blood Center (PRC Tower)")
+      var del = "National Blood Center (PRC Tower)";
+      var index = SampleArray.indexOf(del);
+      SampleArray.splice(index,1)
     }
     alert(SampleArray.toString());
   }
 
   AddItemsToArray2=()=>{
-    //Adding Items To Array.
-    SampleArray.push("National Blood Center (Manila)");
-    // Showing the complete Array on Screen Using Alert.
-    alert(SampleArray.toString());
     this.setState({isChecked2: !this.state.isChecked2})
+    if(this.state.isChecked2 == false){
+      SampleArray.push("National Blood Center (Manila)");
+    }else{
+      var del = "National Blood Center (Manila)";
+      var index = SampleArray.indexOf(del);
+      SampleArray.splice(index,1)
+    }
+    alert(SampleArray.toString());
   }
 
   AddItemsToArray3=()=>{
-    //Adding Items To Array.
-    SampleArray.push("Caloocan City BCU/ BS");
-    // Showing the complete Array on Screen Using Alert.
-    alert(SampleArray.toString());
     this.setState({isChecked3: !this.state.isChecked3})
+    if(this.state.isChecked3 == false){
+      SampleArray.push("Caloocan City BCU/ BS");
+    }else{
+      var del = "Caloocan City BCU/ BS";
+      var index = SampleArray.indexOf(del);
+      SampleArray.splice(index,1)
+    }
+    alert(SampleArray.toString());
   }
 
   AddItemsToArray4=()=>{
-    //Adding Items To Array.
-    SampleArray.push("Pasay City BCU/ BS");
-    // Showing the complete Array on Screen Using Alert.
-    alert(SampleArray.toString());
     this.setState({isChecked4: !this.state.isChecked4})
+    if(this.state.isChecked4 == false){
+      SampleArray.push("Pasay City BCU/ BS");
+    }else{
+      var del = "Pasay City BCU/ BS";
+      var index = SampleArray.indexOf(del);
+      SampleArray.splice(index,1)
+    }
+    alert(SampleArray.toString());
   }
 
   AddItemsToArray5=()=>{
-    //Adding Items To Array.
-    SampleArray.push("Quezon City BCU/ BS");
-    // Showing the complete Array on Screen Using Alert.
-    alert(SampleArray.toString());
     this.setState({isChecked5: !this.state.isChecked5})
+    if(this.state.isChecked5 == false){
+      SampleArray.push("Quezon City BCU/ BS");
+    }else{
+      var del = "Quezon City BCU/ BS";
+      var index = SampleArray.indexOf(del);
+      SampleArray.splice(index,1)
+    }
+    alert(SampleArray.toString());
   }
 
   AddItemsToArray6=()=>{
-    //Adding Items To Array.
-    SampleArray.push("Quezon City BCU/ BS");
-    // Showing the complete Array on Screen Using Alert.
-    alert(SampleArray.toString());
     this.setState({isChecked6: !this.state.isChecked6})
+    if(this.state.isChecked6 == false){
+      SampleArray.push("Rizal BCU/ BS");
+    }else{
+      var del = "Rizal BCU/ BS";
+      var index = SampleArray.indexOf(del);
+      SampleArray.splice(index,1)
+    }
+    alert(SampleArray.toString());
   }
 
   AddItemsToArray7=()=>{
-    //Adding Items To Array.
-    SampleArray.push("Rizal BCU/ BS");
-    // Showing the complete Array on Screen Using Alert.
-    alert(SampleArray.toString());
+    if(this.state.isChecked7 == false){
+      SampleArray.push("Valenzuela City BCU/ BS");
+    }else{
+      var del = "Valenzuela City BCU/ BS";
+      var index = SampleArray.indexOf(del);
+      SampleArray.splice(index,1)
+    }
     this.setState({isChecked7: !this.state.isChecked7})
+    alert(SampleArray.toString());
   }
 
   render() {
@@ -153,8 +179,12 @@ export default class trycheck extends Component {
             </Body>
           </ListItem>
         </Content>
-        <Button onPress={()=>{alert(SampleArray.toString())}}>
-            <Text>Click Me!</Text>
+        <Button onPress={()=>{alert(SampleArray.toString())}}
+        style={{
+          backgroundColor: "#B81E12",
+          alignSelf: "center",
+          marginBottom: 15}}>
+            <Text>Create Account</Text>
         </Button>
       </Container>
     );

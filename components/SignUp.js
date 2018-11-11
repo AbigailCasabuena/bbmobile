@@ -21,7 +21,7 @@ type Props = {};
 
 var screen= Dimensions.get('window');
 
-const radio_props = [
+/*const radio_props = [
   {
     label: 'Male',
     value: 'Male'
@@ -41,7 +41,7 @@ const radio_props2 = [
     label: 'No',
     value: 'No'
   }
-];
+];*/
 
 class FloatingLabelInput extends Component {
   state = {
@@ -117,12 +117,14 @@ export default class SignUp extends React.Component {
       valuedonation: 'No',
       donatedbefore: 'No',
       nameinput: '',
+      username: '',
       pw: '',
       repw: '',
       gender: '0', 
       emailadd: '',
       phonenum: '',
       pickgen: 'Male',
+      createbutton: true,
       //name: INFO[name].value,
       //modalVisible: false,
     };
@@ -137,6 +139,11 @@ export default class SignUp extends React.Component {
       await AsyncStorage.setItem('SignName', this.state.nameinput);
     } catch (error) {
       alert('error store name');
+    }
+    try {
+      await AsyncStorage.setItem('SignUsername', this.state.username);
+    } catch (error) {
+      alert('error store username');
     }
     try{
       await AsyncStorage.setItem('SignPword', this.state.pw);
@@ -181,6 +188,12 @@ export default class SignUp extends React.Component {
       this.setState({nameinput: value1});
     } catch (error) {
       alert('error retrieve name');
+    }
+    try {
+      const valueuname = await AsyncStorage.getItem('SignUsername');
+      this.setState({usernamet: valueuname});
+    } catch (error) {
+      alert('error retrieve username');
     }
     try{
       const value2 = await AsyncStorage.getItem('SignPword');
@@ -241,6 +254,8 @@ export default class SignUp extends React.Component {
           this._storeData();
           navigate('BloodBanksScreen',{name:'BloodBanksScreen', donatedbefore: this.state.donatedbefore});
         });
+      }else{
+        this.setState({createbutton: false});
       }
     }
 
@@ -253,6 +268,11 @@ export default class SignUp extends React.Component {
           label="Name"
           onChangeText={(text) => this.setState({nameinput: text})}
           defaultValue={this.state.nameinput}
+        />
+        <FloatingLabelInput
+          label="Username"
+          onChangeText={(text) => this.setState({username: text})}
+          defaultValue={this.state.username}
         />
         <FloatingLabelInput
           label="Password"
@@ -331,20 +351,63 @@ export default class SignUp extends React.Component {
         <View style={styles.createview}>
             <TouchableOpacity
             style={{backgroundColor: '#B81E12',
-                  padding: 15,marginBottom: 100}}
-            onPress={() => {
-              //this._retrieveData();
-              //alert(this.state.nameinput);
-              if(this.state.pw != this.state.repw){
-                alert('Password error');
-              }
-            }}
+                  padding: 15,marginBottom: 30}}
+            disabled={this.state.createbutton}
+            onPress={this.signup}
             >
               <Text style={styles.createtext}>Create Account</Text>
             </TouchableOpacity>
           </View>
       </ScrollView>
     );
+  }
+  signup = () => {
+      if(this.state.nameinput == "" || this.state.username == "" || this.state.pw == "" 
+      || this.state.repw == "" || this.state.emailadd == "" || this.state.phonenum == ""){
+        alert("Please fill out all fields.");
+      }
+      else{
+        if(this.state.pw == this.state.repw){
+          var dbefore = false;
+          if(this.state.donatedbefore == 'No'){
+            dbefore = false;
+          }else{
+            dbefore = true;
+          }
+          fetch('http://192.168.43.18:3000/users/signup', {
+                  method: 'POST',
+                  headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    user_name: this.state.nameinput,
+                    user_username: this.state.username,
+                    user_emailAdd: this.state.emailadd,
+                    user_contactNum: this.state.phonenum,
+                    user_password: this.state.pw,
+                    donated_before: dbefore,
+                    user_gender: this.state.pickgen,
+                    user_birthday: this.state.date,
+                  })
+    
+          })
+          .then((response) => {
+            if (response.status === 200) {
+              //alert('Hello' + response.username);
+              alert("User account has been created.")
+            }else if(response.status === 400){
+              alert("Invalid email address.")
+            }
+            else {
+              alert("Username/Email already exists.");
+            }
+          })  
+          .done();
+        }else{
+          alert("Passwords does not match.");
+        }
+      }
   }
 }
 
