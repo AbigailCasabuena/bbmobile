@@ -43,6 +43,7 @@ export default class Login extends Component<Props> {
   _storeData = async () => {
     try {
       alert(this.state.username)
+      //await AsyncStorage.setItem('LoggedName', String(this.state.username));
       await AsyncStorage.setItem('LoggedUser', String(this.state.username));
       await AsyncStorage.setItem('Logged', String(true));
       //alert(this.state.username);
@@ -60,7 +61,7 @@ export default class Login extends Component<Props> {
       const value1 = await AsyncStorage.getItem('Logged');
       const value2 = await AsyncStorage.getItem('LoggedUser');
       if(value1 == 'true'){
-        alert(value2);
+        //alert(value2);
         this.props.navigation.navigate('Home');
       }
     } catch (error) {

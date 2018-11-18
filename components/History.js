@@ -4,7 +4,8 @@ import React, { Component } from 'react';
   Text,
   View,
 } from 'react-native';*/
-import HeaderNew from './HeaderNew';
+import HistoryHeader from './HistoryHeader';
+import HistorySubHeader from './HistorySubHeader';
 //import Button from 'react-native-button';
 import { Image } from 'react-native';
 import Moment from 'moment';
@@ -27,7 +28,7 @@ import { Container,
 //YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
 type Props = {};
-export default class NewsFeed extends Component<Props> {
+export default class History extends Component<Props> {
   /*constructor(props) {
     super(props)
 
@@ -50,74 +51,59 @@ export default class NewsFeed extends Component<Props> {
   constructor() {
     super();
     this.state = {
-        data: []
+        data: [],
+        selected: "Donations",
     }
   }
 
 
   componentDidMount() {
     //alert('hello');
-    fetch("http://192.168.43.18:3000/newsfeed/")
-    .then((result) => result.json())
-    .then((res) => {
-      this.setState({ data: res});
-      //alert(res);
-    })
-    .catch(e => e)
-
+    
   }
 
 
   render() {
-    /*var items = [
+    var final =[];
+
+    var items = [
       {
-        name: "Abigail",
-        age: 19
+        chapter: "Philippine Red Cross Manila",
+        bags: 2,
+        date: "February 1, 2018"
       },
       {
-        name: "Asleeh",
-        age: 22
+        chapter: "Philippine Red Cross Caloocan",
+        bags: 1,
+        date: "February 4, 2018"
       },
       {
-        name: "Christian",
-        age: 15
+        chapter: "Philippine Red Cross Valenzuela",
+        bags: 2,
+        date: "February 8, 2018"
       },
-    ];*/
-    Moment.locale('en');
+    ];
+    
+    //Moment.locale('en');
     return (
       <Container>
-        <HeaderNew {...this.props} />
+        <HistoryHeader {...this.props} />
+        <HistorySubHeader {...this.props} />
         <Content>
-          <List dataArray={this.state.data}
+          <List dataArray={items}
             renderRow={(item) =>
               <ListItem>
               <Card width={'100%'}>
                 <CardItem>
-                  <Left>
-                    <Thumbnail source={require('../img/redcross.png')} />
-                    <Body>
-                      <Text>Philippine Red Cross</Text>
-                      <Text note>{Moment(item.date_posted).format('MMMM DD, YYYY')}</Text>
-                    </Body>
-                  </Left>
-                </CardItem>
-                <CardItem>
                   <Body>
-                  <Image source={require('../img/blooddrive1.jpg')} style={{height: 200, width: 300, flex: 1}}/>
+                    <Text style={{fontWeight: 'bold'}}>
+                      {item.chapter}{"\n"}
+                    </Text>
                     <Text>
-                      {item.nw_content}
+                      {item.bags}{" "}bags donated{"\n"}
+                      {item.date}
                     </Text>
                   </Body>
-                </CardItem>
-                <CardItem footer>
-                  <Left>
-                  <Button transparent>
-                    <Icon active name="thumbs-up"
-                    style={{color: '#E57373',
-                    fontSize: 30}} />
-                    <Text>12 Likes</Text>
-                  </Button>
-                  </Left>
                 </CardItem>
               </Card>
               </ListItem>

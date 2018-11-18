@@ -13,6 +13,7 @@ import ForgotPassword2 from './components/ForgotPassword2';
 import ForgotPassword3 from './components/ForgotPassword3';
 import SelectBloodBanks from './components/SelectBloodBanks';
 import trycheck from './components/trycheck';
+import History from './components/History';
 //import Stack from './components/StackNav1';
 //import ModalExample from './components/ModalExample';
 
@@ -38,25 +39,7 @@ else{
     initial = 'Login';
 }*/
 
-_retrieveData = async () => {
-    //alert('myaw');
-    try {
-      const value1 = await AsyncStorage.getItem('Logged');
-      const value2 = await AsyncStorage.getItem('LoggedUser');
-      if(value1 == 'true'){
-        initial = 'Home';
-        uname = value2;
-        //this.props.navigation.navigate('Home');
-      }
-      else{
-        initial = 'Login';
-      }
-    } catch (error) {
-      alert(error.message);
-    }
-}
 
-this._retrieveData();
 //alert(initial);
 
 const ForgotStack = StackNavigator({
@@ -139,8 +122,13 @@ const SignUpStack = StackNavigator({
         path: '/home',
         screen: NewsFeed
     },
-    
+    History: {
+        path: '/history',
+        screen: History
+    },
  };
+
+ //let final;
 
  let drawernav = {
      //initialRouteName
@@ -156,7 +144,7 @@ const SignUpStack = StackNavigator({
           color: '#000',
         },
       },
-      initialRouteName: initial
+      initialRouteName: 'Login'
  };
 
 const App = DrawerNavigator(routeConfigs,drawernav);

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Button from 'react-native-button';
+//import Button from 'react-native-button';
 import {
     Text,
     View,
@@ -10,7 +10,7 @@ import {
     StyleSheet,
 } from 'react-native';
 
-export default class Header extends Component {
+export default class HeaderNew extends Component {
     _storeData = async () => {
         try {
           await AsyncStorage.setItem('LoggedUser', String(' '));

@@ -124,7 +124,7 @@ export default class SignUp extends React.Component {
       emailadd: '',
       phonenum: '',
       pickgen: 'Male',
-      createbutton: true,
+      createbutton: false,
       //name: INFO[name].value,
       //modalVisible: false,
     };
@@ -255,7 +255,7 @@ export default class SignUp extends React.Component {
           navigate('BloodBanksScreen',{name:'BloodBanksScreen', donatedbefore: this.state.donatedbefore});
         });
       }else{
-        this.setState({createbutton: false});
+        this.setState({createbutton: false,donatedbefore: 'No'});
       }
     }
 
@@ -374,7 +374,7 @@ export default class SignUp extends React.Component {
           }else{
             dbefore = true;
           }
-          fetch('http://192.168.43.18:3000/users/signup', {
+          fetch('http://192.168.1.59:3000/users/signup', {
                   method: 'POST',
                   headers: {
                     'Accept': 'application/json',
@@ -389,6 +389,7 @@ export default class SignUp extends React.Component {
                     donated_before: dbefore,
                     user_gender: this.state.pickgen,
                     user_birthday: this.state.date,
+                    is_Active: false,
                   })
     
           })
