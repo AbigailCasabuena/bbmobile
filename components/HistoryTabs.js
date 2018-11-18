@@ -6,6 +6,7 @@ import React, { Component } from 'react';
 } from 'react-native';*/
 import HistoryHeader from './HistoryHeader';
 import HistorySubHeader from './HistorySubHeader';
+import History from './History';
 //import Button from 'react-native-button';
 import { Image } from 'react-native';
 import Moment from 'moment';
@@ -23,12 +24,16 @@ import { Container,
         Button,
         Card,
         CardItem,
-        Thumbnail } from 'native-base';
+        Thumbnail,
+        Tab,
+        TabHeading,
+        Tabs,
+        ScrollableTab} from 'native-base';
 //import { YellowBox } from 'react-native';
 //YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
 type Props = {};
-export default class History extends Component<Props> {
+export default class HistoryTabs extends Component<Props> {
   /*constructor(props) {
     super(props)
 
@@ -87,27 +92,19 @@ export default class History extends Component<Props> {
     //Moment.locale('en');
     return (
       <Container>
-        <Content>
-          <List dataArray={items}
-            renderRow={(item) =>
-              <ListItem>
-              <Card width={'100%'}>
-                <CardItem>
-                  <Body>
-                    <Text style={{fontWeight: 'bold'}}>
-                      {item.chapter}{"\n"}
-                    </Text>
-                    <Text>
-                      {item.bags}{" "}bags donated{"\n"}
-                      {item.date}
-                    </Text>
-                  </Body>
-                </CardItem>
-              </Card>
-              </ListItem>
-            }>
-          </List>
-        </Content>
+        <HistoryHeader {...this.props} />
+        <Tabs renderTabBar={()=> <ScrollableTab style={{backgroundColor:'#B81E12'}}/>}>
+          <Tab heading={<TabHeading style={{backgroundColor:'#B81E12'}}>
+                 <Text style={{color: 'white'}}>Blood Donations</Text>
+               </TabHeading>}>
+            <History />
+          </Tab>
+          <Tab heading={<TabHeading style={{backgroundColor:'#B81E12'}}>
+                 <Text style={{color: 'white'}}>Blood Requests</Text>
+               </TabHeading>}>
+            <History />
+          </Tab>
+        </Tabs>
       </Container>
     );
   }

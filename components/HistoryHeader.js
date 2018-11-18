@@ -39,6 +39,25 @@ export default class HistoryHeader extends Component {
                     marginLeft: 13,
                     marginRight: 140,
                 }}>History</Text>
+                <TouchableHighlight style={{marginRight: 15}}
+                        onPress={() => {
+                            const {navigate} = this.props.navigation;
+                            navigate('DrawerOpen');
+                        }}>
+                        <Image
+                            style={{width:24, height:24}}
+                            source={require('../img/notif.png')}
+                        />
+                    
+                </TouchableHighlight> 
+                <TouchableHighlight style={{}}
+                        onPress={this._storeData}>
+                        <Image
+                            style={{width:24, height:24}}
+                            source={require('../img/settings.png')}
+                        />
+                    
+                </TouchableHighlight> 
             </View>
             
         );

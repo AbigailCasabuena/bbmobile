@@ -14,6 +14,7 @@ import ForgotPassword3 from './components/ForgotPassword3';
 import SelectBloodBanks from './components/SelectBloodBanks';
 import trycheck from './components/trycheck';
 import History from './components/History';
+import HistoryTabs from './components/HistoryTabs';
 //import Stack from './components/StackNav1';
 //import ModalExample from './components/ModalExample';
 
@@ -124,7 +125,7 @@ const SignUpStack = StackNavigator({
     },
     History: {
         path: '/history',
-        screen: History
+        screen: HistoryTabs
     },
  };
 
