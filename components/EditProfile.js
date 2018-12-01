@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-
+import {Text, View, TouchableOpacity, Image} from 'react-native';
 import EditProfileHeader from './EditProfileHeader';
+import ImagePicker from 'react-native-image-picker';
 
 import { Container, 
         Header, 
         Content, 
         List, 
         ListItem, 
-        Text, 
         Icon, 
         Left, 
         Body, 
@@ -20,11 +20,19 @@ import { Container,
         TabHeading,
         Tabs,
         ScrollableTab} from 'native-base';
-import { Image, Button, TouchableOpacity } from 'react-native';
 //const FilePicker = require('NativeModules').FilePickerManager;
-import CameraRollPicker from 'react-native-camera-roll-picker';
+//import CameraRollPicker from 'react-native-camera-roll-picker';
 
 type Props = {};
+
+const options={
+  title: "my pic app",
+  maxWidth: 800, // photos only
+  maxHeight: 500,
+  takePhotoButtonTitle: "camera",
+  chooseFromLibraryButtonTitle: "library",
+}
+
 export default class EditProfile extends Component<Props> {
   /*constructor(props) {
     super(props)
@@ -38,8 +46,8 @@ export default class EditProfile extends Component<Props> {
   constructor(props) {
     super(props);
     this.state = {
-        data: [],
-        selectedImage: '',
+      avatarSource: null,
+      data: null
     }
   }
 
@@ -48,36 +56,73 @@ export default class EditProfile extends Component<Props> {
     
   }
 
-  getSelectedImages=(image)=>{
-    if(image[0]){
-      //alert(image[0].uri);
-      this.setState({selectedImage: image[0].uri});
-      //alert(JSON.stringify(image[0]));
-    }
+  execPic=()=>{
+    ImagePicker.showImagePicker(options, (response) => {
+      console.log('Response = ', response);
+    
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      } else {
+        const source = { uri: response.uri, path: response.path, type: response.type, fileName: response.fileName };
+    
+        // You can also display the image using data:
+        // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+    
+        this.setState({
+          avatarSource: source,
+        });
+        alert(source.path);
+      }
+    });    
   }
 
-  saveImg(){
-    alert(this.state.selectedImage);
-    const data = new FormData();
-    data.append('name', 'avatar');
-    data.append('price', 25);
-    data.append('productImage', {
-      uri : this.state.selectedImage,
-    });
-    fetch('http://192.168.43.18:3000/products/upload', {
+  savepic=()=>{
+    var formData = new FormData();
+        formData.append("name", "bts");
+        formData.append("price", "100");
+
+        // pictureSource is object containing image data.
+        var pictureSource = this.state.avatarSource;
+        //alert(pictureSource.path);
+
+        if (pictureSource) {
+          var photo = {
+            uri: pictureSource.uri,
+            type: pictureSource.type,
+            name: pictureSource.fileName,
+            path: pictureSource.uri,
+          };
+          formData.append('productImage', photo);
+
+          fetch('http://192.168.43.18:3000/products', {  
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'multipart/form-data'
+            },
+            method: 'POST',
+            body: formData
+          });
+        }
+
+        /*fetch('http://192.168.43.18:3000/products/', {
                   method: 'POST',
                   headers: {
                     'Accept': 'application/json',
-                    'Content-Type': 'multipart/form-data',
                   },
-                  body: data
+                  body: formData
           })
-          .then((response) => {
-            if (response.status === 200) {
-              alert("Saved");
+          .then((response,err) => {
+            if(response.status === 200){
+              alert("done");
+            }else{
+              alert(err.message);
             }
-          })
-          .done();
+          })  
+          .done();*/
   }
 
   render() {
@@ -86,10 +131,17 @@ export default class EditProfile extends Component<Props> {
         <EditProfileHeader {...this.props} />
         <Content>
             <Text> Hello</Text>
-            <TouchableOpacity style={{backgroundColor:'red',padding: 10}} onPress={this.saveImg.bind(this)}>
-              <Text> Save </Text>
+            {
+              /*
+              <CameraRollPicker callback={this.getSelectedImages.bind(this)} assetType="All"/>
+              */
+            }
+            <TouchableOpacity onPress={this.execPic} style={{backgroundColor: 'red',padding: 10}}>
+              <Text style={{color:'white'}}> Select Image </Text>
             </TouchableOpacity>
-            <CameraRollPicker callback={this.getSelectedImages.bind(this)} assetType="All"/>
+            <TouchableOpacity onPress={this.savepic} style={{backgroundColor: 'red',padding: 10}}>
+              <Text style={{color:'white'}}> Save </Text>
+            </TouchableOpacity>
         </Content>
       </Container>
     );
