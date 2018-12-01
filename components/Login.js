@@ -10,8 +10,8 @@ import {
 } from 'react-native';
 import Header from './Header';
 import Button from 'react-native-button';
-//import { YellowBox } from 'react-native';
-//YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
+import { YellowBox } from 'react-native';
+YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
 type Props = {};
 export default class Login extends Component<Props> {
@@ -23,6 +23,7 @@ export default class Login extends Component<Props> {
     this.state = {
       username: '',
       password: '',
+      data: [],
     }
 
   }
@@ -42,7 +43,7 @@ export default class Login extends Component<Props> {
 
   _storeData = async () => {
     try {
-      alert(this.state.username)
+      //alert(this.state.username)
       //await AsyncStorage.setItem('LoggedName', String(this.state.username));
       await AsyncStorage.setItem('LoggedUser', String(this.state.username));
       await AsyncStorage.setItem('Logged', String(true));
@@ -188,6 +189,19 @@ export default class Login extends Component<Props> {
       .then((response) => {
         if (response.status === 200) {
             //alert('Hello' + response.username);
+            var uname = this.state.username;
+            fetch("http://192.168.43.18:3000/users/"+uname)
+            .then((result) => result.json())
+            .then((res) => {
+              //this.setState({ data: res});
+              //alert(res[0]._id);
+              try{
+                AsyncStorage.setItem('LoggedUserId', String(res[0]._id));
+              }catch(error){
+                alert(error.message);
+              }
+            })
+            .catch(e => e);
             this._storeData();
             this.props.navigation.navigate('Home');
         }

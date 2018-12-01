@@ -8,6 +8,7 @@ import {
     AsyncStorage,
     ToolbarAndroid,
     StyleSheet,
+    TouchableOpacity
 } from 'react-native';
 
 export default class HeaderNew extends Component {
@@ -35,7 +36,7 @@ export default class HeaderNew extends Component {
                 borderBottomColor: '#B81E12',
                 borderBottomWidth: 2
             }}> 
-                <TouchableHighlight style={{marginLeft: 10}}
+                <TouchableOpacity style={{marginLeft: 10}}
                     onPress={() => {
                         const {navigate} = this.props.navigation;
                         navigate('DrawerOpen');
@@ -45,32 +46,32 @@ export default class HeaderNew extends Component {
                         source={require('../img/bbphicon.png')}
                     />
                 
-                </TouchableHighlight>  
+                </TouchableOpacity>  
                 <Text style={{
                     fontSize: 16,
                     fontWeight: 'bold',
                     marginLeft: 13,
                     marginRight: 140,
                 }}>News Feed</Text>
-                <TouchableHighlight style={{marginRight: 15}}
+                <TouchableOpacity style={{marginRight: 15}}
                         onPress={() => {
                             const {navigate} = this.props.navigation;
-                            navigate('DrawerOpen');
+                            navigate('Notifications');
                         }}>
                         <Image
                             style={{width:24, height:24}}
                             source={require('../img/notif.png')}
                         />
                     
-                </TouchableHighlight> 
-                <TouchableHighlight style={{}}
+                </TouchableOpacity> 
+                <TouchableOpacity style={{}}
                         onPress={this._storeData}>
                         <Image
                             style={{width:24, height:24}}
                             source={require('../img/settings.png')}
                         />
                     
-                </TouchableHighlight> 
+                </TouchableOpacity> 
                 
             </View>
         );

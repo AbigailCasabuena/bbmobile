@@ -57,7 +57,7 @@ export default class NewsFeed extends Component<Props> {
 
   componentDidMount() {
     //alert('hello');
-    fetch("http://192.168.43.18:3000/newsfeed/")
+    fetch("http://192.168.1.7:8080/getnewsfeed/")
     .then((result) => result.json())
     .then((res) => {
       this.setState({ data: res});

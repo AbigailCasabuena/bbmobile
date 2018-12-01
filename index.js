@@ -1,8 +1,5 @@
 import { AppRegistry, Dimensions,Text,View,AsyncStorage} from 'react-native';
-//import {StackNavigator} from 'react-navigation';
 import {DrawerNavigator,DrawerItems,StackNavigator} from 'react-navigation';
-//import { createStore, combineReducers } from 'redux';
-//import { connect } from 'react-redux';
 
 import Splash from './components/Splash';
 import Login from './components/Login';
@@ -11,15 +8,14 @@ import NewsFeed from './components/NewsFeed';
 import ForgotPassword from './components/ForgotPassword';
 import ForgotPassword2 from './components/ForgotPassword2';
 import ForgotPassword3 from './components/ForgotPassword3';
-import SelectBloodBanks from './components/SelectBloodBanks';
 import trycheck from './components/trycheck';
-import History from './components/History';
 import HistoryTabs from './components/HistoryTabs';
-//import Stack from './components/StackNav1';
-//import ModalExample from './components/ModalExample';
+import Notifications from './components/Notifications';
+import EditProfile from './components/EditProfile';
+import SingleEvent from './components/SingleEvent';
+import SingleAnnouncement from './components/SingleAnnouncement';
 
 import React, { Component } from 'react';
-import {SplashScreen ,LoginScreen,SignUpScreen,NewsScreen,ForgotScreen,Forgot2Screen,Forgot3Screen} from './screen';
 
 var initial = '';
 var uname = '';
@@ -68,6 +64,18 @@ const SignUpStack = StackNavigator({
     initialRouteName: 'SignUpScreen'
 })
 
+/*const SingleEventStack = StackNavigator({
+    Notifications: {
+        screen: Notifications,
+    },
+    SingleEvent: {
+        screen: SingleEvent,
+    },
+},{
+    initialRouteName: 'SingleEvent'
+})*/
+
+
  const DrawerContent = (props) => (
     <View>
       <View
@@ -79,7 +87,7 @@ const SignUpStack = StackNavigator({
         }}
       >
         <Text style={{ color: 'white', fontSize: 30 }}>
-          {uname}
+          BloodBank PH
         </Text>
       </View>
       <DrawerItems {...props} />
@@ -126,6 +134,31 @@ const SignUpStack = StackNavigator({
     History: {
         path: '/history',
         screen: HistoryTabs
+    },
+    Notifications: {
+        path: '/notifications',
+        screen: Notifications,
+        navigationOptions: {
+            drawerLabel: () => null
+        }
+    },
+    'Edit Profile': {
+        path: '/editprofile',
+        screen: EditProfile
+    },
+    SingleEvent: {
+        path: '/singleevent',
+        screen: SingleEvent,
+        navigationOptions: {
+            drawerLabel: () => null
+        }
+    },
+    SingleAnnouncement: {
+        path: '/singleannouncement',
+        screen: SingleAnnouncement,
+        navigationOptions: {
+            drawerLabel: () => null
+        }
     },
  };
 

@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import {AsyncStorage} from 'react-native';
 import { Container, Header, Content, ListItem, CheckBox, Text, Body, Button} from 'native-base';
 
 var SampleArray = [];
+var a = '';
 
 export default class trycheck extends Component {
   constructor(props){
@@ -14,6 +16,15 @@ export default class trycheck extends Component {
       isChecked5: false,
       isChecked6: false,
       isChecked7: false,
+      nameinput: '',
+      username: '',
+      pw: '',
+      repw: '',
+      date:'',
+      emailadd: '',
+      phonenum: '',
+      pickgen: 'Male',
+      donatedbefore: 'No',
     };
   }
 
@@ -103,6 +114,118 @@ export default class trycheck extends Component {
     alert(SampleArray.toString());
   }
 
+  //store
+  _storeData = async () => {
+    try {
+      await AsyncStorage.setItem('SignName', this.state.nameinput);
+    } catch (error) {
+      alert('error store name');
+    }
+    try {
+      await AsyncStorage.setItem('SignUsername', this.state.username);
+    } catch (error) {
+      alert('error store username');
+    }
+    try{
+      await AsyncStorage.setItem('SignPword', this.state.pw);
+    } catch (error) {
+      alert('error store pw');
+    }
+    try{
+      await AsyncStorage.setItem('SignRepword', this.state.repw);
+    } catch (error) {
+      alert('error store repw');
+    }
+    try{
+      await AsyncStorage.setItem('Pickgen', this.state.pickgen);
+    } catch (error) {
+      alert('error store pickgen');
+    }
+    try{
+      await AsyncStorage.setItem('Date', this.state.date);
+    } catch (error) {
+      alert('error store date');
+    }
+    try{
+      await AsyncStorage.setItem('Email', this.state.emailadd);
+    } catch (error) {
+      alert('error store email');
+    }
+    try{
+      await AsyncStorage.setItem('Phonenum', this.state.phonenum);
+    } catch (error) {
+      alert('error store phone num');
+    }
+    try{
+      await AsyncStorage.setItem('Donatedbefore', this.state.donatedbefore);
+    } catch (error) {
+      alert('error store donated before');
+    }
+  }
+
+  //retrieve info
+  _retrieveData = async () => {
+    try {
+      const value1 = await AsyncStorage.getItem('SignName');
+      this.setState({nameinput: value1});
+      //a = value1;
+    } catch (error) {
+      alert('error retrieve name ' + error.message);
+    }
+    try {
+      const valueuname = await AsyncStorage.getItem('SignUsername');
+      this.setState({username: valueuname});
+    } catch (error) {
+      alert('error retrieve username ' + error.message);
+    }
+    try{
+      const value2 = await AsyncStorage.getItem('SignPword');
+      this.setState({pw: value2});
+    } catch (error) {
+      alert('error retrieve pw ' + error.message);
+    }
+    try{
+      const value3 = await AsyncStorage.getItem('SignRepword');
+      this.setState({repw: value3});
+    } catch (error) {
+      alert('error retrieve repw ' + error.message);
+    }
+    try{
+      const value4 = await AsyncStorage.getItem('Date');
+      this.setState({date: value4});
+    } catch (error) {
+      alert('error retrieve date ' + error.message);
+    }
+    try{
+      const value8 = await AsyncStorage.getItem('Pickgen');
+      this.setState({pickgen: value8});
+     } catch (error) {
+       alert('error retrieve pickgen ' + error.message);
+     }
+    try{
+      const value5 = await AsyncStorage.getItem('Email');
+      this.setState({emailadd: value5});
+    } catch (error) {
+      alert('error retrieve email ' + error.message);
+    }
+    try{
+      const value6 = await AsyncStorage.getItem('Phonenum');
+      this.setState({phonenum: value6});
+    } catch (error) {
+      alert('error retrieve phonenum ' + error.message);
+    }
+    try{
+      const value9 = await AsyncStorage.getItem('Donatedbefore');
+      this.setState({donatedbefore: value9});
+    } catch (error) {
+      alert('error retrieve donated before ' + error.message);
+    }
+  }
+
+  componentDidMount(){
+    this._retrieveData();
+  }
+
   render() {
     return (
       <Container>
@@ -179,7 +302,7 @@ export default class trycheck extends Component {
             </Body>
           </ListItem>
         </Content>
-        <Button onPress={()=>{alert(SampleArray.toString())}}
+        <Button onPress={this.signup}
         style={{
           backgroundColor: "#B81E12",
           alignSelf: "center",
@@ -188,5 +311,78 @@ export default class trycheck extends Component {
         </Button>
       </Container>
     );
+  }
+
+  signup = () => {
+    //this._retrieveData();
+    if(SampleArray.length == 0){
+      alert("Please select blood bank/s.");
+    }
+    else{
+      if(this.state.nameinput == "" || this.state.username == "" || this.state.pw == "" 
+    || this.state.repw == "" || this.state.emailadd == "" || this.state.phonenum == ""){
+      alert("Please fill out all fields.");
+    }
+    else{
+      if(this.state.pw == this.state.repw){
+        var dbefore = false;
+        if(this.state.donatedbefore == 'No'){
+          dbefore = false;
+        }else{
+          dbefore = true;
+        }
+        fetch('http://192.168.43.18:3000/users/signup', {
+                method: 'POST',
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  user_name: this.state.nameinput,
+                  user_username: this.state.username,
+                  user_emailAdd: this.state.emailadd,
+                  user_contactNum: this.state.phonenum,
+                  user_password: this.state.pw,
+                  donated_before: dbefore,
+                  user_gender: this.state.pickgen,
+                  user_birthday: this.state.date,
+                  is_Active: false,
+                  bloodbank_array: SampleArray,
+                })
+  
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            try{
+              AsyncStorage.setItem('LoggedUser', this.state.username);
+            } catch (error) {
+              alert('error store user');
+            }
+            this.setState({
+              nameinput: '',
+              username: '',
+              pw: '',
+              repw: '',
+              pickgen: 'Male',
+              date: '',
+              emailadd: '',
+              phonenum: '',
+              donatedbefore: 'No'
+            });
+            this._storeData();
+            alert("User account has been created.")
+          }else if(response.status === 400){
+            alert("Invalid email address.")
+          }
+          else {
+            alert("Username/Email already exists.");
+          }
+        })  
+        .done();
+        }else{
+          alert("Passwords does not match.");
+        }
+      }
+    }
   }
 }

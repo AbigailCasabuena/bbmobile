@@ -10,7 +10,7 @@ import {
     StyleSheet,
 } from 'react-native';
 
-export default class HistoryHeader extends Component {
+export default class SingleAnnouncementHeader extends Component {
 
     render(){
         return (
@@ -21,6 +21,8 @@ export default class HistoryHeader extends Component {
                 flexDirection: 'row',
                 justifyContent: 'flex-start',
                 alignItems: 'center',
+                borderBottomColor: '#B81E12',
+                borderBottomWidth: 2
             }}> 
                 <TouchableOpacity style={{marginLeft: 10}}
                     onPress={() => {
@@ -38,7 +40,7 @@ export default class HistoryHeader extends Component {
                     fontWeight: 'bold',
                     marginLeft: 13,
                     marginRight: 140,
-                }}>History</Text>
+                }}>Announcement</Text>
                 <TouchableOpacity style={{marginRight: 15}}
                         onPress={() => {
                             const {navigate} = this.props.navigation;

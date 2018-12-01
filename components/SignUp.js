@@ -116,7 +116,9 @@ export default class SignUp extends React.Component {
       maxdate:"12-31-" + maxyear,
       valuedonation: 'No',
       donatedbefore: 'No',
-      nameinput: '',
+      firstname: '',
+      middlename: '',
+      lastname: '',
       username: '',
       pw: '',
       repw: '',
@@ -136,9 +138,19 @@ export default class SignUp extends React.Component {
 
   _storeData = async () => {
     try {
-      await AsyncStorage.setItem('SignName', this.state.nameinput);
+      await AsyncStorage.setItem('SignFirstName', this.state.firstname);
     } catch (error) {
-      alert('error store name');
+      alert('error store first name');
+    }
+    try {
+      await AsyncStorage.setItem('SignMiddleName', this.state.middlename);
+    } catch (error) {
+      alert('error store middle name');
+    }
+    try {
+      await AsyncStorage.setItem('SignLastName', this.state.lastname);
+    } catch (error) {
+      alert('error store last name');
     }
     try {
       await AsyncStorage.setItem('SignUsername', this.state.username);
@@ -157,26 +169,31 @@ export default class SignUp extends React.Component {
     }
     try{
       await AsyncStorage.setItem('Pickgen', this.state.pickgen);
+      alert("Pickgen: " + this.state.pickgen);
     } catch (error) {
       alert('error store pickgen');
     }
     try{
       await AsyncStorage.setItem('Date', this.state.date);
+      alert("Bdate: " + this.state.date);
     } catch (error) {
       alert('error store date');
     }
     try{
       await AsyncStorage.setItem('Email', this.state.emailadd);
+      alert("Email: " + this.state.emailadd);
     } catch (error) {
       alert('error store email');
     }
     try{
       await AsyncStorage.setItem('Phonenum', this.state.phonenum);
+      alert("Phonenum: " + this.state.phonenum);
     } catch (error) {
       alert('error store phone num');
     }
     try{
       await AsyncStorage.setItem('Donatedbefore', this.state.donatedbefore);
+      alert("Donated before: " + this.state.donatedbefore);
     } catch (error) {
       alert('error store donated before');
     }
@@ -184,10 +201,22 @@ export default class SignUp extends React.Component {
 
   _retrieveData = async () => {
     try {
-      const value1 = await AsyncStorage.getItem('SignName');
-      this.setState({nameinput: value1});
+      const value1 = await AsyncStorage.getItem('SignFirstName');
+      this.setState({firstname: value1});
     } catch (error) {
-      alert('error retrieve name');
+      alert('error retrieve first name');
+    }
+    try {
+      const value1 = await AsyncStorage.getItem('SignMiddleName');
+      this.setState({middlename: value1});
+    } catch (error) {
+      alert('error retrieve middle name');
+    }
+    try {
+      const value1 = await AsyncStorage.getItem('SignLastName');
+      this.setState({lastname: value1});
+    } catch (error) {
+      alert('error retrieve last name');
     }
     try {
       const valueuname = await AsyncStorage.getItem('SignUsername');
@@ -265,9 +294,19 @@ export default class SignUp extends React.Component {
           <Text style={styles.headtext}>Sign Up</Text>
         </View>
         <FloatingLabelInput
-          label="Name"
-          onChangeText={(text) => this.setState({nameinput: text})}
-          defaultValue={this.state.nameinput}
+          label="First Name"
+          onChangeText={(text) => this.setState({firstname: text})}
+          defaultValue={this.state.firstname}
+        />
+        <FloatingLabelInput
+          label="Middle Name"
+          onChangeText={(text) => this.setState({middlename: text})}
+          defaultValue={this.state.middlename}
+        />
+        <FloatingLabelInput
+          label="Last Name"
+          onChangeText={(text) => this.setState({lastname: text})}
+          defaultValue={this.state.lastname}
         />
         <FloatingLabelInput
           label="Username"
@@ -362,7 +401,7 @@ export default class SignUp extends React.Component {
     );
   }
   signup = () => {
-      if(this.state.nameinput == "" || this.state.username == "" || this.state.pw == "" 
+      if(this.state.firstname == "" || this.state.lastname == "" || this.state.username == "" || this.state.pw == "" 
       || this.state.repw == "" || this.state.emailadd == "" || this.state.phonenum == ""){
         alert("Please fill out all fields.");
       }
@@ -381,7 +420,9 @@ export default class SignUp extends React.Component {
                     'Content-Type': 'application/json',
                   },
                   body: JSON.stringify({
-                    user_name: this.state.nameinput,
+                    user_firstname: this.state.firstname,
+                    user_middlename: this.state.middlename,
+                    user_lastname: this.state.lastname,
                     user_username: this.state.username,
                     user_emailAdd: this.state.emailadd,
                     user_contactNum: this.state.phonenum,
@@ -401,7 +442,9 @@ export default class SignUp extends React.Component {
                 alert('error store user');
               }
               this.setState({
-                nameinput: '',
+                firstname: '',
+                middlename: '',
+                lastname: '',
                 username: '',
                 pw: '',
                 repw: '',
@@ -409,7 +452,7 @@ export default class SignUp extends React.Component {
                 date: '',
                 emailadd: '',
                 phonenum: '',
-                donated_before: 'No'
+                donatedbefore: 'No'
               });
               this._storeData();
               alert("User account has been created.")
