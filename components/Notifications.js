@@ -26,6 +26,7 @@ import { Container,
 type Props = {};
 
 var id = '';
+var imgpath = 'http://192.168.43.18:3000/uploads/message.png';
 
 export default class Notifications extends Component<Props> {
   /*constructor(props) {
@@ -44,6 +45,7 @@ export default class Notifications extends Component<Props> {
         data_all: [],
         userId: '',
         disabled_property: false,
+        image: 'http://192.168.43.18:3000/uploads/message.png'
     }
   }
 
@@ -110,6 +112,36 @@ export default class Notifications extends Component<Props> {
     }
   }
 
+  checkType=(type)=>{
+    if(type == "event"){
+      return "Upcoming Event"
+    }
+    if(type == "announcement"){
+      return "Announcement"
+    }
+    if(type == "message"){
+      return "Message"
+    }
+    if(type == "notice"){
+      return "Blood Donation Notice"
+    }
+  }
+
+  checkthumbnail=(type)=>{
+    if(type == "event"){
+      imgpath = 'http://192.168.43.18:3000/uploads/event.png';
+    }
+    if(type == "announcement"){
+      imgpath = 'http://192.168.43.18:3000/uploads/announce.png';
+    }
+    if(type == "message"){
+      imgpath =  'http://192.168.43.18:3000/uploads/message.png';
+    }
+    if(type == "notice"){
+      imgpath = 'http://192.168.43.18:3000/uploads/notice.png';
+    }
+  }
+
   render() {
     return (
       <Container>
@@ -120,13 +152,19 @@ export default class Notifications extends Component<Props> {
               <ListItem>
               <Card width={'100%'}>
                 <CardItem>
+                <Left>
+                    {this.checkthumbnail(item.type)}
+                    <Thumbnail source={{uri:imgpath}} style={{height: 30, width: 30}}/>
+                    <Body>
+                      <Text>{this.checkType(item.type)}</Text>
+                    </Body>
+                </Left>
+                </CardItem>
+                <CardItem>
                   <Body>
-                    <TouchableOpacity onPress={this.getContent} disabled={this.checkDisabled(item.type)}>
                     <Text>
-                      {item.type + "\n"}
                       {item.content}
                     </Text>
-                    </TouchableOpacity>
                   </Body>
                 </CardItem>
                 <CardItem>
