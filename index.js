@@ -14,6 +14,7 @@ import Notifications from './components/Notifications';
 import EditProfile from './components/EditProfile';
 import SingleEvent from './components/SingleEvent';
 import SingleAnnouncement from './components/SingleAnnouncement';
+import ProductSocket from './components/ProductSocket';
 
 import React, { Component } from 'react';
 
@@ -159,6 +160,10 @@ const SignUpStack = StackNavigator({
         navigationOptions: {
             drawerLabel: () => null
         }
+    },
+    ProductSocket: {
+        path: '/psocket',
+        screen: ProductSocket
     },
  };
 

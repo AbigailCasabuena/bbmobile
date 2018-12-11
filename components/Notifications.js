@@ -86,10 +86,10 @@ export default class Notifications extends Component<Props> {
         this.setState({ data: res});
         //alert(res);
       })
-    .catch(e => e);
-    } catch (error) {
-      alert(error.message);
-    }
+      .catch(e => e);
+      } catch (error) {
+        alert(error.message);
+      }
   }
 
   getContent=(itemId,type)=>{
