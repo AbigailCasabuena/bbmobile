@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component} from 'react';
 /*import {
   StyleSheet,
   Text,
@@ -6,7 +6,7 @@ import React, { Component } from 'react';
 } from 'react-native';*/
 import HeaderNew from './HeaderNew';
 //import Button from 'react-native-button';
-import { Image } from 'react-native';
+import { Image, TouchableOpacity, View, AsyncStorage,} from 'react-native';
 import Moment from 'moment';
 import { Container, 
         Header, 
@@ -22,20 +22,18 @@ import { Container,
         Button,
         Card,
         CardItem,
-        Thumbnail } from 'native-base';
+        Thumbnail,
+        Segment} from 'native-base';
 //import { YellowBox } from 'react-native';
 //YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
-
 type Props = {};
+var colorcolor="";
+var num;
 export default class NewsFeed extends Component<Props> {
   /*constructor(props) {
     super(props)
 
   }*/
-
-  onPress = () => {
-    
-  }
 
   /*static navigationOptions = ({navigation}) =>{
     let label = 'Login';
@@ -47,42 +45,201 @@ export default class NewsFeed extends Component<Props> {
     );
     return {label,icon};
   };*/
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    
     this.state = {
-        data: []
+        data: [],
+        userid: '',
+        responses: [],
+        respdata: [],
+        lengthx: 0
     }
   }
 
 
   componentDidMount() {
-    //alert('hello');
-    fetch("http://192.168.1.7:8080/getnewsfeed/")
+    //fetch("http://192.168.1.7:8080/getnewsfeed/")
+    this._retrieveData();
+    //this.showId();
+    fetch("http://192.168.43.18:3000/newsfeed")
     .then((result) => result.json())
     .then((res) => {
       this.setState({ data: res});
       //alert(res);
     })
-    .catch(e => e)
-
+    .catch(e=>{
+      
+    })
+    //alert(num);
   }
 
+  async getUsername(){
+    try{
+      let value = await AsyncStorage.getItem('LoggedUserId');
+    //alert(value);
+    return value;
+    }catch(error){
 
-  render() {
-    /*var items = [
-      {
-        name: "Abigail",
-        age: 19
-      },
-      {
-        name: "Asleeh",
-        age: 22
-      },
-      {
-        name: "Christian",
-        age: 15
-      },
-    ];*/
+    }
+  }
+
+  _retrieveData = async () => {
+    try {
+      const value2 = await AsyncStorage.getItem('LoggedUserId');
+      //this.setState({userId: String(value2)});
+      id=String(value2);
+      this.setState({userid: String(value2)});
+      //alert(id);
+      //alert(value2);
+      fetch("http://192.168.43.18:3000/response/"+id)
+      .then((result) => result.json())
+      .then((res) => {
+        this.setState({ respdata: res});
+        //alert(res);
+        //alert(num)
+      })
+      .catch(e => e);
+      } catch (error) {
+      }
+  }
+
+  getBg=(eventid)=>{
+    var ind = this.state.respdata.findIndex(item => (item.event_id == eventid) && (item.response == "interested"));
+    
+    if(ind != -1){
+      //alert('true ' + this.state.respdata[ind]._id);
+      fetch('http://192.168.43.18:3000/response/'+this.state.respdata[ind]._id, {  
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        method: 'DELETE',
+      })
+      .then((response)=>{
+        if(response.status === 200){
+          fetch("http://192.168.43.18:3000/response/"+this.state.userid)
+          .then((result) => result.json())
+          .then((res) => {
+            this.setState({ respdata: res});
+          })
+          .catch(e => e);
+
+          alert('Response has been removed.')
+        }
+      });
+    }else{
+      var xx = this.state.respdata.findIndex(item => (item.event_id == eventid) && (item.response == "going"));
+      if(xx != -1){
+        alert('You already responded "Going".');
+      }else{
+        fetch('http://192.168.43.18:3000/response/', {
+                  method: 'POST',
+                  headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    event_id: eventid,
+                    user_id: this.state.userid,
+                    response: "interested",
+                  })
+          })
+          .then((response) => {
+            if (response.status === 201) {
+              alert("Response has been added.")
+            }
+          })  
+          .done();
+
+          fetch("http://192.168.43.18:3000/response/"+this.state.userid)
+          .then((result) => result.json())
+          .then((res) => {
+            this.setState({ respdata: res});
+          })
+          .catch(e => e);
+      }
+    }
+  }
+
+  getBg2=(eventid)=>{
+    var ind = this.state.respdata.findIndex(item => (item.event_id == eventid) && (item.response == "going"));
+    
+    if(ind != -1){
+      //alert('true ' + this.state.respdata[ind]._id);
+      fetch('http://192.168.43.18:3000/response/'+this.state.respdata[ind]._id, {  
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        method: 'DELETE',
+      })
+      .then((response)=>{
+        if(response.status === 200){
+          fetch("http://192.168.43.18:3000/response/"+this.state.userid)
+          .then((result) => result.json())
+          .then((res) => {
+            this.setState({ respdata: res});
+          })
+          .catch(e => e);
+
+          alert('Response has been removed.')
+        }
+      });
+    }else{
+      var xx = this.state.respdata.findIndex(item => (item.event_id == eventid) && (item.response == "interested"));
+      if(xx != -1){
+        alert('You already responded "Interested".');
+      }else{
+        fetch('http://192.168.43.18:3000/response/', {
+                  method: 'POST',
+                  headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    event_id: eventid,
+                    user_id: this.state.userid,
+                    response: "going",
+                  })
+          })
+          .then((response) => {
+            if (response.status === 201) {
+              alert("Response has been added.")
+            }
+          })  
+          .done();
+
+          fetch("http://192.168.43.18:3000/response/"+this.state.userid)
+          .then((result) => result.json())
+          .then((res) => {
+            this.setState({ respdata: res});
+          })
+          .catch(e => e);
+      }
+    }
+  }
+
+  execfunction=(type, eventid)=>{
+    if(type == 'event'){
+      return <TouchableOpacity style={{backgroundColor: 'white', width: '50%', paddingTop: 7, paddingBottom: 7, borderColor: '#B81E12', borderWidth: 1, alignSelf: 'flex-start'}}
+      onPress={_=>this.getBg(eventid)}>
+        <Text style={{color: 'black', alignSelf: 'center'}}> Interested </Text>
+      </TouchableOpacity>
+    }
+  }  
+
+  execfunction2=(type, eventid)=>{
+    if(type == "event"){
+      return <TouchableOpacity style={{backgroundColor: 'white', width: '50%', paddingTop: 7, paddingBottom: 7, borderColor: '#B81E12', borderWidth: 1, alignSelf: 'auto'}}
+      onPress={_=>this.getBg2(eventid)}>
+        <Text style={{color: '#B81E12', alignSelf: 'center'}}> Going </Text>
+      </TouchableOpacity>
+      //backgroundColor: btncolor, width: '50%', paddingTop: 7, paddingBottom: 7, borderColor: '#B81E12', borderWidth: 1, alignSelf: 'auto'
+    }
+  }
+
+  render() { 
     Moment.locale('en');
     return (
       <Container>
@@ -92,6 +249,14 @@ export default class NewsFeed extends Component<Props> {
             renderRow={(item) =>
               <ListItem>
               <Card width={'100%'}>
+              <List dataArray={this.state.respdata}
+                renderRow={(itemx) =>
+                  <ListItem>
+                    <Text> Hello </Text>
+                  </ListItem>
+                }>
+              </List>
+
                 <CardItem>
                   <Left>
                     <Thumbnail source={require('../img/redcross.png')} />
@@ -103,21 +268,15 @@ export default class NewsFeed extends Component<Props> {
                 </CardItem>
                 <CardItem>
                   <Body>
-                  <Image source={require('../img/blooddrive1.jpg')} style={{height: 200, width: 300, flex: 1}}/>
+                  <Image source={{uri: "http://192.168.43.18:3000/" + item.nw_image}} style={{height: 200, width: 300, flex: 1}}/>
                     <Text>
                       {item.nw_content}
                     </Text>
                   </Body>
                 </CardItem>
                 <CardItem footer>
-                  <Left>
-                  <Button transparent>
-                    <Icon active name="thumbs-up"
-                    style={{color: '#E57373',
-                    fontSize: 30}} />
-                    <Text>12 Likes</Text>
-                  </Button>
-                  </Left>
+                  {this.execfunction(item.type, item._id)}
+                  {this.execfunction2(item.type, item._id)}
                 </CardItem>
               </Card>
               </ListItem>

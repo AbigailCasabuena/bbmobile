@@ -15,6 +15,7 @@ import EditProfile from './components/EditProfile';
 import SingleEvent from './components/SingleEvent';
 import SingleAnnouncement from './components/SingleAnnouncement';
 import ProductSocket from './components/ProductSocket';
+import Facilities from './components/Facilities';
 
 import React, { Component } from 'react';
 
@@ -37,6 +38,26 @@ else{
     initial = 'Login';
 }*/
 
+
+var abi = "";
+
+_retrieveData = async () => {
+    try {
+      const value2 = await AsyncStorage.getItem('LoggedUser');
+      //this.setState({userId: String(value2)});
+      abi=String(value2);
+      //alert(abi);
+      return "abi";
+      //return abi;
+    }catch(e){
+        
+    }
+}
+
+var xx= "hh";
+//alert(xx);
+//var xx = _retrieveData();
+//alert(xx);
 
 //alert(initial);
 
@@ -164,6 +185,10 @@ const SignUpStack = StackNavigator({
     ProductSocket: {
         path: '/psocket',
         screen: ProductSocket
+    },
+    'Blood Services Facilities Details': {
+        path: '/facilitiesdetails',
+        screen: Facilities
     },
  };
 

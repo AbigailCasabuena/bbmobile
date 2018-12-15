@@ -43,15 +43,18 @@ export default class Notifications extends Component<Props> {
     this.state = {
         data: [],
         data_all: [],
+        respdata: [],
         userId: '',
         disabled_property: false,
-        image: 'http://192.168.43.18:3000/uploads/message.png'
+        image: 'http://192.168.43.18:3000/uploads/message.png',
+        varg: '',
     }
   }
 
   componentDidMount() {
     //alert('hello');
     this._retrieveData();
+    //alert(this.state.varg)
     //alert(id);
     BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
   }
@@ -78,6 +81,7 @@ export default class Notifications extends Component<Props> {
       const value2 = await AsyncStorage.getItem('LoggedUserId');
       //this.setState({userId: String(value2)});
       id=String(value2);
+      this.setState({varg: String(value2)});
       //alert(id);
       //alert(value2);
       fetch("http://192.168.43.18:3000/notification/"+id)
@@ -87,6 +91,7 @@ export default class Notifications extends Component<Props> {
         //alert(res);
       })
       .catch(e => e);
+
       } catch (error) {
         alert(error.message);
       }
@@ -105,6 +110,7 @@ export default class Notifications extends Component<Props> {
   }
 
   execfunction=(type, itemId)=>{
+    //alert(this.state.respdata.length);
     if(type=="event" || type=="announcement"){
       return <TouchableOpacity key={itemId} style={{backgroundColor:'#B81E12', padding: 10}} onPress={ _ => this.getContent(itemId,type)} >
               <Text style={{color: 'white'}}>View Content</Text>
