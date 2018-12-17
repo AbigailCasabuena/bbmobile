@@ -29,6 +29,10 @@ import { Container,
 type Props = {};
 var colorcolor="";
 var num;
+
+window.navigator.userAgent = "react-native";
+import io from 'socket.io-client/dist/socket.io';
+
 export default class NewsFeed extends Component<Props> {
   /*constructor(props) {
     super(props)
@@ -45,16 +49,22 @@ export default class NewsFeed extends Component<Props> {
     );
     return {label,icon};
   };*/
-  constructor(props) {
-    super(props);
+  state = {
+    data: [],
+    userid: '',
+    responses: [],
+    respdata: [],
+    lengthx: 0
+}
+
+  constructor() {
+    super();
     
-    this.state = {
-        data: [],
-        userid: '',
-        responses: [],
-        respdata: [],
-        lengthx: 0
-    }
+    /*this.socket = io('http://192.168.0.15:8080',{json: false});
+    this.socket.on('newsfeeddata',(nf)=>{
+      alert('hello ' + nf[0]._id);
+      this.setState({data: nf});
+    })*/
   }
 
 
@@ -71,6 +81,7 @@ export default class NewsFeed extends Component<Props> {
     .catch(e=>{
       
     })
+    //this.socket.emit('getnewsfeed');
     //alert(num);
   }
 
@@ -245,6 +256,11 @@ export default class NewsFeed extends Component<Props> {
       <Container>
         <HeaderNew {...this.props} />
         <Content>
+        <TouchableOpacity style={{padding: 10}} onPress={()=>{
+                this.socket.emit('getnewsfeed');
+            }}>
+                <Text>Emit</Text>
+            </TouchableOpacity>
           <List dataArray={this.state.data}
             renderRow={(item) =>
               <ListItem>

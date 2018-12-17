@@ -15,6 +15,13 @@ export default class ForgotPassword extends Component<Props> {
   static navigationOptions = {
     header: null
   }
+
+  constructor(props){
+    super(props);
+    this.state = {
+      uname: '',
+    }
+  }
   
   render() {
     const { navigate } = this.props.navigation;
@@ -26,16 +33,28 @@ export default class ForgotPassword extends Component<Props> {
           <Text style={styles.text}>
             Password Reset
           </Text>
-          <Text style={{textAlign:'left',color:'black'}}>Enter your email address: </Text>
+          <Text style={{textAlign:'left',color:'black'}}>Enter your username: </Text>
           <TextInput style={styles.un}
-            keyboardType= 'email-address'
-            placeholder='email'>
-          </TextInput> 
+            placeholder='username' onChangeText={(text)=>{
+              this.setState({uname: text})
+            }}/>
           <View style={styles.accview}>
             <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              navigate('Forgot2Screen', { name: 'Forgot2Screens' })
+              fetch('http://192.168.0.15:8080/api/resetpassword', {
+                  method: 'PUT',
+                  headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    username: this.state.uname
+                  })
+                  })
+                  .then((response) => {
+                  })  
+                  .done();
             }}
             >
               <Text style={styles.buttontext}>Submit</Text>

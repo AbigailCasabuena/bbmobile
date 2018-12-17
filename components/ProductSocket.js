@@ -24,13 +24,17 @@ export default class History extends Component<Props> {
     state = {
         prods: [],
         value: 'val',
+        name: 'abiii',
     }
 
     constructor() {
         super();
-        this.socket = io('http://192.168.43.18:3000',{json: false});
+        this.socket = io('http://192.168.0.15:8080',{json: false});
         this.socket.on('xx',()=>{
             this.setState({value: "Abigail"});
+        })
+        this.socket.on('yy',()=>{
+          this.setState({name: "Casabuena"});
         })
         this.socket.on('prods',(prod)=>{
             //alert(prod[0].name);
@@ -57,11 +61,12 @@ export default class History extends Component<Props> {
         return (
           <Container>
             <TouchableOpacity style={{padding: 10}} onPress={()=>{
-                this.socket.emit('try');
+                this.socket.emit('yy');
             }}>
                 <Text>Emit</Text>
             </TouchableOpacity>
             <Text>{this.state.value}</Text>
+            <Text>{this.state.name}</Text>
             <Content>
               <List dataArray={this.state.prods}
                 renderRow={(item) =>
