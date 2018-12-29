@@ -169,31 +169,31 @@ export default class SignUp extends React.Component {
     }
     try{
       await AsyncStorage.setItem('Pickgen', this.state.pickgen);
-      alert("Pickgen: " + this.state.pickgen);
+      //alert("Pickgen: " + this.state.pickgen);
     } catch (error) {
       alert('error store pickgen');
     }
     try{
       await AsyncStorage.setItem('Date', this.state.date);
-      alert("Bdate: " + this.state.date);
+      //alert("Bdate: " + this.state.date);
     } catch (error) {
       alert('error store date');
     }
     try{
       await AsyncStorage.setItem('Email', this.state.emailadd);
-      alert("Email: " + this.state.emailadd);
+      //alert("Email: " + this.state.emailadd);
     } catch (error) {
       alert('error store email');
     }
     try{
       await AsyncStorage.setItem('Phonenum', this.state.phonenum);
-      alert("Phonenum: " + this.state.phonenum);
+      //alert("Phonenum: " + this.state.phonenum);
     } catch (error) {
       alert('error store phone num');
     }
     try{
       await AsyncStorage.setItem('Donatedbefore', this.state.donatedbefore);
-      alert("Donated before: " + this.state.donatedbefore);
+      //alert("Donated before: " + this.state.donatedbefore);
     } catch (error) {
       alert('error store donated before');
     }
@@ -413,7 +413,7 @@ export default class SignUp extends React.Component {
           }else{
             dbefore = true;
           }
-          fetch('http://192.168.1.59:3000/users/signup', {
+          fetch('http://192.168.43.18:3000/users/signup', {
                   method: 'POST',
                   headers: {
                     'Accept': 'application/json',
@@ -436,11 +436,25 @@ export default class SignUp extends React.Component {
           })
           .then((response) => {
             if (response.status === 200) {
-              try{
-                AsyncStorage.setItem('LoggedUser', this.state.username);
-              } catch (error) {
-                alert('error store user');
-              }
+              var uname = this.state.username;
+              fetch("http://192.168.43.18:3000/users/"+uname)
+              .then((result) => result.json())
+              .then((res) => {
+                //this.setState({ data: res});
+                //alert(res[0]._id);
+                try{
+                  AsyncStorage.setItem('LoggedUserId', String(res[0]._id));
+                  AsyncStorage.setItem('LoggedFName', String(res[0].user_firstname));
+                  AsyncStorage.setItem('LoggedLName', String(res[0].user_lastname));
+                  AsyncStorage.setItem('LoggedBloodType', String(res[0].user_bloodtype));
+                  AsyncStorage.setItem('LoggedUser', String(res[0].user_username));
+                  AsyncStorage.setItem('Logged', String(true));
+                  //alert(res[0].user_firstname);
+                }catch(error){
+                  alert(error.message);
+                }
+              })
+              .catch(e => e);
               this.setState({
                 firstname: '',
                 middlename: '',
@@ -455,7 +469,8 @@ export default class SignUp extends React.Component {
                 donatedbefore: 'No'
               });
               this._storeData();
-              alert("User account has been created.")
+              alert("User account has been created.");
+              this.props.navigation.navigate('Home');
             }else if(response.status === 400){
               alert("Invalid email address.")
             }

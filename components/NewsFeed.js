@@ -60,11 +60,11 @@ export default class NewsFeed extends Component<Props> {
   constructor() {
     super();
     
-    /*this.socket = io('http://192.168.0.15:8080',{json: false});
+    this.socket = io('http://192.168.43.210:8080',{json: false});
     this.socket.on('newsfeeddata',(nf)=>{
-      alert('hello ' + nf[0]._id);
+      //alert('hello ');
       this.setState({data: nf});
-    })*/
+    })
   }
 
 
@@ -83,6 +83,7 @@ export default class NewsFeed extends Component<Props> {
     })
     //this.socket.emit('getnewsfeed');
     //alert(num);
+    this.socket.emit('getnewsfeed');
   }
 
   async getUsername(){
@@ -250,17 +251,18 @@ export default class NewsFeed extends Component<Props> {
     }
   }
 
+  checkimg=(img)=>{
+    if(img != ''){
+      return <Image source={{uri: "http://192.168.43.18:3000/" + img}} style={{height: 200, width: 300, flex: 1}}/>
+    }
+  }
+
   render() { 
     Moment.locale('en');
     return (
       <Container>
         <HeaderNew {...this.props} />
         <Content>
-        <TouchableOpacity style={{padding: 10}} onPress={()=>{
-                this.socket.emit('getnewsfeed');
-            }}>
-                <Text>Emit</Text>
-            </TouchableOpacity>
           <List dataArray={this.state.data}
             renderRow={(item) =>
               <ListItem>
@@ -284,7 +286,7 @@ export default class NewsFeed extends Component<Props> {
                 </CardItem>
                 <CardItem>
                   <Body>
-                  <Image source={{uri: "http://192.168.43.18:3000/" + item.nw_image}} style={{height: 200, width: 300, flex: 1}}/>
+                    {this.checkimg(item.nw_image)}
                     <Text>
                       {item.nw_content}
                     </Text>

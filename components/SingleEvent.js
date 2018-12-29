@@ -61,7 +61,7 @@ export default class SingleEvent extends Component<Props> {
   }
 
   handleBackPress = () => {
-    this.props.navigation.navigate('Notifications'); // works best when the goBack is async
+    this.props.navigation.navigate('Notifications'); 
     return true;
   }
 

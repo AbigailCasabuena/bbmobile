@@ -197,6 +197,11 @@ export default class Login extends Component<Props> {
               //alert(res[0]._id);
               try{
                 AsyncStorage.setItem('LoggedUserId', String(res[0]._id));
+                AsyncStorage.setItem('LoggedFName', String(res[0].user_firstname));
+                AsyncStorage.setItem('LoggedLName', String(res[0].user_lastname));
+                AsyncStorage.setItem('LoggedBloodType', String(res[0].user_bloodtype));
+                
+                //alert(res[0].user_firstname);
               }catch(error){
                 alert(error.message);
               }

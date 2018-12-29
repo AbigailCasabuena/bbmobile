@@ -4,31 +4,13 @@ import {
     Text,
     View,
     Image,
-    TouchableHighlight,
+    TouchableOpacity,
     AsyncStorage,
     ToolbarAndroid,
     StyleSheet,
-    TouchableOpacity
 } from 'react-native';
 
-import {Button, Badge, Icon} from 'native-base';
-
-export default class HeaderNew extends Component {
-    _storeData = async () => {
-        try {
-          await AsyncStorage.setItem('LoggedUser', String(''));
-          await AsyncStorage.setItem('Logged',String(false));
-          await AsyncStorage.setItem('LoggedUserId', String(''));
-          await AsyncStorage.setItem('LoggedFName', String(''));
-          await AsyncStorage.setItem('LoggedLName', String(''));
-          await AsyncStorage.setItem('LoggedBloodType', String(''));
-          //alert(AsyncStorage.getItem('LoggedUser'));
-          this.props.navigation.navigate('Login');
-        } catch (error) {
-          alert('error store logged user');
-        }
-    }
-
+export default class BloodRequestHeader extends Component {
 
     render(){
         return (
@@ -57,8 +39,8 @@ export default class HeaderNew extends Component {
                     fontSize: 16,
                     fontWeight: 'bold',
                     marginLeft: 13,
-                    marginRight: 140,
-                }}>News Feed</Text>
+                    marginRight: 130,
+                }}>Blood Request</Text>
                 <TouchableOpacity style={{marginRight: 15}}
                         onPress={() => {
                             const {navigate} = this.props.navigation;
@@ -79,6 +61,7 @@ export default class HeaderNew extends Component {
                     
                 </TouchableOpacity> 
             </View>
+            
         );
     }
 

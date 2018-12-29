@@ -145,8 +145,6 @@ export default class EditProfile extends Component<Props> {
       } else {
         const source = { uri: response.uri, path: response.path, type: response.type, fileName: response.fileName };
         const mypic = {uri: response.uri};
-        // You can also display the image using data:
-        // const source = { uri: 'data:image/jpeg;base64,' + response.data };
     
         this.setState({
           avatarSource: source,

@@ -16,6 +16,8 @@ import SingleEvent from './components/SingleEvent';
 import SingleAnnouncement from './components/SingleAnnouncement';
 import ProductSocket from './components/ProductSocket';
 import Facilities from './components/Facilities';
+import BloodRequest from './components/BloodRequest';
+//import MapView from './components/MapView';
 
 import React, { Component } from 'react';
 
@@ -47,7 +49,7 @@ _retrieveData = async () => {
       //this.setState({userId: String(value2)});
       abi=String(value2);
       //alert(abi);
-      return "abi";
+      return abi;
       //return abi;
     }catch(e){
         
@@ -97,6 +99,30 @@ const SignUpStack = StackNavigator({
     initialRouteName: 'SingleEvent'
 })*/
 
+var username = '';
+var firstname = '';
+var lastname = '';
+var bloodtype = '';
+
+getLogged = () =>{
+    AsyncStorage.getItem('LoggedUser',(err, val)=>{
+        username = val;
+    })
+
+    AsyncStorage.getItem('LoggedFName',(err, val)=>{
+        firstname = val;
+    })
+
+    AsyncStorage.getItem('LoggedLName',(err, val)=>{
+        lastname = val;
+    })
+
+    AsyncStorage.getItem('LoggedBloodType',(err, val)=>{
+        bloodtype = val;
+    })
+}
+
+this.getLogged();
 
  const DrawerContent = (props) => (
     <View>
@@ -108,8 +134,14 @@ const SignUpStack = StackNavigator({
           justifyContent: 'center',
         }}
       >
-        <Text style={{ color: 'white', fontSize: 30 }}>
-          BloodBank PH
+        <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold'}}>
+          {firstname + " " + lastname}
+        </Text>
+        <Text style={{ color: 'white', fontSize: 16 }}>
+          {"@" + username + "\n"}
+        </Text>
+        <Text style={{ color: 'white', fontSize: 16 }}>
+          {"Blood Type: " + bloodtype}
         </Text>
       </View>
       <DrawerItems {...props} />
@@ -117,6 +149,8 @@ const SignUpStack = StackNavigator({
   )
 
  var {height, width} = Dimensions.get('window');
+
+ var abi = "xx";
 
  let routeConfigs = {
     /*SplashScreen: {
@@ -184,12 +218,25 @@ const SignUpStack = StackNavigator({
     },
     ProductSocket: {
         path: '/psocket',
-        screen: ProductSocket
+        screen: ProductSocket,
+        navigationOptions: {
+            drawerLabel: function(){
+                if(abi == "ok"){
+                    return null;
+                }else{
+                    return 'Products'
+                }
+            }
+        }
     },
     'Blood Services Facilities Details': {
         path: '/facilitiesdetails',
         screen: Facilities
     },
+    'Blood Request': {
+        path: '/bloodrequest',
+        screen: BloodRequest
+    }
  };
 
  //let final;
