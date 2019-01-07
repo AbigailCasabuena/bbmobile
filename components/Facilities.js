@@ -27,11 +27,20 @@ export default class Facilities extends Component<Props> {
   constructor() {
     super();
     this.state = {
+      mystate: 'abooo'
     }
   }
+/*
+  static navigationOptions = {
+    drawerLabel: ()=>{if(this.state.mystate == "abi"){
+      return "Facs";
+    }else{
+      return "Not Facs";
+    }}
+  }
+*/
+  componentWillMount() {
 
-
-  componentDidMount() {
   }
 
   render() {

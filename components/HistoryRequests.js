@@ -16,6 +16,9 @@ import { Container,
         CardItem,
         Thumbnail } from 'native-base';
 
+import {AsyncStorage} from 'react-native';
+import Moment from 'moment';
+
 type Props = {};
 export default class HistoryRequests extends Component<Props> {
   /*constructor(props) {
@@ -41,49 +44,73 @@ export default class HistoryRequests extends Component<Props> {
     super();
     this.state = {
         data: [],
-        selected: "Donations",
+        userid: '',
     }
   }
 
 
   componentDidMount() {
     //alert('hello');
-    
+    this._retrieveData(); 
   }
 
+  _retrieveData = async () => {
+    try {
+      const value2 = await AsyncStorage.getItem('LoggedUserId');
+      //this.setState({userId: String(value2)});
+      id=String(value2);
+      this.setState({userid: String(value2)});
+      fetch("http://192.168.43.18:3000/bloodrequest/"+id)
+      .then((result) => result.json())
+      .then((res) => {
+        this.setState({ data: res});
+      })
+      .catch(e => e);
+    } catch (error) {
+    }
+  }
+
+  cancelRequest=(id)=>{
+    fetch('http://192.168.43.18:3000/bloodrequest/'+id, {  
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: 'PATCH',
+      body: JSON.stringify({
+        request_status: 'cancelled'
+      })
+    })
+    .then((response)=>{
+              
+    });
+    fetch("http://192.168.43.18:3000/bloodrequest/"+this.state.userid)
+    .then((result) => result.json())
+    .then((res) => {
+      this.setState({ data: res});
+    })
+    .catch(e => e);
+    alert('Blood request was successfully cancelled.');
+    //this.props.navigation.navigate('Home');
+  }
+
+  showCancel=(stat, id)=>{
+    if(stat == 'pending'){
+      //alert('pending');
+      return <Button danger onPress={_=> this.cancelRequest(id)}>
+        <Text>Cancel Request</Text>
+      </Button>
+    }
+  }
 
   render() {
-    var final =[];
-
-    var items = [
-        {
-            patient_name: "Natalie Hung",
-            bags: 2,
-            date_needed: "February 1, 2018",
-            date_requested: "January 28, 2018",
-            status: "claimed",
-          },
-          {
-            patient_name: "Asleeh Casabuena",
-            bags: 1,
-            date_needed: "March 17, 2018",
-            date_requested: "March 16, 2018",
-            status: "cancelled",
-          },
-          {
-            patient_name: "Christian Casabuena",
-            bags: 2,
-            date_needed: "November 7, 2018",
-            date_requested: "November 5, 2018",
-            status: "pending",
-          },
-    ];
+    //var final =[];
     
-    //Moment.locale('en');
+    Moment.locale('en');
     return (
       <Container>
         <Content>
-          <List dataArray={items}
+          <List dataArray={this.state.data}
             renderRow={(item) =>
               <ListItem>
               <Card width={'100%'}>
@@ -99,29 +126,21 @@ export default class HistoryRequests extends Component<Props> {
                       No. of blood bags: {" "}
                     </Text>
                     <Text>
-                      {item.bags}{"\n"}
-                    </Text>
-                    <Text style={{fontWeight: 'bold'}}>
-                      Date Needed: {" "}
-                    </Text>
-                    <Text>
-                      {item.date_needed}{"\n"}
+                      {item.number_bags}{"\n"}
                     </Text>
                     <Text style={{fontWeight: 'bold'}}>
                       Date Requested: {" "}
                     </Text>
                     <Text>
-                      {item.date_requested}{"\n"}
+                      {Moment(item.date_requested).format('MMMM DD, YYYY')}{"\n"}
                     </Text>
                     <Text style={{fontWeight: 'bold'}}>
                       Status: {" "}
                     </Text>
                     <Text>
-                      {item.status}{"\n"}
+                      {item.request_status}{"\n"}
                     </Text>
-                    <Button danger>
-                        <Text>Cancel Request</Text>
-                    </Button>
+                    {this.showCancel(item.request_status, item._id)}
                   </Body>
                 </CardItem>
               </Card>

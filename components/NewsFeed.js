@@ -267,14 +267,6 @@ export default class NewsFeed extends Component<Props> {
             renderRow={(item) =>
               <ListItem>
               <Card width={'100%'}>
-              <List dataArray={this.state.respdata}
-                renderRow={(itemx) =>
-                  <ListItem>
-                    <Text> Hello </Text>
-                  </ListItem>
-                }>
-              </List>
-
                 <CardItem>
                   <Left>
                     <Thumbnail source={require('../img/redcross.png')} />
