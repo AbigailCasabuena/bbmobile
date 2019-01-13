@@ -407,78 +407,115 @@ export default class SignUp extends React.Component {
       }
       else{
         if(this.state.pw == this.state.repw){
-          var dbefore = false;
-          if(this.state.donatedbefore == 'No'){
-            dbefore = false;
-          }else{
-            dbefore = true;
+          var unval = true;
+          var pwval = true;
+          var usernamex = this.state.username;
+          var pwx = this.state.pw;
+          var unerrmsg = "";
+          var pwerrmsg = "";
+          var unwhitespacecheck = true;
+          var specialcheck = true;
+          var lengthcheck = true;
+          
+          for(var x = 0; x<usernamex.length; x++){
+            if(usernamex.charAt(x) == " "){
+              unwhitespacecheck = false;
+            }
           }
-          fetch('http://192.168.43.18:3000/users/signup', {
-                  method: 'POST',
-                  headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify({
-                    user_firstname: this.state.firstname,
-                    user_middlename: this.state.middlename,
-                    user_lastname: this.state.lastname,
-                    user_username: this.state.username,
-                    user_emailAdd: this.state.emailadd,
-                    user_contactNum: this.state.phonenum,
-                    user_password: this.state.pw,
-                    donated_before: dbefore,
-                    user_gender: this.state.pickgen,
-                    user_birthday: this.state.date,
-                    is_Active: false,
-                  })
-    
-          })
-          .then((response) => {
-            if (response.status === 200) {
-              var uname = this.state.username;
-              fetch("http://192.168.43.18:3000/users/"+uname)
-              .then((result) => result.json())
-              .then((res) => {
-                //this.setState({ data: res});
-                //alert(res[0]._id);
-                try{
-                  AsyncStorage.setItem('LoggedUserId', String(res[0]._id));
-                  AsyncStorage.setItem('LoggedFName', String(res[0].user_firstname));
-                  AsyncStorage.setItem('LoggedLName', String(res[0].user_lastname));
-                  AsyncStorage.setItem('LoggedBloodType', String(res[0].user_bloodtype));
-                  AsyncStorage.setItem('LoggedUser', String(res[0].user_username));
-                  AsyncStorage.setItem('Logged', String(true));
-                  //alert(res[0].user_firstname);
-                }catch(error){
-                  alert(error.message);
-                }
-              })
-              .catch(e => e);
-              this.setState({
-                firstname: '',
-                middlename: '',
-                lastname: '',
-                username: '',
-                pw: '',
-                repw: '',
-                pickgen: 'Male',
-                date: '',
-                emailadd: '',
-                phonenum: '',
-                donatedbefore: 'No'
-              });
-              this._storeData();
-              alert("User account has been created.");
-              this.props.navigation.navigate('Home');
-            }else if(response.status === 400){
-              alert("Invalid email address.")
+
+          //AIzaSyD06LPlQ7Vznn3OLEgGkGuI-NUtf3mD478
+
+          if(unwhitespacecheck == false){
+            unerrmsg = unerrmsg + "White space is not allowed for username." + "\n";
+          }
+
+          if(usernamex.length < 8){
+            lengthcheck = false;
+            unerrmsg = unerrmsg + "Username should be comprised of at least 8 characters." + "\n";
+          }
+
+          if(unwhitespacecheck == true && specialcheck == true && lengthcheck == true){
+            unval = true;
+          }else{
+            unval = false;
+          }
+          
+          if(unval == true && pwval == true){
+            var dbefore = false;
+            if(this.state.donatedbefore == 'No'){
+              dbefore = false;
+            }else{
+              dbefore = true;
             }
-            else {
-              alert("Username/Email already exists.");
-            }
-          })  
-          .done();
+            fetch('http://192.168.43.18:3000/users/signup', {
+                    method: 'POST',
+                    headers: {
+                      'Accept': 'application/json',
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                      user_firstname: this.state.firstname,
+                      user_middlename: this.state.middlename,
+                      user_lastname: this.state.lastname,
+                      user_username: this.state.username,
+                      user_emailAdd: this.state.emailadd,
+                      user_contactNum: this.state.phonenum,
+                      user_password: this.state.pw,
+                      donated_before: dbefore,
+                      user_gender: this.state.pickgen,
+                      user_birthday: this.state.date,
+                      is_Active: false,
+                    })
+      
+            })
+            .then((response) => {
+              if (response.status === 200) {
+                var uname = this.state.username;
+                fetch("http://192.168.43.18:3000/users/"+uname)
+                .then((result) => result.json())
+                .then((res) => {
+                  //this.setState({ data: res});
+                  //alert(res[0]._id);
+                  try{
+                    AsyncStorage.setItem('LoggedUserId', String(res[0]._id));
+                    AsyncStorage.setItem('LoggedFName', String(res[0].user_firstname));
+                    AsyncStorage.setItem('LoggedLName', String(res[0].user_lastname));
+                    AsyncStorage.setItem('LoggedBloodType', String(res[0].user_bloodtype));
+                    AsyncStorage.setItem('LoggedUser', String(res[0].user_username));
+                    AsyncStorage.setItem('Logged', String(true));
+                    //alert(res[0].user_firstname);
+                  }catch(error){
+                    alert(error.message);
+                  }
+                })
+                .catch(e => e);
+                this.setState({
+                  firstname: '',
+                  middlename: '',
+                  lastname: '',
+                  username: '',
+                  pw: '',
+                  repw: '',
+                  pickgen: 'Male',
+                  date: '',
+                  emailadd: '',
+                  phonenum: '',
+                  donatedbefore: 'No'
+                });
+                this._storeData();
+                alert("User account has been created.");
+                this.props.navigation.navigate('Home');
+              }else if(response.status === 400){
+                alert("Invalid email address.")
+              }
+              else {
+                alert("Username/Email already exists.");
+              }
+            })  
+            .done();
+          }else{
+            alert(unerrmsg + "\n" + pwerrmsg);
+          }
         }else{
           alert("Passwords does not match.");
         }

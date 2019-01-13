@@ -11,6 +11,8 @@ import {
 import Header from './Header';
 import Button from 'react-native-button';
 import { YellowBox } from 'react-native';
+//import RNRestart from 'react-native-restart';
+//import CodePush from 'react-native-code-push';
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
 type Props = {};
@@ -200,6 +202,7 @@ export default class Login extends Component<Props> {
                 AsyncStorage.setItem('LoggedFName', String(res[0].user_firstname));
                 AsyncStorage.setItem('LoggedLName', String(res[0].user_lastname));
                 AsyncStorage.setItem('LoggedBloodType', String(res[0].user_bloodtype));
+                AsyncStorage.setItem('LoggedUserType', String(res[0].user_type));
                 
                 //alert(res[0].user_firstname);
               }catch(error){
@@ -208,7 +211,9 @@ export default class Login extends Component<Props> {
             })
             .catch(e => e);
             this._storeData();
+            //CodePush.restartApp();
             this.props.navigation.navigate('Home');
+            //RNRestart.Restart();
         }
         else {
           alert("Invalid username and/or password.");

@@ -5,7 +5,7 @@
  */
 
 import React, { Component } from 'react';
-import { AppRegistry, Dimensions,Text,View,AsyncStorage} from 'react-native';
+import { AppRegistry, Dimensions,Text,View,AsyncStorage, Image} from 'react-native';
 import {DrawerNavigator,DrawerItems,StackNavigator} from 'react-navigation';
 
 import Login from './components/Login';
@@ -23,6 +23,7 @@ import SingleAnnouncement from './components/SingleAnnouncement';
 import ProductSocket from './components/ProductSocket';
 import Facilities from './components/Facilities';
 import BloodRequest from './components/BloodRequest';
+import SelectLocation from './components/SelectLocation';
 
 var username = '';
 var firstname = '';
@@ -134,6 +135,25 @@ const Admin = DrawerNavigator({
           drawerLabel: () => null
       }
   },
+  ProductSocket: {
+        path: '/psocket',
+        screen: ProductSocket,
+        navigationOptions: {
+          drawerLabel: () => null
+        }
+    },
+    'Blood Services Facilities Details': {
+        path: '/facilitiesdetails',
+        screen: Facilities
+    },
+    'Blood Request': {
+        path: '/bloodrequest',
+        screen: BloodRequest
+    },
+    'Blood Banks Location': {
+        path: '/selectlocation',
+        screen: SelectLocation
+    }
   },{
   initialRouteName: 'Login',
   contentComponent: DrawerContent,
@@ -255,11 +275,11 @@ export default class App extends React.Component {
       .then((result) => result.json())
       .then((res) => {
         //alert(res[0].user_type);
-        if(res[0].user_type == 'bbuser'){
-          this.setState({type: 'bbuser'});
-        }else{
+        //if(res[0].user_type == 'bbuser'){
+          //this.setState({type: 'bbuser'});
+        //}else{
           //ckt = false;
-        }
+        //}
       })
       .catch(e => e);
     })
@@ -278,6 +298,10 @@ export default class App extends React.Component {
 
     AsyncStorage.getItem('LoggedBloodType',(err, val)=>{
         bloodtype = val;
+    })
+
+    AsyncStorage.getItem('LoggedUserType',(err, val)=>{
+        this.setState({type: val})
     })
   }
 
