@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import SingleEventHeader from './SingleEventHeader';
+import EventsHeader from './EventsHeader';
 import {AsyncStorage, TouchableOpacity, BackHandler, Image} from 'react-native';
 import Moment from 'moment';
 
@@ -26,18 +26,7 @@ import { Container,
 
 type Props = {};
 
-export default class SingleEvent extends Component<Props> {
-  /*constructor(props) {
-    super(props)
-
-  }*/
-  /*static navigationOptions = {
-    header: null
-  }*/
-
-  onPress = () => {
-    
-  }
+export default class Events extends Component<Props> {
 
   constructor(props) {
     super(props);
@@ -47,43 +36,27 @@ export default class SingleEvent extends Component<Props> {
   }
 
   componentDidMount() {
-    //alert('hello');
-    //this._retrieveData();
-    //alert(id);
-    const { navigation } = this.props;
-    const itemId = navigation.getParam('eventId', 'No event');
-    this._retrieveData(itemId);
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+    this._retrieveData();
   }
 
-  componentWillUnmount() {
+  _retrieveData=()=>{
+
+  }
+
+  /*componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
   }
 
   handleBackPress = () => {
     this.props.navigation.navigate('Notifications'); 
     return true;
-  }
-
-  _retrieveData = (itemId) => {
-    try {
-      fetch("http://192.168.43.18:3000/newsfeed/"+itemId)
-      .then((result) => result.json())
-      .then((res) => {
-        this.setState({ data: res});
-        //alert(res);
-      })
-    .catch(e => e);
-    } catch (error) {
-      alert(error.message);
-    }
-  }
+  }*/
 
   render() {  
 
     return (
       <Container>
-        <SingleEventHeader {...this.props} />
+        <EventsHeader {...this.props} />
         <Content>
         <List dataArray={this.state.data}
             renderRow={(item) =>

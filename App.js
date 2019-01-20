@@ -24,6 +24,10 @@ import ProductSocket from './components/ProductSocket';
 import Facilities from './components/Facilities';
 import BloodRequest from './components/BloodRequest';
 import SelectLocation from './components/SelectLocation';
+import Events from './components/Events';
+import NotificationsAdmin from './components/NotificationsAdmin';
+import MapViewCurrent from './components/MapViewCurrent';
+import MapExample from './components/MapExample';
 
 var username = '';
 var firstname = '';
@@ -153,7 +157,15 @@ const Admin = DrawerNavigator({
     'Blood Banks Location': {
         path: '/selectlocation',
         screen: SelectLocation
-    }
+    },
+    'Map View': {
+      path: '/mapview',
+      screen: MapViewCurrent
+  },
+  'Map Example': {
+    path: '/mapexample',
+    screen: MapExample
+  } 
   },{
   initialRouteName: 'Login',
   contentComponent: DrawerContent,
@@ -193,18 +205,11 @@ const Admin2 = DrawerNavigator({
   },
   Home: {
       path: '/home',
-      screen: NewsFeed,
-      navigationOptions: {
-        drawerLabel: () => "Homesss"
-    }
-  },
-  History: {
-      path: '/history',
-      screen: HistoryTabs
+      screen: NewsFeed
   },
   Notifications: {
       path: '/notifications',
-      screen: Notifications,
+      screen: NotificationsAdmin,
       navigationOptions: {
           drawerLabel: () => null
       }
@@ -213,19 +218,13 @@ const Admin2 = DrawerNavigator({
       path: '/editprofile',
       screen: EditProfile
   },
-  SingleEvent: {
-      path: '/singleevent',
-      screen: SingleEvent,
-      navigationOptions: {
-          drawerLabel: () => null
-      }
+  'Blood Request': {
+      path: '/bloodrequest',
+      screen: BloodRequest
   },
-  SingleAnnouncement: {
-      path: '/singleannouncement',
-      screen: SingleAnnouncement,
-      navigationOptions: {
-          drawerLabel: () => null
-      }
+  'Events':{
+    path: '/events',
+    screen: Events
   },
   },{
   initialRouteName: 'Login',

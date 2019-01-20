@@ -416,6 +416,9 @@ export default class SignUp extends React.Component {
           var unwhitespacecheck = true;
           var specialcheck = true;
           var lengthcheck = true;
+
+          //var pwspecialcheck = true;
+          //var pwlengthcheck = true;
           
           for(var x = 0; x<usernamex.length; x++){
             if(usernamex.charAt(x) == " "){
@@ -434,10 +437,98 @@ export default class SignUp extends React.Component {
             unerrmsg = unerrmsg + "Username should be comprised of at least 8 characters." + "\n";
           }
 
+          var unstringcheck = "~`!@#$%^&*()-+=\|}]{[';:/>?,<";
+
+          for(var chk = 0; chk < usernamex.length ; chk++){
+            var unchar = usernamex.charAt(chk);
+            for(var x = 0; x < unstringcheck.length; x++){
+              if(unstringcheck.charAt(x) == unchar){
+                specialcheck = false;
+              }
+            }
+          }
+
+          if(specialcheck == false){
+            unerrmsg = unerrmsg + "Special characters aside from . and _ is not allowed for username." + "\n";
+          }
+
           if(unwhitespacecheck == true && specialcheck == true && lengthcheck == true){
             unval = true;
           }else{
             unval = false;
+          }
+
+          var pwnumcheck = false;
+          var pwspecialcheck = false;
+          var pwlowercheck = false;
+          var pwuppercheck = false;
+          var pwlengthcheck = true;
+          var pwstringcheck = "~`!@#$%^&*()-+=\|}]{[';:/>?,< ._";
+          var numbers = "0123456789";
+          var lower = "qwertyuiopasdfghjklzxcvbnm";
+          var upper = "QWERTYUIOPASDFGHJKLZXCVBNM";
+
+          if(pwx.length < 8){
+            pwlengthcheck = false;
+            pwerrmsg = pwerrmsg + "Password should be comprised of at least 8 characters." + "\n";
+          }
+
+          for(var b = 0; b < pwx.length ; b++){
+            var pwchar = pwx.charAt(b);
+            for(var x = 0; x < numbers.length; x++){
+              if(numbers.charAt(x) == pwchar){
+                pwnumcheck = true;
+              }
+            }
+          }
+
+          if(pwnumcheck == false){
+            pwerrmsg = pwerrmsg + "Password should have at least one special character." + "\n";
+          }
+
+          for(var b = 0; b < pwx.length ; b++){
+            var pwchar = pwx.charAt(b);
+            for(var x = 0; x < lower.length; x++){
+              if(lower.charAt(x) == pwchar){
+                pwlowercheck = true;
+              }
+            }
+          }
+
+          if(pwlowercheck == false){
+            pwerrmsg = pwerrmsg + "Password should have at least one lowercase letter." + "\n";
+          }
+
+          for(var b = 0; b < pwx.length ; b++){
+            var pwchar = pwx.charAt(b);
+            for(var x = 0; x < upper.length; x++){
+              if(upper.charAt(x) == pwchar){
+                pwuppercheck = true;
+              }
+            }
+          }
+
+          if(pwuppercheck == false){
+            pwerrmsg = pwerrmsg + "Password should have at least one uppercase letter." + "\n";
+          }
+
+          for(var b = 0; b < pwx.length ; b++){
+            var pwchar = pwx.charAt(b);
+            for(var x = 0; x < pwstringcheck.length; x++){
+              if(pwstringcheck.charAt(x) == pwchar){
+                pwspecialcheck = true;
+              }
+            }
+          }
+
+          if(pwspecialcheck == false){
+            pwerrmsg = pwerrmsg + "Password should have at least one special character." + "\n";
+          }
+
+          if(pwnumcheck == true && pwspecialcheck == true && pwlowercheck == true && pwuppercheck == true && pwlengthcheck == true){
+            pwval = true;
+          }else{
+            pwval = false;
           }
           
           if(unval == true && pwval == true){
