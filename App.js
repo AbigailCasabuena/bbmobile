@@ -28,6 +28,9 @@ import Events from './components/Events';
 import NotificationsAdmin from './components/NotificationsAdmin';
 import MapViewCurrent from './components/MapViewCurrent';
 import MapExample from './components/MapExample';
+import MapGithub from './components/MapGithub';
+import GiveBlood from './components/GiveBlood';
+import FocusOnMarkers from './components/FocusOnMarkers';
 
 var username = '';
 var firstname = '';
@@ -158,14 +161,27 @@ const Admin = DrawerNavigator({
         path: '/selectlocation',
         screen: SelectLocation
     },
-    'Map View': {
+    /*'Map View': {
       path: '/mapview',
       screen: MapViewCurrent
-  },
-  'Map Example': {
-    path: '/mapexample',
-    screen: MapExample
-  } 
+    },*/
+    'Map Example': {
+      path: '/mapexample',
+      screen: MapExample
+    },
+    /*
+    'Map Github': {
+      path: '/mapgithub',
+      screen: MapGithub
+    },*/
+    'Give Blood': {
+      path: '/giveblood',
+      screen: GiveBlood
+    },
+    /*'Focus On Markers': {
+      path: '/focus',
+      screen: FocusOnMarkers
+    }*/
   },{
   initialRouteName: 'Login',
   contentComponent: DrawerContent,

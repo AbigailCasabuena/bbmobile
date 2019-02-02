@@ -73,7 +73,7 @@ export default class MapExample extends React.Component {
                     latitudeDelta: 1,
                     longitudeDelta: 1
                     }}
-                    showsUserLocation={true}
+                    showsUserLocation={false}
                 >
                     <MapView.Marker
                         coordinate={{

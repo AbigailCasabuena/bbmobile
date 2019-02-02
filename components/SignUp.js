@@ -483,7 +483,7 @@ export default class SignUp extends React.Component {
           }
 
           if(pwnumcheck == false){
-            pwerrmsg = pwerrmsg + "Password should have at least one special character." + "\n";
+            pwerrmsg = pwerrmsg + "Password should have at least one number." + "\n";
           }
 
           for(var b = 0; b < pwx.length ; b++){
