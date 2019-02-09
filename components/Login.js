@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   AsyncStorage,
+  AppState
 } from 'react-native';
 import Header from './Header';
 import Button from 'react-native-button';
@@ -15,6 +16,16 @@ import { YellowBox } from 'react-native';
 //import CodePush from 'react-native-code-push';
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
+var PushNotification = require('react-native-push-notification');
+
+PushNotification.configure({
+  onNotification: function(notification) {
+    console.log( 'NOTIFICATION:', notification );
+  },
+  popInitialNotification: true,
+  requestPermissions: true,
+})
+
 type Props = {};
 export default class Login extends Component<Props> {
   constructor(props) {
@@ -22,6 +33,9 @@ export default class Login extends Component<Props> {
     //this.mydate = 0;
     //this.date = 0;
     super(props);
+
+    this.handleAppStateChange = this.handleAppStateChange.bind(this);
+
     this.state = {
       username: '',
       password: '',
@@ -40,7 +54,26 @@ export default class Login extends Component<Props> {
   sName = "Login";
 
   componentDidMount(){
+    console.log('hello');
     this._retrieveData();
+    PushNotification.localNotification({
+      message: "My Notification Message", 
+      //date: new Date(Date.now() + (5 * 1000)) 
+    });
+    AppState.addEventListener('change', this.handleAppStateChange);
+  }
+
+  componentWillUnmount(){
+    AppState.removeEventListener('change', this.handleAppStateChange); 
+  }
+
+  handleAppStateChange(appstate){
+    /*if(appstate === 'background'){
+      PushNotification.localNotificationSchedule({
+        message: "My Notification Message", 
+        date: new Date(Date.now() + (5 * 1000)) 
+      });
+    }*/
   }
 
   _storeData = async () => {

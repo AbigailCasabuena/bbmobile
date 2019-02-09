@@ -32,6 +32,7 @@ import MapGithub from './components/MapGithub';
 import GiveBlood from './components/GiveBlood';
 import FocusOnMarkers from './components/FocusOnMarkers';
 import BloodBanksLocation from './components/BloodBanksLocation';
+import App2 from './App2';
 
 var username = '';
 var firstname = '';

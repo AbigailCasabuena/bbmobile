@@ -31,16 +31,19 @@ allprojects {
     }
 }
 
-/*ext {
+ext {
     googlePlayServicesVersion = "+"
     firebaseVersion = "+"
 
     // Other settings
-    compileSdkVersion = 23
-    buildToolsVersion = "23.0.1"
+    //compileSdkVersion = 23
+    compileSdkVersion = 26
+    //buildToolsVersion = "23.0.1"
+    buildToolsVersion = "26.1.0"
     targetSdkVersion = 23
-    supportLibVersion = "23.1.1"
-}*/
+    //supportLibVersion = "23.1.1"
+    supportLibVersion = "26.1.0"
+}
 
 //not sure if included
 task clean(type: Delete) {
