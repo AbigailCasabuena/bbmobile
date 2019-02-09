@@ -6,7 +6,7 @@ import React, { Component} from 'react';
 } from 'react-native';*/
 import HeaderNew from './HeaderNew';
 //import Button from 'react-native-button';
-import { Image, TouchableOpacity, View, AsyncStorage,StyleSheet,Dimensions} from 'react-native';
+import { Image, TouchableOpacity, View, AsyncStorage,StyleSheet,Dimensions, Alert} from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import Moment from 'moment';
 import { Container, 
@@ -26,10 +26,11 @@ import { Container,
         Thumbnail,
         Segment} from 'native-base';
 
-import MapView, {Marker, ProviderPropType} from 'react-native-maps';
+import MapView, {Marker, ProviderPropType, Callout} from 'react-native-maps';
 import Polyline from '@mapbox/polyline';
 import MapViewDirections from 'react-native-maps-directions';
 import BloodBanksLocationHeader from './BloodBanksLocationHeader';
+import getDirections from 'react-native-google-maps-directions';
 //import { YellowBox } from 'react-native';
 //YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 type Props = {};
@@ -68,10 +69,12 @@ export default class SelectLocation extends Component<Props> {
           listview: 'auto',
           curlat: null,
           curlong: null,
+          coordinates: [],
         };
     
         this.mergeLot = this.mergeLot.bind(this);
-    
+        this.getDirections = this.getDirections.bind(this);
+        this.handleGetDirections = this.handleGetDirections.bind(this);
     }
 
     componentDidMount() {
@@ -132,7 +135,7 @@ export default class SelectLocation extends Component<Props> {
     
     }
 
-    async getDirections(startLoc, destinationLoc) {
+    /*async getDirections(startLoc, destinationLoc) {
 
         try {
             let resp = await fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${ startLoc }&destination=${ destinationLoc }`)
@@ -152,6 +155,50 @@ export default class SelectLocation extends Component<Props> {
             this.setState({x: "error"})
             return error
         }
+    }*/
+
+    async getDirections(startLoc, destinationLoc){
+        try{
+            let resp = await fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${destinationLoc}&mode=walking&key=AIzaSyD06LPlQ7Vznn3OLEgGkGuI-NUtf3mD478`);
+            let respJson = await resp.json();
+            let points = Polyline.decode(respJson.routes[0].overview_polyline.points);
+            let coords = points.map((point, index)=>{
+                return {
+                    latitude: point[0],
+                    longitude: point[1]
+                };
+            });
+            const newCoords = [...this.state.coordinates, coords];
+            this.setState({coordinates: newCoords});
+            return coords;
+        }catch(error){
+            alert(error);
+            return error;
+        }
+    }
+
+    handleGetDirections=()=>{
+        const data = {
+            source: {
+                latitude: this.state.latitude,
+                longitude: this.state.longitude,
+            },
+            destination: {
+                latitude: this.state.cordLatitude,
+                longitude: this.state.cordLongitude,
+            },
+            params: [
+                {
+                    key: 'travelmode',
+                    value: 'walking'
+                },
+                {
+                    key: 'dir_action',
+                    value: 'navigate'
+                }
+            ]
+        }
+        getDirections(data)
     }
 
     show=()=>{
@@ -184,26 +231,54 @@ export default class SelectLocation extends Component<Props> {
             
             
                 
-                {!!this.state.latitude && !!this.state.longitude && <MapView.Marker
+                {/*!!this.state.latitude && !!this.state.longitude && <MapView.Marker
                 coordinate={{"latitude":this.state.latitude,"longitude":this.state.longitude}}
                 title={"Your Location"}
                 identifier="Marker1"
-                />}
+                />*/}
 
-                {!!this.state.cordLatitude && !!this.state.cordLongitude && <MapView.Marker
+                {/*!!this.state.cordLatitude && !!this.state.cordLongitude && <MapView.Marker
                     coordinate={{"latitude":this.state.cordLatitude,"longitude":this.state.cordLongitude}}
                     title={"Your Destination"}
                     identifier="Marker2"
-                />}
+                />*/}
 
-            {/*<Marker
+            <Marker
                 identifier="Marker1"
-                coordinate={{latitude: this.state.latitude, longitude: this.state.longitude}}
-            />
+                coordinate={{"latitude": this.state.latitude, "longitude": this.state.longitude}}
+                pinColor="green"
+            >
+                <Callout tooltip={false}>
+                    <View>
+                        <Text>Your Location</Text>
+                    </View>
+                </Callout>
+            </Marker>
             <Marker
                 identifier="Marker2"
-                coordinate={{latitude: this.state.cordLatitude, longitude: this.state.cordLongitude}}
-            />*/}
+                coordinate={{"latitude": this.state.cordLatitude, "longitude": this.state.cordLongitude}}
+            >
+            <Callout tooltip={false} 
+                onPress={()=>{
+                    Alert.alert(
+                        'Blood Bank Location',
+                        'Show routes?',
+                        [
+                          {
+                            text: 'Yes',
+                            onPress: () => this.handleGetDirections(),
+                          },
+                          {text: 'Cancel', onPress: () => console.log('Cancel Pressed')},
+                        ],
+                        {cancelable: false},
+                    );
+                }}
+            >
+                    <View>
+                        <Text>Philippine Red Cross Valenzuela</Text>
+                    </View>
+            </Callout>
+            </Marker>
 
             {/*!!this.state.latitude && !!this.state.longitude && this.state.x == 'true' && <MapView.Polyline
                     coordinates={this.state.coords}

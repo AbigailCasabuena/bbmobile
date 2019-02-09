@@ -31,6 +31,7 @@ import MapExample from './components/MapExample';
 import MapGithub from './components/MapGithub';
 import GiveBlood from './components/GiveBlood';
 import FocusOnMarkers from './components/FocusOnMarkers';
+import BloodBanksLocation from './components/BloodBanksLocation';
 
 var username = '';
 var firstname = '';
@@ -158,8 +159,15 @@ const Admin = DrawerNavigator({
         screen: BloodRequest
     },
     'Blood Banks Location': {
-        path: '/selectlocation',
-        screen: SelectLocation
+        path: '/bblocation',
+        screen: BloodBanksLocation
+    },
+    'Select Location': {
+      path: '/selectlocation',
+      screen: SelectLocation,
+      navigationOptions: {
+        drawerLabel: () => null
+      }
     },
     /*'Map View': {
       path: '/mapview',
