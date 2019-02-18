@@ -31,6 +31,7 @@ import Polyline from '@mapbox/polyline';
 import MapViewDirections from 'react-native-maps-directions';
 import BloodBanksLocationHeader from './BloodBanksLocationHeader';
 import getDirections from 'react-native-google-maps-directions';
+import geolib from 'geolib';
 //import { YellowBox } from 'react-native';
 //YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 type Props = {};
@@ -70,6 +71,8 @@ export default class SelectLocation extends Component<Props> {
           curlat: null,
           curlong: null,
           coordinates: [],
+          name: '',
+          distanceaway: 0
         };
     
         this.mergeLot = this.mergeLot.bind(this);
@@ -88,12 +91,46 @@ export default class SelectLocation extends Component<Props> {
                error: null,
              });
              //this.mergeLot();
-             this.focus1();
+            /* alert('You are ' + (geolib.getDistance(position.coords, {
+                latitude: 51.525,
+                longitude: 7.4575
+            })/1000) + ' kilometers away from 51.525, 7.4575');*/
+            const { navigation } = this.props;
+            const latx = navigation.getParam('lat', 0);
+            const longx = navigation.getParam('long', 0);
+            const namex = navigation.getParam('name', '');
+            this.setState({cordLatitude: latx, cordLongitude: longx, name: namex});
+            this.focus1();
+            var dist = geolib.getDistance(position.coords, {
+                latitude: latx,
+                longitude: longx
+            })/1000;
+            this.setState({distanceaway: dist});
+            //alert(dist);
            },
            (error) => this.setState({ error: error.message }),
            { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
          );
+
+        /*const { navigation } = this.props;
+        const latx = navigation.getParam('lat', 0);
+        const longx = navigation.getParam('long', 0);
+        const namex = navigation.getParam('name', '');
+        this.setState({cordLatitude: latx, cordLongitude: longx, name: namex});*/
+        //this.getDistance();
     }
+
+    /*getDistance(){
+        var dist = geolib.getDistance({
+            latitude: this.state.latitude,
+            longitude: this.state.longitude
+        }, {
+            latitude: this.state.cordLatitude,
+            longitude: this.state.cordLongitude
+        })/1000;
+        this.setState({distanceaway: dist});
+        alert(dist);
+    }*/
 
     componentWillUnmount() {
         if (animationTimeout) {
@@ -126,10 +163,11 @@ export default class SelectLocation extends Component<Props> {
         if (this.state.latitude != null && this.state.longitude!=null)
          {
            let concatLot = this.state.latitude +","+this.state.longitude
+           let concatDestination = this.state.cordLatitude + "," + this.state.cordLongitude
            this.setState({
              concat: concatLot
            }, () => {
-             this.getDirections(concatLot, "14.678072,120.978467");
+             this.getDirections(concatLot, concatDestination);
            });
          }
     
@@ -274,8 +312,10 @@ export default class SelectLocation extends Component<Props> {
                     );
                 }}
             >
+         
                     <View>
-                        <Text>Philippine Red Cross Valenzuela</Text>
+                        <Text>{this.state.name}</Text>
+                        <Text>{this.state.distanceaway} km away </Text>
                     </View>
             </Callout>
             </Marker>
@@ -326,6 +366,14 @@ export default class SelectLocation extends Component<Props> {
                 //alert(details.geometry.location.longitude);
                 this.setState({latitude: details.geometry.location.lat,longitude: details.geometry.location.lng, listview:'false'})
                 this.focus1();
+                var dist = geolib.getDistance({
+                    latitude: this.state.latitude,
+                    longitude: this.state.longitude
+                },{
+                    latitude: this.state.cordLatitude,
+                    longitude: this.state.cordLongitude
+                })/1000;
+                this.setState({distanceaway: dist});
             }}
             
             getDefaultValue={() => ''}
@@ -379,6 +427,14 @@ export default class SelectLocation extends Component<Props> {
                 onPress={()=>{
                     this.setState({latitude: this.state.curlat, longitude: this.state.curlong})
                     this.focus1();
+                    var dist = geolib.getDistance({
+                        latitude: this.state.curlat,
+                        longitude: this.state.curlong
+                    },{
+                        latitude: this.state.cordLatitude,
+                        longitude: this.state.cordLongitude
+                    })/1000;
+                    this.setState({distanceaway: dist});
                 }}
             >
                 <Text style={{color: 'black'}}>Current location</Text>

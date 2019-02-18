@@ -7,6 +7,9 @@
 import React, { Component } from 'react';
 import { AppRegistry, Dimensions,Text,View,AsyncStorage, Image} from 'react-native';
 import {DrawerNavigator,DrawerItems,StackNavigator} from 'react-navigation';
+import BackgroundTask from 'react-native-background-task';
+
+var PushNotification = require('react-native-push-notification');
 
 import Login from './components/Login';
 import SignUp from './components/SignUp';
@@ -33,6 +36,7 @@ import GiveBlood from './components/GiveBlood';
 import FocusOnMarkers from './components/FocusOnMarkers';
 import BloodBanksLocation from './components/BloodBanksLocation';
 import App2 from './App2';
+import GiveBlood2 from './components/GiveBlood2';
 
 var username = '';
 var firstname = '';
@@ -151,13 +155,17 @@ const Admin = DrawerNavigator({
           drawerLabel: () => null
         }
     },
+    'Give Blood': {
+      path: '/giveblood',
+      screen: GiveBlood
+    },
+    'Blood Request': {
+      path: '/bloodrequest',
+      screen: BloodRequest
+    },
     'Blood Services Facilities Details': {
         path: '/facilitiesdetails',
         screen: Facilities
-    },
-    'Blood Request': {
-        path: '/bloodrequest',
-        screen: BloodRequest
     },
     'Blood Banks Location': {
         path: '/bblocation',
@@ -174,23 +182,27 @@ const Admin = DrawerNavigator({
       path: '/mapview',
       screen: MapViewCurrent
     },*/
-    'Map Example': {
+    /*'Map Example': {
       path: '/mapexample',
       screen: MapExample
-    },
+    },*/
     /*
     'Map Github': {
       path: '/mapgithub',
       screen: MapGithub
     },*/
-    'Give Blood': {
-      path: '/giveblood',
-      screen: GiveBlood
-    },
     /*'Focus On Markers': {
       path: '/focus',
       screen: FocusOnMarkers
     }*/
+    'GiveBlood2': {
+      path: '/giveblood2',
+      screen: GiveBlood2,
+      navigationOptions: {
+        drawerLockMode: 'locked-closed', 
+        drawerLabel: () => null
+      }
+    },
   },{
   initialRouteName: 'Login',
   contentComponent: DrawerContent,
@@ -265,6 +277,23 @@ const Admin2 = DrawerNavigator({
 }
 );
 
+PushNotification.configure({
+  onNotification: function(notification) {
+    console.log( 'NOTIFICATION:', notification );
+  },
+  popInitialNotification: true,
+  requestPermissions: true,
+})
+
+BackgroundTask.define(() => {
+  //console.log('Hello from a background task')
+  PushNotification.localNotification({
+    message: "My Notification Message", 
+    //date: new Date(Date.now()) 
+  });
+  BackgroundTask.finish()
+})
+
 //type Props = {};
 export default class App extends React.Component {
 
@@ -332,6 +361,10 @@ export default class App extends React.Component {
   componentDidMount(){
     this._retrieveDatax();
     //alert(this.state.logged);
+    //alert('Hello');
+    BackgroundTask.schedule({
+      period: 1800, // Aim to run every 30 mins - more conservative on battery
+    })
   }
 
   render() {

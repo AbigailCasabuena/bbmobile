@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {AsyncStorage} from 'react-native';
-import { Container, Header, Content, ListItem, CheckBox, Text, Body, Button} from 'native-base';
+import { Container, Header, Content, ListItem, CheckBox, Text, Body, Button, Right} from 'native-base';
+import GiveBloodHeader from './GiveBloodHeader';
 
 var SampleArray = [];
 var a = '';
@@ -9,116 +10,90 @@ export default class GiveBlood extends Component {
   constructor(props){
     super(props);
     this.state = {
-      isChecked1: false,
-      isChecked2: false,
-      isChecked3: false,
-      isChecked4: false,
-      isChecked5: false,
-      isChecked6: false,
-      isChecked7: false,
+
     };
-  }
-
-  AddItemsToArray1=()=>{
-    //Adding Items To Array.
-    // Showing the complete Array on Screen Using Alert.
-    this.setState({isChecked1: !this.state.isChecked1})
-    if(this.state.isChecked1 == false){
-      SampleArray.push("National Blood Center (PRC Tower)");
-    }else{
-      var del = "National Blood Center (PRC Tower)";
-      var index = SampleArray.indexOf(del);
-      SampleArray.splice(index,1)
-    }
-    alert(SampleArray.toString());
-  }
-
-  AddItemsToArray2=()=>{
-    this.setState({isChecked2: !this.state.isChecked2})
-    if(this.state.isChecked2 == false){
-      SampleArray.push("National Blood Center (Manila)");
-    }else{
-      var del = "National Blood Center (Manila)";
-      var index = SampleArray.indexOf(del);
-      SampleArray.splice(index,1)
-    }
-    alert(SampleArray.toString());
-  }
-
-  AddItemsToArray3=()=>{
-    this.setState({isChecked3: !this.state.isChecked3})
-    if(this.state.isChecked3 == false){
-      SampleArray.push("Caloocan City BCU/ BS");
-    }else{
-      var del = "Caloocan City BCU/ BS";
-      var index = SampleArray.indexOf(del);
-      SampleArray.splice(index,1)
-    }
-    alert(SampleArray.toString());
-  }
-
-  AddItemsToArray4=()=>{
-    this.setState({isChecked4: !this.state.isChecked4})
-    if(this.state.isChecked4 == false){
-      SampleArray.push("Pasay City BCU/ BS");
-    }else{
-      var del = "Pasay City BCU/ BS";
-      var index = SampleArray.indexOf(del);
-      SampleArray.splice(index,1)
-    }
-    alert(SampleArray.toString());
-  }
-
-  AddItemsToArray5=()=>{
-    this.setState({isChecked5: !this.state.isChecked5})
-    if(this.state.isChecked5 == false){
-      SampleArray.push("Quezon City BCU/ BS");
-    }else{
-      var del = "Quezon City BCU/ BS";
-      var index = SampleArray.indexOf(del);
-      SampleArray.splice(index,1)
-    }
-    alert(SampleArray.toString());
-  }
-
-  AddItemsToArray6=()=>{
-    this.setState({isChecked6: !this.state.isChecked6})
-    if(this.state.isChecked6 == false){
-      SampleArray.push("Rizal BCU/ BS");
-    }else{
-      var del = "Rizal BCU/ BS";
-      var index = SampleArray.indexOf(del);
-      SampleArray.splice(index,1)
-    }
-    alert(SampleArray.toString());
-  }
-
-  AddItemsToArray7=()=>{
-    if(this.state.isChecked7 == false){
-      SampleArray.push("Valenzuela City BCU/ BS");
-    }else{
-      var del = "Valenzuela City BCU/ BS";
-      var index = SampleArray.indexOf(del);
-      SampleArray.splice(index,1)
-    }
-    this.setState({isChecked7: !this.state.isChecked7})
-    alert(SampleArray.toString());
   }
 
   componentDidMount(){
     //this._retrieveData();
   }
 
+  selectbloodbank(bloodbankid, num){
+    var bbname = '';
+    var address = '';
+    var officehours = '';
+    var days = '';
+
+    if(num ==1){
+      bbname = "Philippine Red Cross Tower";
+      address = "37 EDSA corner Boni Avenue, \nMandaluyong City ";
+      officehours = "";
+      days = "";
+    }
+
+    if(num ==2){
+      bbname = "Philippine Red Cross Manila";
+      address = "Bonifacio Drive, Port Area, Manila";
+      officehours = "Office Hours: 8:00 AM to 5:00 PM";
+      days = "Monday to Friday";
+    }
+
+    if(num ==3){
+      bbname = "Philippine Red Cross Caloocan City Chapter";
+      address = "7th Ave. Grace Park, Caloocan City";
+      officehours = "Office Hours: 8:00 AM to 5:00 PM";
+      days = "Monday to Friday";
+    }
+
+    if(num ==4){
+      bbname = "Philippine Red Cross Pasay City Chapter";
+      address = "2354 CAA Compound, Aurora Blvd. \n(old Tramo), Pasay City";
+      officehours = "";
+      days = "";
+    }
+
+    if(num ==5){
+      bbname = "Philippine Red Cros Quezon City Chapter";
+      address = "Quezon City Hall Compound, \nKalayaan Avenue, Diliman, Quezon City";
+      officehours = "Office Hours: 9:00 AM to 8:00 PM";
+      days = "Monday to Sunday";
+    }
+
+    if(num ==6){
+      bbname = "Philippine Red Cross Rizal Chapter";
+      address = "Shaw Blvd., Pasig City";
+      officehours = "";
+      days = "";
+    }
+
+    if(num ==7){
+      bbname = "Philippine Red Cros Valenzuela City Chapter";
+      address = "Dahlia Street, Villa Teresa Subdivision,\n Marulas, Valenzuela City";
+      officehours = "Office Hours: 7:30 AM to 9:30 PM";
+      days = "Monday to Sunday";
+    }
+
+    this.props.navigation.navigate('GiveBlood2', {
+      itemId: bloodbankid,
+      name: bbname,
+      bbaddress: address,
+      bbhours: officehours,
+      bbdays: days
+    });
+  }
+
   render() {
+    //const { navigate } = this.props.navigation;
     return (
       <Container>
+        <GiveBloodHeader {...this.props} />
         <Text style={{
           textAlign:'center',
           color: '#B81E12',
           fontSize: 20,
           fontWeight: 'bold',
           paddingBottom: 20,
-          marginTop: 0,
+          marginTop: 10,
         }}>
             Blood Banks
         </Text>
@@ -136,55 +111,51 @@ export default class GiveBlood extends Component {
           marginRight: 25
         }}>
           <ListItem
-          onPress={this.AddItemsToArray1}>
+          onPress={_=>this.selectbloodbank("5c17671a7eeb193eb548d7fb",1)}>
             <Body>
               <Text>National Blood Center (PRC Tower)</Text>
             </Body>
+            <Right>
+              <Text>Hello</Text>
+            </Right>
           </ListItem>
           <ListItem
-          onPress={this.AddItemsToArray2}>
+          onPress={_=>this.selectbloodbank("5c1767247eeb193eb548d7fc",2)}>
             <Body>
               <Text>National Blood Center (Manila)</Text>
             </Body>
           </ListItem>
           <ListItem
-          onPress={this.AddItemsToArray3}>
+          onPress={_=>this.selectbloodbank("5c1766da7eeb193eb548d7f6",3)}>
             <Body>
               <Text>Caloocan City BCU/ BS</Text>
             </Body>
           </ListItem>
           <ListItem
-          onPress={this.AddItemsToArray4}>
+          onPress={_=>this.selectbloodbank("5c1766e67eeb193eb548d7f7",4)}>
             <Body>
               <Text>Pasay City BCU/ BS</Text>
             </Body>
           </ListItem>
           <ListItem
-          onPress={this.AddItemsToArray5}>
+          onPress={_=>this.selectbloodbank("5c1766f37eeb193eb548d7f8",5)}>
             <Body>
               <Text>Quezon City BCU/ BS</Text>
             </Body>
           </ListItem>
           <ListItem
-          onPress={this.AddItemsToArray6}>
+          onPress={_=>this.selectbloodbank("5c1766ff7eeb193eb548d7f9",6)}>
             <Body>
               <Text>Rizal BCU/ BS</Text>
             </Body>
           </ListItem>
           <ListItem
-          onPress={this.AddItemsToArray7}>
+          onPress={_=>this.selectbloodbank("5c17670d7eeb193eb548d7fa",7)}>
             <Body>
               <Text>Valenzuela City BCU/ BS</Text>
             </Body>
           </ListItem>
         </Content>
-        <Button onPress={this.signup}
-        style={{
-          backgroundColor: "#B81E12",
-          alignSelf: "center",
-          marginBottom: 15}}>
-            <Text>Schedule Appointment</Text>
-        </Button>
       </Container>
     );
   }

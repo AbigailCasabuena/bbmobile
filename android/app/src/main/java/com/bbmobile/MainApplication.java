@@ -3,6 +3,7 @@ package com.bbmobile;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.jamesisaac.rnbackgroundtask.BackgroundTaskPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 //import com.airbnb.android.react.maps.MapsPackage;
@@ -35,6 +36,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new BackgroundTaskPackage(),
             new ReactNativePushNotificationPackage(),
             new MapsPackage(),
             //new MapsPackage(),
@@ -58,6 +60,7 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     super.onCreate();
+    BackgroundTaskPackage.useContext(this);
     SoLoader.init(this, /* native exopackage */ false);
   }
 }

@@ -56,24 +56,44 @@ export default class Login extends Component<Props> {
   componentDidMount(){
     console.log('hello');
     this._retrieveData();
-    PushNotification.localNotification({
+    /*PushNotification.localNotification({
       message: "My Notification Message", 
       //date: new Date(Date.now() + (5 * 1000)) 
-    });
+    });*/
     AppState.addEventListener('change', this.handleAppStateChange);
+    //setInterval(()=>{console.log('hello')},10000);
   }
 
   componentWillUnmount(){
     AppState.removeEventListener('change', this.handleAppStateChange); 
   }
 
+  hello(){
+    console.log('hello');
+  }
+
   handleAppStateChange(appstate){
-    /*if(appstate === 'background'){
-      PushNotification.localNotificationSchedule({
-        message: "My Notification Message", 
-        date: new Date(Date.now() + (5 * 1000)) 
-      });
-    }*/
+    //setInterval methodd
+    //var x= "hello";
+    var mydate = new Date(2019,2,13,0,0,0); //date of appointment
+    var currdate = new Date();
+    var curyear = new Date().getFullYear();
+    var curmonth = currdate.getMonth() + 1;
+    var curday = currdate.getDate();
+    //var currdatex = new Date(curyear,curmonth,curday,0,0,0);
+
+    var myyear = mydate.getFullYear();
+    var mymonth = mydate.getMonth();
+    var myday = mydate.getDate();
+    if(appstate === 'background'){
+      if((curyear == myyear) && (curmonth == mymonth) && (curday == myday)){
+        PushNotification.localNotification({
+          message: "My Notification Message", 
+          //date: new Date(Date.now()) 
+        });
+        //x = "lol";
+      }
+    }
   }
 
   _storeData = async () => {

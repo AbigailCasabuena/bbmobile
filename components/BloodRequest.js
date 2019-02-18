@@ -120,7 +120,9 @@ export default class BloodRequest extends Component<Props> {
       stockid: '',
       reserved: 0,
       remaining: 0,
-      totalstock: 0
+      totalstock: 0,
+      hospital: '',
+      personal_use: true,
     }
   }
 
@@ -376,7 +378,6 @@ export default class BloodRequest extends Component<Props> {
         <Container>
         <BloodRequestHeader {...this.props} />
             <Content>
-            <Text> Price List </Text>
               <Text style={styles.radlabel}>Blood Type</Text>
               <Picker
                 selectedValue={this.state.pickbgroup}
