@@ -93,13 +93,6 @@ export default class NotificationsAdmin extends Component<Props> {
         //alert(res);
         //alert(res[0].user_chapter);
         //this.setState({chap_id: res[0].user_chapter})
-        fetch("http://192.168.43.18:3000/notification/chapter/"+res[0].user_chapter)
-        .then((result) => result.json())
-        .then((res) => {
-          this.setState({ data: res});
-          //alert(res);
-        })
-        .catch(e => e);
       })
       .catch(e => e);
 
@@ -120,6 +113,13 @@ export default class NotificationsAdmin extends Component<Props> {
         //alert(res);
       })
     .catch(e => e);*/
+    fetch("http://192.168.43.18:3000/notification/chapter/bloodbank")
+        .then((result) => result.json())
+        .then((res) => {
+          this.setState({ data: res});
+          //alert(res);
+        })
+    .catch(e => e);
   }
 
   getContent=(itemId,type)=>{

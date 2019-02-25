@@ -7,17 +7,23 @@ import {
   KeyboardAvoidingView,
   BackHandler,
   Picker,
-  AsyncStorage
+  AsyncStorage,
+  Alert,
+  Modal,
+  TouchableHighlight,
+  ScrollView
 } from 'react-native';
 
-import { Container, Header, Content, ListItem, Text, Radio, Right, Left, List } from 'native-base';
+import { Container, Header, Content, ListItem, Text, Radio, Right, Left, List, Body, Spinner} from 'native-base';
 import Login from './Login';
 import BloodRequestHeader from './BloodRequestHeader';
 import ImagePicker from 'react-native-image-picker';
+import geolib from 'geolib';
 
 type Props = {};
 
 var request_form = [];
+var counter = 0;
 
 const options={
   title: "Select a photo",
@@ -72,7 +78,7 @@ class FloatingLabelInput extends Component {
           <TextInput
             {...props}
             //onChangeText={ (cont) => this.setState({cont})}
-            style={{width:'84%',fontSize: 16, color: '#000',marginBottom: 20}}
+            style={{width:'84%',fontSize: 16, color: '#000',marginBottom: 10}}
             onFocus={this.handleFocus}
             onBlur={this.handleBlur}
           />
@@ -84,6 +90,20 @@ class FloatingLabelInput extends Component {
 export default class BloodRequest extends Component<Props> {
 
   componentDidMount(){
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+      
+       /*var dist = geolib.getDistance(position.coords, {
+           latitude: latx,
+           longitude: longx
+       })/1000;*/
+       //this.setState({distanceaway: dist});
+       //alert(position.coords.latitude);
+       this.setState({curLat: position.coords.latitude, curLong: position.coords.longitude});
+      },
+      (error) => this.setState({ error: error.message }),
+      { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+    );
     BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
     this._retrieveData();
   }
@@ -101,7 +121,8 @@ export default class BloodRequest extends Component<Props> {
     super(props);
     this.state = {
       bags: 0,
-      pickbgroup: 'A+',
+      pickbgroup: 'A',
+      pickbrh: '+',
       pickbprod: 'Apheresis platelets',
       data: [],
       disp: false,
@@ -123,7 +144,17 @@ export default class BloodRequest extends Component<Props> {
       totalstock: 0,
       hospital: '',
       personal_use: true,
+      modalVisible: false,
+      cancel1: true,
+      cancel2: false,
+      hospital: '',
+      curLat: 0,
+      curLong: 0,
     }
+  }
+
+  setModalVisible(visible) {
+    this.setState({modalVisible: visible});
   }
 
   _retrieveData = async () => {
@@ -160,7 +191,7 @@ export default class BloodRequest extends Component<Props> {
     }else{
       urg = false;
     }
-    if(!(this.state.patient_name == "") && !(this.state.person_claim == "")){
+    if(!(this.state.patient_name == "") && !(this.state.person_claim == "") && !(this.state.hospital == "")){
       if(request_form.length > 0){
         var formData = new FormData();
         var rf = [];
@@ -181,10 +212,11 @@ export default class BloodRequest extends Component<Props> {
 
         formData.append("requester_id",this.state.userid);
         formData.append("patient_name",this.state.patient_name);
-        formData.append("number_bags", this.state.bags);
+        formData.append("no_of_bags", this.state.bags);
         formData.append("chapter_id", this.state.chapter_id);
         formData.append("is_urgent", urg);
         formData.append("person_claim", this.state.person_claim);
+        formData.append("hospital", this.state.hospital);
         //formData.append("request_form", request_form)
 
         fetch('http://192.168.43.18:3000/bloodrequest', {
@@ -206,8 +238,8 @@ export default class BloodRequest extends Component<Props> {
               },
               method: 'PATCH',
               body: JSON.stringify({
-                reserved: newres,
-                remaining: newrem
+                reserved_stock: newres,
+                remaining_stock: newrem
               })
             })
             .then((response)=>{
@@ -252,6 +284,10 @@ export default class BloodRequest extends Component<Props> {
             label="Person to Claim"
             onChangeText={(text) => this.setState({person_claim: text})}
           />
+          <FloatingLabelInput
+            label="Hospital"
+            onChangeText={(text) => this.setState({hospital: text})}
+          />
           <Text style={styles.radlabel}>Blood Request Form{"\n"}</Text>
           <TouchableOpacity
             style={{backgroundColor: '#B81E12',
@@ -261,36 +297,108 @@ export default class BloodRequest extends Component<Props> {
             <Text style={{color: 'white', alignSelf: 'center'}}>Attach Image</Text>
           </TouchableOpacity>
           <Text style={styles.radlabel}>{this.state.picslength + " "}image/s selected. {"\n"} </Text>
-          <TouchableOpacity
-            style={{backgroundColor: '#B81E12',
-              padding: 10,marginBottom: 15, width: 130, alignSelf: 'center'}}
-            onPress={this.submit}
-          >
-            <Text style={{color: 'white', alignSelf: 'center'}}>Submit</Text>
-          </TouchableOpacity>
+            <View style={{flexDirection: 'row', alignSelf: 'center'}}>
+              <TouchableOpacity
+                style={{backgroundColor: '#B81E12',
+                  padding: 10,marginBottom: 15, width: 120, alignSelf: 'center', marginRight:15}}
+                onPress={this.submit}
+              >
+                <Text style={{color: 'white', alignSelf: 'center'}}>Submit</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{backgroundColor: '#B81E12',
+                  padding: 10,marginBottom: 15, width: 100, alignSelf: 'center', marginRight:15}}
+                onPress={()=>{this.setState({disp: false, btndisp: true, cancel1: true, selecttext: true})}}
+              >
+                <Text style={{color: 'white', alignSelf: 'center'}}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
         </Content>
     }
   }
 
+  showCancel(){
+    if(this.state.btndisp == false && this.state.cancel1 == false){
+      return <TouchableOpacity
+              style={{backgroundColor: '#B81E12',
+                padding: 10,marginBottom: 15, width: 100, alignSelf: 'center'}}
+              onPress={()=>{this.setState({cancel1: !this.state.cancel1, btndisp: !this.state.btndisp})
+                counter = 0;
+              }}
+            >
+              <Text style={{color: 'white', alignSelf: 'center'}}>Cancel</Text>
+      </TouchableOpacity>
+    }
+  }
+
+  addcount(){
+    counter += 1;
+  }
+
   hidelist=()=>{
-    if(this.state.disp == false){
-        return <Content style={{marginLeft: 20}}>
-            <List dataArray={this.state.data}
+    if(this.state.disp == false && this.state.cancel1 == false){
+        var manarr = this.state.data;
+        var dist = [];
+        var dist_copy = [];
+        var finalarr = [];
+
+        if(this.state.curLat != 0){
+          for(var x = 0; x<manarr.length; x++){
+            var latx = manarr[x].chapter.latitude;
+            var longx = manarr[x].chapter.longitude;
+            var distance1 = geolib.getDistance({latitude: this.state.curLat, longitude: this.state.curLong}, {
+              latitude: latx,
+              longitude: longx
+            })/1000;
+            dist.push(distance1);
+          }
+
+          for(var j=0; j< dist.length; j++){
+            dist_copy.push(dist[j]);
+          }
+
+          dist_copy.sort(function(a, b){return a-b});
+
+          for(var z=0; z < dist_copy.length; z++){
+            for(var l=0; l < dist.length; l++){
+              if(dist_copy[z] == dist[l]){
+                finalarr.push(manarr[l]);
+              }
+            }
+          }
+
+          //alert(finalarr[0].chapter.chapter_name);
+
+          //alert(dist + "\n" + dist_copy)
+  
+          //alert(dist);
+          return <Content style={{marginLeft: 10, marginBottom: 20}}>
+            <List dataArray={finalarr}
                 renderRow={(itemx) =>
                   <ListItem>
+                    <Body>
                     <TouchableOpacity onPress={_=>this.setState({selecttext: false, disp: true, 
                       chapter_id: itemx.chapter._id, 
                       chap_name: itemx.chapter.chapter_name, 
                       stockid: itemx._id,
                       totalstock: itemx.num_stock,
-                      reserved: itemx.reserved,
-                      remaining: itemx.remaining})}>
-                      <Text> {itemx.chapter.chapter_name} </Text>
+                      reserved: itemx.reserved_stock,
+                      remaining: itemx.remaining_stock,
+                      cancel1: true})}>
+                      <Text> {itemx.chapter.chapter_name}</Text>
                     </TouchableOpacity>
+                    </Body>
+                    <Right>
+                      <Text style={{color: 'gray', fontSize: 12}}>{dist_copy[counter] + " km away"}</Text>
+                    </Right>
+                    {this.addcount()}
                   </ListItem>
                 }>
             </List>
-        </Content>
+          </Content>
+        }else{
+          return <Spinner color='red' />
+        }
     }
   }
 
@@ -307,20 +415,20 @@ export default class BloodRequest extends Component<Props> {
                     'Content-Type': 'application/json',
                   },
                   body: JSON.stringify({
-                    blood_group: this.state.pickbgroup,
-                    blood_category: this.state.pickbprod,
+                    blood_type: this.state.pickbgroup,
+                    rh_factor: this.state.pickbrh,
+                    blood_component: this.state.pickbprod,
                     num_stock: this.state.bags
                   })
-    
       })
       .then((response)=> response.json())
       .then((res)=>{
         this.setState({data: res});
         if(res.length == 0){
-          alert(this.state.bags + " bags of " + this.state.pickbgroup + " " + this.state.pickbprod
+          alert(this.state.bags + " bags of " + this.state.pickbgroup + this.state.pickbrh + " " + this.state.pickbprod
           + " is currently not available. Please try again after 30 to 45 mins." );
         }else{
-          this.setState({btndisp: false})
+          this.setState({btndisp: false, cancel1: false})
         }
       })
       .done()
@@ -328,7 +436,7 @@ export default class BloodRequest extends Component<Props> {
   }
 
   buttondisplay=()=>{
-    if(this.state.btndisp == true){
+    if(this.state.btndisp == true && this.state.cancel1 == true){
       return <Content>
         <TouchableOpacity
             style={{backgroundColor: '#B81E12',
@@ -338,7 +446,7 @@ export default class BloodRequest extends Component<Props> {
           <Text style={{color: 'white', alignSelf: 'center'}}>Check Availability</Text>
         </TouchableOpacity>
       </Content>
-    }else if(this.state.btndisp == false && this.state.selecttext == true){
+    }else if(this.state.btndisp == false && this.state.selecttext == true && this.state.cancel1 == false){
       return <Content>
         <Text style={{fontWeight: 'bold', marginBottom: 20, marginLeft: 35}}>Select a blood bank to send your blood request:</Text>
       </Content>
@@ -377,25 +485,140 @@ export default class BloodRequest extends Component<Props> {
     return (
         <Container>
         <BloodRequestHeader {...this.props} />
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={this.state.modalVisible}
+              onRequestClose={() => {
+                //Alert.alert('Modal has been closed.');
+                this.setModalVisible(!this.state.modalVisible);
+              }}>
+              <ScrollView style={{marginTop: 15, backgroundColor: 'white', marginBottom: 10}}>
+                <Text style={{color: '#B81E12', fontWeight:'bold', alignSelf: 'center'}}>Processing Fees of Blood Components</Text>
+                <View style={{marginLeft: 0}}>
+                  <ScrollView>
+                    <ListItem style={{marginRight: 0}}>
+                      <Body>
+                        <Text>Apheresis Platelets</Text>
+                      </Body>
+                      <Right>
+                        <Text style={{color: 'gray'}}>PHP 15,000</Text>
+                      </Right>
+                    </ListItem>
+                    <ListItem style={{marginRight: 0}}>
+                      <Body>
+                        <Text>Leukocyte-poor RBC</Text>
+                      </Body>
+                      <Right>
+                        <Text style={{color: 'gray'}}>PHP 2,000</Text>
+                      </Right>
+                    </ListItem>
+                    <ListItem style={{marginRight: 0}}>
+                      <Body>
+                        <Text>Whole Blood</Text>
+                      </Body>
+                      <Right>
+                        <Text style={{color: 'gray'}}>PHP 1,800</Text>
+                      </Right>
+                    </ListItem>
+                    <ListItem style={{marginRight: 0}}>
+                      <Body>
+                        <Text>Packed RBC</Text>
+                      </Body>
+                      <Right>
+                        <Text style={{color: 'gray'}}>PHP 1,500</Text>
+                      </Right>
+                    </ListItem>
+                    <ListItem style={{marginRight: 0}}>
+                      <Body>
+                        <Text>Leukocyte-poor PC</Text>
+                      </Body>
+                      <Right>
+                        <Text style={{color: 'gray'}}>PHP 1,200</Text>
+                      </Right>
+                    </ListItem>
+                    <ListItem style={{marginRight: 0}}>
+                      <Body>
+                        <Text>Platelet Concentrate (PC)</Text>
+                      </Body>
+                      <Right>
+                        <Text style={{color: 'gray'}}>PHP 1,000</Text>
+                      </Right>
+                    </ListItem>
+                    <ListItem style={{marginRight: 0}}>
+                      <Body>
+                        <Text>Frozen Plasma</Text>
+                      </Body>
+                      <Right>
+                        <Text style={{color: 'gray'}}>PHP 1,000</Text>
+                      </Right>
+                    </ListItem>
+                    <ListItem style={{marginRight: 0}}>
+                      <Body>
+                        <Text>Cryoprecipitate</Text>
+                      </Body>
+                      <Right>
+                        <Text style={{color: 'gray'}}>PHP 1,000</Text>
+                      </Right>
+                    </ListItem>
+                    <ListItem style={{marginRight: 0}}>
+                      <Body>
+                        <Text>Cryosupernate</Text>
+                      </Body>
+                      <Right>
+                        <Text style={{color: 'gray'}}>PHP 1,000</Text>
+                      </Right>
+                    </ListItem>
+                  </ScrollView>
+                  <TouchableOpacity
+                    style={{backgroundColor: '#B81E12', padding: 10, width: 80, alignSelf: 'center'}}
+                    onPress={() => {
+                      this.setModalVisible(!this.state.modalVisible);
+                    }}>
+                    <Text style={{color: 'white', alignSelf: 'center'}}>Close</Text>
+                  </TouchableOpacity>
+                </View>
+              </ScrollView>
+            </Modal>
             <Content>
-              <Text style={styles.radlabel}>Blood Type</Text>
-              <Picker
-                selectedValue={this.state.pickbgroup}
-                style={{ height: 50, width: 200, marginLeft: 35, marginBottom: 20}}
-                onValueChange={(itemValue, itemIndex) => this.setState({pickbgroup: itemValue})}>
-                <Picker.Item label="A+" value="A+"/>
-                <Picker.Item label="A-" value="A-"/>
-                <Picker.Item label="B+" value="B+"/>
-                <Picker.Item label="B-" value="B-"/>
-                <Picker.Item label="AB+" value="AB+"/>
-                <Picker.Item label="AB-" value="AB-"/>
-                <Picker.Item label="O+" value="O+"/>
-                <Picker.Item label="O-" value="O-"/>
-              </Picker>
+              <View style={{backgroundColor: '#B81E12', height: 230, alignItems: 'center', alignContent: 'center'}}>
+                <View style={{alignItems: 'center', alignContent: 'center', marginLeft: 20, marginRight: 20}}>
+                  <Text style={{color: 'white', fontWeight:'bold', marginTop: 10}}>Notice</Text>
+                  <Text style={{color: 'white', marginTop: 5, alignSelf: 'stretch'}}>
+                    While donated blood is free, there are significant costs associated with collecting, testing, preparing components, labeling, storing and shipping; recruiting and educating donors; and quality assurance. As a result, processing fees are charged to recover costs. 
+                  </Text>
+                </View>
+                <TouchableOpacity
+                  style={{padding: 10}}
+                  onPress={() => {
+                    this.setModalVisible(true);
+                  }}>
+                  <Text style={{color: 'white', fontWeight:'bold'}}>View Processing Fees</Text>
+                </TouchableOpacity>
+              </View>
+              <Text style={styles.radlabel}>Blood Type and Rh Factor</Text>
+              <View style={{flexDirection: 'row'}}>
+                <Picker
+                  selectedValue={this.state.pickbgroup}
+                  style={{ height: 50, width: 100, marginLeft: 35, marginBottom: 20}}
+                  onValueChange={(itemValue, itemIndex) => this.setState({pickbgroup: itemValue})}>
+                  <Picker.Item label="A" value="A"/>
+                  <Picker.Item label="B" value="B"/>
+                  <Picker.Item label="AB" value="AB"/>
+                  <Picker.Item label="O" value="O"/>
+                </Picker>
+                <Picker
+                selectedValue={this.state.pickbrh}
+                style={{ height: 50, width: 100, marginLeft: 20, marginBottom: 20}}
+                onValueChange={(itemValue, itemIndex) => this.setState({pickbrh: itemValue})}>
+                  <Picker.Item label="+" value="+"/>
+                  <Picker.Item label="-" value="-"/>
+                </Picker>
+              </View>
               <Text style={styles.radlabel}>Blood Product</Text>
               <Picker
                 selectedValue={this.state.pickbprod}
-                style={{ height: 50, width: 200, marginLeft: 35, marginBottom: 20}}
+                style={{ height: 50, width: 250, marginLeft: 35, marginBottom: 20}}
                 onValueChange={(itemValue, itemIndex) => this.setState({pickbprod: itemValue})}>
                 <Picker.Item label="Apheresis platelets" value="Apheresis platelets"/>
                 <Picker.Item label="Leukocyte-poor RBC" value="Leukocyte-poor RBC"/>
@@ -414,6 +637,7 @@ export default class BloodRequest extends Component<Props> {
               />
               {this.buttondisplay()}
               {this.hidelist()}
+              {this.showCancel()}
               {this.getItems()}
             </Content>
         </Container>

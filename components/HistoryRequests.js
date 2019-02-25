@@ -126,7 +126,7 @@ export default class HistoryRequests extends Component<Props> {
                       No. of blood bags: {" "}
                     </Text>
                     <Text>
-                      {item.number_bags}{"\n"}
+                      {item.no_of_bags}{"\n"}
                     </Text>
                     <Text style={{fontWeight: 'bold'}}>
                       Date Requested: {" "}

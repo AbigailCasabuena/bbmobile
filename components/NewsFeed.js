@@ -6,7 +6,7 @@ import React, { Component} from 'react';
 } from 'react-native';*/
 import HeaderNew from './HeaderNew';
 //import Button from 'react-native-button';
-import { Image, TouchableOpacity, View, AsyncStorage,} from 'react-native';
+import { Image, TouchableOpacity, View, AsyncStorage,ScrollView, RefreshControl} from 'react-native';
 import Moment from 'moment';
 import { Container, 
         Header, 
@@ -32,6 +32,15 @@ var num;
 
 window.navigator.userAgent = "react-native";
 import io from 'socket.io-client/dist/socket.io';
+var PushNotification = require('react-native-push-notification');
+
+PushNotification.configure({
+  onNotification: function(notification) {
+    console.log( 'NOTIFICATION:', notification );
+  },
+  popInitialNotification: true,
+  requestPermissions: true,
+})
 
 export default class NewsFeed extends Component<Props> {
   /*constructor(props) {
@@ -54,7 +63,8 @@ export default class NewsFeed extends Component<Props> {
     userid: '',
     responses: [],
     respdata: [],
-    lengthx: 0
+    lengthx: 0,
+    refreshing: false,
 }
 
   constructor() {
@@ -84,6 +94,20 @@ export default class NewsFeed extends Component<Props> {
     //this.socket.emit('getnewsfeed');
     //alert(num);
     this.socket.emit('getnewsfeed');
+  }
+
+  _onRefresh = () => {
+    this.setState({refreshing: true});
+    fetch("http://192.168.43.18:3000/newsfeed")
+    .then((result) => result.json())
+    .then((res) => {
+      this.setState({ data: res});
+      //alert(res);
+    })
+    .catch(e=>{
+      
+    })
+    this.setState({refreshing: false});
   }
 
   async getUsername(){
@@ -262,6 +286,14 @@ export default class NewsFeed extends Component<Props> {
     return (
       <Container>
         <HeaderNew {...this.props} />
+        <ScrollView
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.refreshing}
+                onRefresh={this._onRefresh}
+              />
+            } 
+        >
         <Content>
           <List dataArray={this.state.data}
             renderRow={(item) =>
@@ -271,7 +303,7 @@ export default class NewsFeed extends Component<Props> {
                   <Left>
                     <Thumbnail source={require('../img/redcross.png')} />
                     <Body>
-                      <Text>Philippine Red Cross</Text>
+                      <Text>{item.chapter.chapter_name}</Text>
                       <Text note>{Moment(item.date_posted).format('MMMM DD, YYYY')}</Text>
                     </Body>
                   </Left>
@@ -293,6 +325,7 @@ export default class NewsFeed extends Component<Props> {
             }>
           </List>
         </Content>
+        </ScrollView>
       </Container>
     );
   }

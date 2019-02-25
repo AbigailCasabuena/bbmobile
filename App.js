@@ -163,13 +163,13 @@ const Admin = DrawerNavigator({
       path: '/bloodrequest',
       screen: BloodRequest
     },
+    'Blood Banks Location': {
+      path: '/bblocation',
+      screen: BloodBanksLocation
+    },
     'Blood Services Facilities Details': {
         path: '/facilitiesdetails',
         screen: Facilities
-    },
-    'Blood Banks Location': {
-        path: '/bblocation',
-        screen: BloodBanksLocation
     },
     'Select Location': {
       path: '/selectlocation',
@@ -285,12 +285,32 @@ PushNotification.configure({
   requestPermissions: true,
 })
 
+var dt = '';
+var bloodbank = '';
+var curr_year = new Date().getFullYear();
+var date_now = new Date();
+var curr_month = date_now.getMonth() + 1;
+var curr_day = date_now.getDate();
+
 BackgroundTask.define(() => {
   //console.log('Hello from a background task')
-  PushNotification.localNotification({
-    message: "My Notification Message", 
-    //date: new Date(Date.now()) 
-  });
+  var x = curr_month + "-" + curr_day + "-" + curr_year;
+  AsyncStorage.getItem('DonationDate',(err, val)=>{
+    dt = val;
+  })
+  AsyncStorage.getItem('DonationPlace',(err, val)=>{
+    bloodbank = val;
+  })
+
+  var msg = "You are scheduled to donate blood at " + bloodbank + " today.";
+
+  if(dt == x){
+    PushNotification.localNotification({
+      message: msg, 
+      //date: new Date(Date.now()) 
+    });
+    AsyncStorage.setItem('DonationDate', "");
+  }
   BackgroundTask.finish()
 })
 
@@ -363,7 +383,7 @@ export default class App extends React.Component {
     //alert(this.state.logged);
     //alert('Hello');
     BackgroundTask.schedule({
-      period: 1800, // Aim to run every 30 mins - more conservative on battery
+      period: 21600, // 6 hrs
     })
   }
 

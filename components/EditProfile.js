@@ -257,7 +257,7 @@ export default class EditProfile extends Component<Props> {
     }
     if(!(this.state.curpw == "" || this.state.curpw == null)){
       if(!(this.state.newpw == "" || this.state.newpw == null)){
-        if(!(this.state.repw == "" || this.state.repw == null) && (this.state.newpw == this.state.repw) && (!(this.state.username == "" || this.state.username == null))){
+        if(!(this.state.repw == "" || this.state.repw == null) && (!(this.state.username == "" || this.state.username == null))){
           //formData2.append("user_password", this.state.newpw);
           pwcheck = true;
         }
@@ -266,33 +266,202 @@ export default class EditProfile extends Component<Props> {
 
     //formData2.append("null", null);
     if(unamecheck == true && pwcheck == true){
-      fetch('http://192.168.43.18:3000/users/'+userid, {  
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        method: 'PATCH',
-        body: JSON.stringify({
-          user_username: this.state.username,
-          user_password: this.state.newpw,
-          prevname: uname,
-          prevpw: this.state.curpw,
-        })
-      })
-      .then((response)=>{
-        if(response.status === 200){
-          AsyncStorage.setItem('LoggedUser', this.state.username);
-          this.setState({
-            curpw: '',
-            newpw: '',
-            repw: '',
-          })
-          alert("User info update successful");
+      if(this.state.repw == this.state.newpw){
+        var unval = true;
+        var usernamex = this.state.username;
+        var unwhitespacecheck = true;
+        var specialcheck = true;
+        var lengthcheck = true;
+        var unerrmsg = "";
+
+        for(var x = 0; x<usernamex.length; x++){
+          if(usernamex.charAt(x) == " "){
+            unwhitespacecheck = false;
+          }
         }
-      });
+
+        if(unwhitespacecheck == false){
+          unerrmsg = unerrmsg + "White space is not allowed for username." + "\n";
+        }
+
+        if(usernamex.length < 8){
+          lengthcheck = false;
+          unerrmsg = unerrmsg + "Username should be comprised of at least 8 characters." + "\n";
+        }
+
+        var unstringcheck = "~`!@#$%^&*()-+=\|}]{[';:/>?,<";
+
+        for(var chk = 0; chk < usernamex.length ; chk++){
+          var unchar = usernamex.charAt(chk);
+          for(var x = 0; x < unstringcheck.length; x++){
+            if(unstringcheck.charAt(x) == unchar){
+              specialcheck = false;
+            }
+          }
+        }
+
+        if(specialcheck == false){
+          unerrmsg = unerrmsg + "Special characters aside from . and _ is not allowed for username." + "\n";
+        }
+
+        if(unwhitespacecheck == true && specialcheck == true && lengthcheck == true){
+          unval = true;
+        }else{
+          unval = false;
+        }
+
+        var pwval = true;
+        var pwx = this.state.newpw;
+        var pwerrmsg = "";
+        var pwnumcheck = false;
+        var pwspecialcheck = false;
+        var pwlowercheck = false;
+        var pwuppercheck = false;
+        var pwlengthcheck = true;
+        var pwstringcheck = "~`!@#$%^&*()-+=\|}]{[';:/>?,< ._";
+        var numbers = "0123456789";
+        var lower = "qwertyuiopasdfghjklzxcvbnm";
+        var upper = "QWERTYUIOPASDFGHJKLZXCVBNM";
+
+        if(pwx.length < 8){
+          pwlengthcheck = false;
+          pwerrmsg = pwerrmsg + "Password should be comprised of at least 8 characters." + "\n";
+        }
+
+        for(var b = 0; b < pwx.length ; b++){
+          var pwchar = pwx.charAt(b);
+          for(var x = 0; x < numbers.length; x++){
+            if(numbers.charAt(x) == pwchar){
+              pwnumcheck = true;
+            }
+          }
+        }
+
+        if(pwnumcheck == false){
+          pwerrmsg = pwerrmsg + "Password should have at least one number." + "\n";
+        }
+
+        for(var b = 0; b < pwx.length ; b++){
+          var pwchar = pwx.charAt(b);
+          for(var x = 0; x < lower.length; x++){
+            if(lower.charAt(x) == pwchar){
+              pwlowercheck = true;
+            }
+          }
+        }
+
+        if(pwlowercheck == false){
+          pwerrmsg = pwerrmsg + "Password should have at least one lowercase letter." + "\n";
+        }
+
+        for(var b = 0; b < pwx.length ; b++){
+          var pwchar = pwx.charAt(b);
+          for(var x = 0; x < upper.length; x++){
+            if(upper.charAt(x) == pwchar){
+              pwuppercheck = true;
+            }
+          }
+        }
+
+        if(pwuppercheck == false){
+          pwerrmsg = pwerrmsg + "Password should have at least one uppercase letter." + "\n";
+        }
+
+        for(var b = 0; b < pwx.length ; b++){
+          var pwchar = pwx.charAt(b);
+          for(var x = 0; x < pwstringcheck.length; x++){
+            if(pwstringcheck.charAt(x) == pwchar){
+              pwspecialcheck = true;
+            }
+          }
+        }
+
+        if(pwspecialcheck == false){
+          pwerrmsg = pwerrmsg + "Password should have at least one special character." + "\n";
+        }
+
+        if(pwnumcheck == true && pwspecialcheck == true && pwlowercheck == true && pwuppercheck == true && pwlengthcheck == true){
+          pwval = true;
+        }else{
+          pwval = false;
+        }
+
+        if(unval == true && pwval == true){
+          fetch('http://192.168.43.18:3000/users/'+userid, {  
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          method: 'PATCH',
+          body: JSON.stringify({
+            user_username: this.state.username,
+            user_password: this.state.newpw,
+            prevname: uname,
+            prevpw: this.state.curpw,
+          })
+          })
+          .then((response)=>{
+            if(response.status === 200){
+              AsyncStorage.setItem('LoggedUser', this.state.username);
+              this.setState({
+                curpw: '',
+                newpw: '',
+                repw: '',
+              })
+              alert("User information was successfully updated.");
+            }
+          });
+        }
+      }else{
+        alert("Passwords does not match.");
+      }
     }
     else if(unamecheck == true){
-      fetch('http://192.168.43.18:3000/users/'+userid, {  
+      var unval = true;
+      var usernamex = this.state.username;
+      var unwhitespacecheck = true;
+      var specialcheck = true;
+      var lengthcheck = true;
+      var unerrmsg = "";
+
+      for(var x = 0; x<usernamex.length; x++){
+        if(usernamex.charAt(x) == " "){
+          unwhitespacecheck = false;
+        }
+      }
+
+      if(unwhitespacecheck == false){
+        unerrmsg = unerrmsg + "White space is not allowed for username." + "\n";
+      }
+
+      if(usernamex.length < 8){
+        lengthcheck = false;
+        unerrmsg = unerrmsg + "Username should be comprised of at least 8 characters." + "\n";
+      }
+
+      var unstringcheck = "~`!@#$%^&*()-+=\|}]{[';:/>?,<";
+
+      for(var chk = 0; chk < usernamex.length ; chk++){
+        var unchar = usernamex.charAt(chk);
+        for(var x = 0; x < unstringcheck.length; x++){
+          if(unstringcheck.charAt(x) == unchar){
+            specialcheck = false;
+          }
+        }
+      }
+
+      if(specialcheck == false){
+        unerrmsg = unerrmsg + "Special characters aside from . and _ is not allowed for username." + "\n";
+      }
+
+      if(unwhitespacecheck == true && specialcheck == true && lengthcheck == true){
+        unval = true;
+      }else{
+        unval = false;
+      }
+
+      if(unval == true){
+        fetch('http://192.168.43.18:3000/users/'+userid, {  
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
@@ -302,38 +471,127 @@ export default class EditProfile extends Component<Props> {
           user_username: this.state.username,
           prevname: uname
         })
-      })
-      .then((response)=>{
-        if(response.status === 200){
-          AsyncStorage.setItem('LoggedUser', this.state.username);
-          alert("Username update successful");
-        }
-      });
+        })
+        .then((response)=>{
+          if(response.status === 200){
+            AsyncStorage.setItem('LoggedUser', this.state.username);
+            alert("Username was successfully updated.");
+          }else if(response.status === 403){
+            alert("Username already exists.")
+          }
+        });
+      }else{
+        alert(unerrmsg);
+      }
     }
     else if(pwcheck == true){
-      fetch('http://192.168.43.18:3000/users/'+userid, {  
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        method: 'PATCH',
-        body: JSON.stringify({
-          user_password: this.state.newpw,
-          prevpw: this.state.curpw,
-        })
-      })
-      .then((response)=>{
-        if(response.status === 200){
-          //AsyncStorage.setItem('LoggedUser', this.state.username);
-          this.setState({
-            curpw: '',
-            newpw: '',
-            repw: '',
-          })
-          alert("Password update successful.");
-          //qalert(this.state.curpw);
+      if(this.state.newpw == this.state.repw){
+        var pwval = true;
+        var pwx = this.state.newpw;
+        var pwerrmsg = "";
+        var pwnumcheck = false;
+        var pwspecialcheck = false;
+        var pwlowercheck = false;
+        var pwuppercheck = false;
+        var pwlengthcheck = true;
+        var pwstringcheck = "~`!@#$%^&*()-+=\|}]{[';:/>?,< ._";
+        var numbers = "0123456789";
+        var lower = "qwertyuiopasdfghjklzxcvbnm";
+        var upper = "QWERTYUIOPASDFGHJKLZXCVBNM";
+
+        if(pwx.length < 8){
+          pwlengthcheck = false;
+          pwerrmsg = pwerrmsg + "Password should be comprised of at least 8 characters." + "\n";
         }
-      });
+
+        for(var b = 0; b < pwx.length ; b++){
+          var pwchar = pwx.charAt(b);
+          for(var x = 0; x < numbers.length; x++){
+            if(numbers.charAt(x) == pwchar){
+              pwnumcheck = true;
+            }
+          }
+        }
+
+        if(pwnumcheck == false){
+          pwerrmsg = pwerrmsg + "Password should have at least one number." + "\n";
+        }
+
+        for(var b = 0; b < pwx.length ; b++){
+          var pwchar = pwx.charAt(b);
+          for(var x = 0; x < lower.length; x++){
+            if(lower.charAt(x) == pwchar){
+              pwlowercheck = true;
+            }
+          }
+        }
+
+        if(pwlowercheck == false){
+          pwerrmsg = pwerrmsg + "Password should have at least one lowercase letter." + "\n";
+        }
+
+        for(var b = 0; b < pwx.length ; b++){
+          var pwchar = pwx.charAt(b);
+          for(var x = 0; x < upper.length; x++){
+            if(upper.charAt(x) == pwchar){
+              pwuppercheck = true;
+            }
+          }
+        }
+
+        if(pwuppercheck == false){
+          pwerrmsg = pwerrmsg + "Password should have at least one uppercase letter." + "\n";
+        }
+
+        for(var b = 0; b < pwx.length ; b++){
+          var pwchar = pwx.charAt(b);
+          for(var x = 0; x < pwstringcheck.length; x++){
+            if(pwstringcheck.charAt(x) == pwchar){
+              pwspecialcheck = true;
+            }
+          }
+        }
+
+        if(pwspecialcheck == false){
+          pwerrmsg = pwerrmsg + "Password should have at least one special character." + "\n";
+        }
+
+        if(pwnumcheck == true && pwspecialcheck == true && pwlowercheck == true && pwuppercheck == true && pwlengthcheck == true){
+          pwval = true;
+        }else{
+          pwval = false;
+        }
+
+        if(pwval == true){
+          fetch('http://192.168.43.18:3000/users/'+userid, {  
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          method: 'PATCH',
+          body: JSON.stringify({
+            user_password: this.state.newpw,
+            prevpw: this.state.curpw,
+          })
+          })
+          .then((response)=>{
+            if(response.status === 200){
+              //AsyncStorage.setItem('LoggedUser', this.state.username);
+              this.setState({
+                curpw: '',
+                newpw: '',
+                repw: '',
+              })
+              alert("Password was successfully updated.");
+              //qalert(this.state.curpw);
+            }
+          });
+        }else{
+          alert(pwerrmsg);
+        }
+      }else{
+        alert("Passwords does not match.");
+      }
     }
   }
 

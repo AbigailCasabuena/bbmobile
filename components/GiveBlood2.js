@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {AsyncStorage, View} from 'react-native';
+import {AsyncStorage, View,TextInput} from 'react-native';
 import { Container, Header, Content, ListItem, CheckBox, Text, Body, Button,Picker} from 'native-base';
 import GiveBloodHeader from './GiveBloodHeader';
 import DatePicker from 'react-native-datepicker';
@@ -14,7 +14,7 @@ var lastname = '';
 var bloodtype = '';
 //const { navigation } = this.props.navigation;
 //const itemId = this.props.navigation.getParam('itemId', 'NO-ID');
-
+Moment.locale('en');
 
 export default class GiveBlood2 extends Component {
   constructor(props){
@@ -52,7 +52,7 @@ export default class GiveBlood2 extends Component {
     this.state = {
         idxx: '',
         userid: '',
-        date: '',
+        date: monthtoday + '-' + daytoday + '-' + curryear,
         maxdate: '12-31-' + curryear,
         mindate: monthtoday + '-' + daytoday + '-' + curryear,
         bbname: '',
@@ -64,6 +64,8 @@ export default class GiveBlood2 extends Component {
         ampm: 'PM',
         checkprev: false,
         showprep: false,
+        donation_type: 'Voluntary',
+        patient_directed_name: '',
     };
   }
 
@@ -137,7 +139,9 @@ export default class GiveBlood2 extends Component {
           appointment_date: this.state.date,
           appointment_time: finaltime,
           donor_name: donorname,
-          blood_group: bloodtype
+          blood_group: bloodtype,
+          donation_type: this.state.donation_type,
+          patient_directed_name: this.state.patient_directed_name
         })
         })
         .then((response) => {
@@ -148,23 +152,63 @@ export default class GiveBlood2 extends Component {
         })  
         .done();
     }else{
-      alert("You've donated blood recently. Blood donation should only be done every four months.");
+      alert("You've donated blood recently. Blood donation should only be done every three months.");
       this.setState({showprep: false})
     }
     //alert(a);
     //this.postDonation();
+    //WEB
+    /*fetch('http://192.168.43.210:8080/blooddonation/', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          donor_id: a,
+          chapter: this.state.idxx,
+          appointment_date: this.state.date,
+          appointment_time: finaltime,
+          //donor_name: donorname,
+          blood_group: bloodtype
+        })
+        })
+        .then((response) => {
+          if (response.status === 201) {
+            alert("Your blood donation appointment has been successfully scheduled.");
+            this.setState({showprep: false});
+          }else{
+            alert('error');
+          }
+        })  
+        .done();*/
+      //alert(this.state.date);
+      AsyncStorage.setItem('DonationDate', String(this.state.date));
+      AsyncStorage.setItem('DonationPlace', String(this.state.bbname));
   }
 
   /*postDonation(){
     alert(this.state.checkprev);
   }*/
 
+  showPatientTextInput(){
+    if(this.state.donation_type == "Patient-Directed"){
+      return <View style={{flexDirection: 'row'}}>
+        <Text style={{fontWeight: 'bold', marginTop: 20}}>Patient's Name: </Text>
+        <TextInput
+            onChangeText={ (cont) => this.setState({patient_directed_name: cont})}
+            style={{width:200,fontSize: 16, color: '#000'}}
+        />
+      </View>
+    }
+  }
+
   inputSched(){
     if(this.state.showprep == false){
       return <View>
         <View style={{alignContent:'center', alignItems: 'center'}}>
         <View style={{flexDirection: 'row'}}>
-          <Text style={{marginTop:5, marginRight: 10}}>Date:</Text>
+          <Text style={{marginTop:5, marginRight: 10, fontWeight: 'bold'}}>Date:</Text>
           <DatePicker
             style={{width: 200, marginBottom: 20}}
             date={this.state.date}
@@ -184,7 +228,6 @@ export default class GiveBlood2 extends Component {
               dateInput: {
                 
               }
-              // ... You can check the source to find the other keys.
             }}
             onDateChange={(date) => {
               this.setState({date: date});
@@ -204,30 +247,35 @@ export default class GiveBlood2 extends Component {
                   //this.setState({ data: res});
                   //alert('ok');
                   //alert(res[0].date_completed.getDate());
-                  var dt = new Date(res[0].date_completed);
-          
-                  //alert(dt);
-                  if(dt.getFullYear() != yearcurrent){
-                    //check = true;
-                    //alert(yearcurrent);
-                    this.setState({checkprev: true});
-                    //alert(check + " less year");
-                  }else if(dt.getFullYear() == yearcurrent){
-                    if((monthnum - (dt.getMonth() + 1)) >= 4){
+                  //alert(res.length);
+                  if(res.length > 0){
+                    var dt = new Date(res[0].date_completed);
+                    //alert(dt);
+                    if(dt.getFullYear() != yearcurrent){
+                      //check = true;
+                      //alert(yearcurrent);
                       this.setState({checkprev: true});
-                      //alert("month okayy")
-                    }else{
-                      //alert("month not okay");
-                      this.setState({checkprev: false})
+                      //alert(check + " less year");
+                    }else if(dt.getFullYear() == yearcurrent){
+                      if((monthnum - (dt.getMonth() + 1)) >= 3){
+                        this.setState({checkprev: true});
+                        //alert("month okayy")
+                      }else{
+                        //alert("month not okay");
+                        this.setState({checkprev: false})
+                      }
                     }
+                  }else{
+                    this.setState({checkprev: true})
                   }
                 })
               .catch(e => e);
+              //alert(this.state.date)
             }}
           />
         </View>
         <View style={{flexDirection: 'row', marginLeft: 30, marginRight: 30}}>
-          <Text>Time:</Text>
+          <Text style={{fontWeight: 'bold'}}>Time:</Text>
           <Picker
             selectedValue={this.state.hh}
             style={{ height: 20, }}
@@ -261,38 +309,78 @@ export default class GiveBlood2 extends Component {
             <Picker.Item label="PM" value="PM"/>
           </Picker>
         </View>
+        <View style={{flexDirection: 'row', marginLeft: 30, marginRight: 30, marginTop: 20}}>
+          <Text style={{fontWeight: 'bold'}}>Donation Type:</Text>
+          <Picker
+            selectedValue={this.state.donation_type}
+            style={{ height: 20, }}
+            onValueChange={(itemValue, itemIndex) => this.setState({donation_type: itemValue})}>
+            <Picker.Item label="Voluntary" value="Voluntary"/>
+            <Picker.Item label="Replacement" value="Replacement"/>
+            <Picker.Item label="Patient-Directed" value="Patient-Directed"/>
+          </Picker>
+        </View>
+        {this.showPatientTextInput()}
         </View>
         <Button onPress={()=>{
-          this.setState({showprep: true})
+          fetch("http://192.168.43.18:3000/users/getId/"+this.state.userid)
+          .then((result) => result.json())
+          .then((res) => {
+            try{
+              //alert(res[0].user_firstname);
+              if(!(res[0].user_deferral_status == "permanent")){
+                this.setState({showprep: true})
+              }else{
+                alert("You are permanently not allowed to donate. However, you can encourage other people to donate blood. Thank you.");
+              }
+            }catch(error){
+              alert(error.message);
+            }
+          })
+          .catch(e => e);
+          //this.setState({date: this.state.date + " 00:00:00.000"});
         }}
         style={{
           backgroundColor: "#B81E12",
           alignSelf: "center",
-          marginBottom: 15, marginTop: 15}}>
+          marginBottom: 15, marginTop: 30}}>
             <Text>Schedule Appointment</Text>
         </Button>
       </View>
     }else{
-      return <View style={{alignContent: 'center', marginTop: 10,marginLeft: 20}}>
-        <Text style={{color: '#B81E12', fontWeight: 'bold', alignSelf: 'center'}}>
+      return <View style={{alignContent: 'center', marginTop: 5}}>
+        <View>
+          <Text style={{color: '#B81E12', fontWeight: 'bold', alignSelf: 'center'}}> Blood Donation Appointment </Text>
+          <View style={{flexDirection: 'row', alignSelf: 'center'}}>
+            <Text style={{fontWeight: 'bold'}}>Date: </Text>
+            <Text>{this.state.date}</Text>
+          </View>
+          <View style={{flexDirection: 'row', alignSelf: 'center'}}>
+            <Text style={{fontWeight: 'bold'}}>Time: </Text>
+            <Text>{this.state.hh + ":" + this.state.min + " " + this.state.ampm}</Text>
+          </View>
+        </View>
+        <Text style={{color: '#B81E12', fontWeight: 'bold', alignSelf: 'center', marginTop: 10}}>
             Preparation Before Donating Blood
         </Text>
-        <Text>
-            1. Have enough rest and sleep.
-        </Text>
-        <Text>
-            2. No alcohol intake 24 hours prior to blood donation.
-        </Text>
-        <Text>
-            3. No medications for at least 24 hours prior to blood donation.
-        </Text>
-        <Text>
-            4. Have something to eat prior to blood donation, avoid fatty food.
-        </Text>
-        <Text>
-            5. Drink plenty of fluid, like water or juice.
-        </Text>
-        <View style={{flexDirection: 'row', marginLeft: 60}}>
+        <View style={{marginLeft: 20}}>
+          <Text>
+              1. Have enough rest and sleep.
+          </Text>
+          <Text>
+              2. No alcohol intake 24 hours prior to blood donation.
+          </Text>
+          <Text>
+              3. No medications for at least 24 hours prior to blood donation.
+          </Text>
+          <Text>
+              4. Have something to eat prior to blood donation, avoid fatty food.
+          </Text>
+          <Text>
+              5. Drink plenty of fluid, like water or juice.
+          </Text>
+        </View>
+        <View style={{flexDirection: 'row', alignSelf: 'center'}}>
           <Button onPress={this.savedonation}
           style={{
             backgroundColor: "#B81E12",
@@ -330,7 +418,7 @@ export default class GiveBlood2 extends Component {
         <GiveBloodHeader {...this.props} />
         <View style={{backgroundColor: '#B81E12', height: 180, alignItems: 'center', alignContent: 'center', marginBottom: 20,}}>
             <View style={{alignItems: 'center', alignContent: 'center', marginLeft: 20, marginRight: 20}}>
-              <Text style={{color: 'white', fontWeight: 'bold', marginTop: 40}}>
+              <Text style={{color: 'white', fontWeight: 'bold', marginTop: 40, alignSelf: 'auto'}}>
                   {this.state.bbname}
               </Text>
               <Text style={{color: 'white'}}>

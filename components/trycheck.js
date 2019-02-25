@@ -39,7 +39,7 @@ export default class trycheck extends Component {
       var index = SampleArray.indexOf(del);
       SampleArray.splice(index,1)
     }
-    alert(SampleArray.toString());
+    //alert(SampleArray.toString());
   }
 
   AddItemsToArray2=()=>{
@@ -51,7 +51,7 @@ export default class trycheck extends Component {
       var index = SampleArray.indexOf(del);
       SampleArray.splice(index,1)
     }
-    alert(SampleArray.toString());
+    //alert(SampleArray.toString());
   }
 
   AddItemsToArray3=()=>{
@@ -63,7 +63,7 @@ export default class trycheck extends Component {
       var index = SampleArray.indexOf(del);
       SampleArray.splice(index,1)
     }
-    alert(SampleArray.toString());
+    //alert(SampleArray.toString());
   }
 
   AddItemsToArray4=()=>{
@@ -75,7 +75,7 @@ export default class trycheck extends Component {
       var index = SampleArray.indexOf(del);
       SampleArray.splice(index,1)
     }
-    alert(SampleArray.toString());
+    //alert(SampleArray.toString());
   }
 
   AddItemsToArray5=()=>{
@@ -87,7 +87,7 @@ export default class trycheck extends Component {
       var index = SampleArray.indexOf(del);
       SampleArray.splice(index,1)
     }
-    alert(SampleArray.toString());
+    //alert(SampleArray.toString());
   }
 
   AddItemsToArray6=()=>{
@@ -99,7 +99,7 @@ export default class trycheck extends Component {
       var index = SampleArray.indexOf(del);
       SampleArray.splice(index,1)
     }
-    alert(SampleArray.toString());
+    //alert(SampleArray.toString());
   }
 
   AddItemsToArray7=()=>{
@@ -111,7 +111,7 @@ export default class trycheck extends Component {
       SampleArray.splice(index,1)
     }
     this.setState({isChecked7: !this.state.isChecked7})
-    alert(SampleArray.toString());
+    //alert(SampleArray.toString());
   }
 
   //store

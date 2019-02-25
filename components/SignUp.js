@@ -328,7 +328,7 @@ export default class SignUp extends React.Component {
         <Text style={styles.radlabel}>Gender</Text>
         <Picker
           selectedValue={this.state.pickgen}
-          style={{ height: 50, width: 100, marginLeft: 35}}
+          style={{ height: 50, width: 120, marginLeft: 35}}
           onValueChange={(itemValue, itemIndex) => this.setState({pickgen: itemValue})}>
           <Picker.Item label="Male" value="Male"/>
           <Picker.Item label="Female" value="Female"/>
@@ -556,6 +556,7 @@ export default class SignUp extends React.Component {
                       user_gender: this.state.pickgen,
                       user_birthday: this.state.date,
                       is_Active: false,
+                      user_type: 'bbuser',
                     })
       
             })

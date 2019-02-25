@@ -17,7 +17,6 @@ export default class BloodRequestHeader extends Component {
             <View style={{
                 height: 50,
                 marginTop: 5,
-                marginBottom: 5,
                 flexDirection: 'row',
                 justifyContent: 'flex-start',
                 alignItems: 'center',
