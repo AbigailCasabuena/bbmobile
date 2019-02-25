@@ -132,7 +132,7 @@ export default class HistoryRequests extends Component<Props> {
                       Date Requested: {" "}
                     </Text>
                     <Text>
-                      {Moment(item.date_requested).format('MMMM DD, YYYY')}{"\n"}
+                      {Moment(new Date(item.date_requested)).format('MMMM DD, YYYY')}{"\n"}
                     </Text>
                     <Text style={{fontWeight: 'bold'}}>
                       Status: {" "}

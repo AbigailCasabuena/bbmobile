@@ -150,6 +150,7 @@ export default class BloodRequest extends Component<Props> {
       hospital: '',
       curLat: 0,
       curLong: 0,
+      date_req: '',
     }
   }
 
@@ -209,6 +210,18 @@ export default class BloodRequest extends Component<Props> {
 
         //alert(rf.length);
         //alert(request_form[0].path);
+        var curyearx = new Date().getFullYear();
+        var curdate = new Date();
+        var curmonth = curdate.getMonth() + 1;
+        var curday = curdate.getDate();
+
+        var stringmnth = curmonth.toString();
+
+        if(stringmnth.length == 1){
+          stringmnth = "0" + stringmnth;
+        }
+
+        var date_requested = curyearx + "-" + stringmnth + "-" + curday;
 
         formData.append("requester_id",this.state.userid);
         formData.append("patient_name",this.state.patient_name);
@@ -217,6 +230,8 @@ export default class BloodRequest extends Component<Props> {
         formData.append("is_urgent", urg);
         formData.append("person_claim", this.state.person_claim);
         formData.append("hospital", this.state.hospital);
+        formData.append("blood_product", this.state.pickbprod);
+        formData.append("date_requested", date_requested);
         //formData.append("request_form", request_form)
 
         fetch('http://192.168.43.18:3000/bloodrequest', {

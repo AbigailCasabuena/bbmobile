@@ -22,6 +22,7 @@ export default class HeaderNew extends Component {
           await AsyncStorage.setItem('LoggedFName', String(''));
           await AsyncStorage.setItem('LoggedLName', String(''));
           await AsyncStorage.setItem('LoggedBloodType', String(''));
+          await AsyncStorage.setItem('LoggedUserType', String(''));
           //alert(AsyncStorage.getItem('LoggedUser'));
           this.props.navigation.navigate('Login');
         } catch (error) {
@@ -64,19 +65,11 @@ export default class HeaderNew extends Component {
                             const {navigate} = this.props.navigation;
                             navigate('Notifications');
                         }}>
-                        <Image
-                            style={{width:24, height:24}}
-                            source={require('../img/notif.png')}
-                        />
-                    
+                        <Icon name="md-notifications" />
                 </TouchableOpacity> 
                 <TouchableOpacity style={{}}
                         onPress={this._storeData}>
-                        <Image
-                            style={{width:24, height:24}}
-                            source={require('../img/settings.png')}
-                        />
-                    
+                        <Icon name="md-log-out" />
                 </TouchableOpacity> 
             </View>
         );

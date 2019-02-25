@@ -37,6 +37,8 @@ import FocusOnMarkers from './components/FocusOnMarkers';
 import BloodBanksLocation from './components/BloodBanksLocation';
 import App2 from './App2';
 import GiveBlood2 from './components/GiveBlood2';
+import NewsFeedAdmin from './components/NewsFeedAdmin';
+import BloodRequestAdmin from './components/BloodRequestAdmin';
 
 var username = '';
 var firstname = '';
@@ -242,7 +244,7 @@ const Admin2 = DrawerNavigator({
   },
   Home: {
       path: '/home',
-      screen: NewsFeed
+      screen: NewsFeedAdmin
   },
   Notifications: {
       path: '/notifications',
@@ -257,7 +259,7 @@ const Admin2 = DrawerNavigator({
   },
   'Blood Request': {
       path: '/bloodrequest',
-      screen: BloodRequest
+      screen: BloodRequestAdmin
   },
   'Events':{
     path: '/events',

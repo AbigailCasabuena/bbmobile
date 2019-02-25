@@ -76,7 +76,7 @@ export default class History extends Component<Props> {
                       {item.blood_product_donated}{"\n"}
                     </Text>
                     <Text>
-                      {Moment(item.date_completed).format('MMMM DD, YYYY')}
+                      {Moment(new Date(item.date_completed)).format('MMMM DD, YYYY')}
                     </Text>
                   </Body>
                 </CardItem>

@@ -26,6 +26,9 @@ import { Container,
 
 type Props = {};
 
+//var count = 3;
+var imgval = ["uploads/blooddrive1.jpg", "uploads/cover.jpg"];
+
 export default class Events extends Component<Props> {
 
   constructor(props) {
@@ -52,12 +55,21 @@ export default class Events extends Component<Props> {
     return true;
   }*/
 
+  
+
   render() {  
 
     return (
       <Container>
         <EventsHeader {...this.props} />
         <Content>
+        <List dataArray={imgval}
+            renderRow={(item) =>
+              <ListItem>
+                <Image source={{uri: "http://192.168.43.18:3000/" + item}} style={{height: 200, width: 300, flex: 1}}/>
+              </ListItem>
+        }>
+        </List>
         <List dataArray={this.state.data}
             renderRow={(item) =>
               <ListItem>
