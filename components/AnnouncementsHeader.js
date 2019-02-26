@@ -12,7 +12,7 @@ import {
 
 import {Icon} from 'native-base';
 
-export default class EventsHeader extends Component {
+export default class AnnouncementsHeader extends Component {
     _storeData = async () => {
         try {
           await AsyncStorage.setItem('LoggedUser', String(''));
@@ -58,8 +58,8 @@ export default class EventsHeader extends Component {
                     fontSize: 16,
                     fontWeight: 'bold',
                     marginLeft: 13,
-                    marginRight: 170,
-                }}>Events</Text>
+                    marginRight: 110,
+                }}>Announcements</Text>
                 <TouchableOpacity style={{marginRight: 15}}
                         onPress={() => {
                             const {navigate} = this.props.navigation;

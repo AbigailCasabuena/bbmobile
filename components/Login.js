@@ -216,7 +216,9 @@ export default class Login extends Component<Props> {
       })
       .done();*/
       //alert('annyeong');
-      fetch('http://192.168.43.18:3000/users/login', {
+
+      //MOBILE old attribs
+      /*fetch('http://192.168.43.18:3000/users/login', {
               method: 'POST',
               headers: {
                 'Accept': 'application/json',
@@ -225,6 +227,20 @@ export default class Login extends Component<Props> {
               body: JSON.stringify({
                 user_username: this.state.username,
                 user_password: this.state.password,
+              })
+
+      })*/
+      //WEB
+      //fetch('http://192.168.43.210:8080/users/login', {
+        fetch('http://192.168.43.18:3000/users/login', {
+              method: 'POST',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                username: this.state.username,
+                password: this.state.password,
               })
 
       })
@@ -245,7 +261,9 @@ export default class Login extends Component<Props> {
         if (response.status === 200) {
             //alert('Hello' + response.username);
             var uname = this.state.username;
-            fetch("http://192.168.43.18:3000/users/"+uname)
+            //MOBILE
+            /**
+             * fetch("http://192.168.43.18:3000/users/"+uname)
             .then((result) => result.json())
             .then((res) => {
               //this.setState({ data: res});
@@ -257,6 +275,30 @@ export default class Login extends Component<Props> {
                 AsyncStorage.setItem('LoggedBloodType', String(res[0].user_bloodtype));
                 AsyncStorage.setItem('LoggedUserType', String(res[0].user_type));
                 
+                //alert(res[0].user_firstname);
+              }catch(error){
+                alert(error.message);
+              }
+            })
+            .catch(e => e);
+             */
+            //WEB
+            //fetch("http://192.168.43.210:8080/users/"+uname)
+            fetch("http://192.168.43.18:3000/users/"+uname)
+            .then((result) => result.json())
+            .then((res) => {
+              //this.setState({ data: res});
+              //alert(res[0]._id);
+              try{
+                AsyncStorage.setItem('LoggedUserId', String(res[0]._id));
+                AsyncStorage.setItem('LoggedFName', String(res[0].user_firstname));
+                AsyncStorage.setItem('LoggedLName', String(res[0].user_lastname));
+                AsyncStorage.setItem('LoggedBloodType', String(res[0].user_bloodtype));
+                AsyncStorage.setItem('LoggedUserType', String(res[0].user_type));
+                if(!(res[0].user_type == "bbuser")){
+                  AsyncStorage.setItem('LoggedChapterId', String(res[0].chapter_id._id));
+                  AsyncStorage.setItem('LoggedChapterName', String(res[0].chapter_id.chapter_name));
+                }
                 //alert(res[0].user_firstname);
               }catch(error){
                 alert(error.message);

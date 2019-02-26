@@ -234,7 +234,9 @@ export default class BloodRequest extends Component<Props> {
         formData.append("date_requested", date_requested);
         //formData.append("request_form", request_form)
 
-        fetch('http://192.168.43.18:3000/bloodrequest', {
+        //MOBILE
+        //fetch('http://192.168.43.18:3000/bloodrequest', {
+        fetch('http://192.168.43.210:8080/bloodrequest', {
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'multipart/form-data'
@@ -246,7 +248,9 @@ export default class BloodRequest extends Component<Props> {
           if(response.status === 201){
             var newres = parseInt(this.state.reserved) + parseInt(this.state.bags);
             var newrem = parseInt(this.state.totalstock) - parseInt(newres);
-            fetch('http://192.168.43.18:3000/bloodstock/'+this.state.stockid, {  
+            //MOBILE
+            //fetch('http://192.168.43.18:3000/bloodstock/'+this.state.stockid, {  
+            fetch('http://192.168.43.210:8080/bloodstock/'+this.state.stockid, {  
               headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -423,7 +427,9 @@ export default class BloodRequest extends Component<Props> {
     if(this.state.bags <= 0){
       alert("Invalid value for no. of bags needed.");
     }else{
-      fetch('http://192.168.43.18:3000/bloodstock/check', {
+      //MOBILE
+      //fetch('http://192.168.43.18:3000/bloodstock/check', {
+      fetch('http://192.168.43.210:8080/bloodstock/check', {
                   method: 'POST',
                   headers: {
                     'Accept': 'application/json',

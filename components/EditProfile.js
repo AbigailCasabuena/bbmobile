@@ -123,8 +123,8 @@ export default class EditProfile extends Component<Props> {
           this.setState({imgpath: "http://192.168.43.18:3000/" + res[0].user_image});
           path = "http://192.168.43.18:3000/" + res[0].user_image;
         }
-        this.setState({username: res[0].user_username});
-        uname = res[0].user_username;
+        this.setState({username: res[0].username});
+        uname = res[0].username;
       })
     .catch(e => e);
     } catch (error) {
@@ -394,8 +394,8 @@ export default class EditProfile extends Component<Props> {
           },
           method: 'PATCH',
           body: JSON.stringify({
-            user_username: this.state.username,
-            user_password: this.state.newpw,
+            username: this.state.username,
+            password: this.state.newpw,
             prevname: uname,
             prevpw: this.state.curpw,
           })
@@ -468,7 +468,7 @@ export default class EditProfile extends Component<Props> {
         },
         method: 'PATCH',
         body: JSON.stringify({
-          user_username: this.state.username,
+          username: this.state.username,
           prevname: uname
         })
         })
@@ -570,7 +570,7 @@ export default class EditProfile extends Component<Props> {
           },
           method: 'PATCH',
           body: JSON.stringify({
-            user_password: this.state.newpw,
+            password: this.state.newpw,
             prevpw: this.state.curpw,
           })
           })

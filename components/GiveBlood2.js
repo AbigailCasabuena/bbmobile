@@ -119,7 +119,9 @@ export default class GiveBlood2 extends Component {
     var finaltime = this.state.hh + ":" + this.state.min + " " + this.state.ampm;
 
     if(this.state.checkprev == true){
-      fetch("http://192.168.43.18:3000/blooddonation/delprev/" + a)
+      //MOBILE
+      //fetch("http://192.168.43.18:3000/blooddonation/delprev/" + a)
+      fetch("http://192.168.43.210:8080/blooddonation/delprev/" + a)
       .then((result) => result.json())
       .then((res) => {
         //this.setState({ data: res});
@@ -127,7 +129,9 @@ export default class GiveBlood2 extends Component {
       })
       .catch(e => e);
 
-      fetch('http://192.168.43.18:3000/blooddonation/', {
+      //MOBILE
+      //fetch('http://192.168.43.18:3000/blooddonation/', {
+      fetch('http://192.168.43.210:8080/blooddonation/', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -141,7 +145,7 @@ export default class GiveBlood2 extends Component {
           donor_name: donorname,
           blood_group: bloodtype,
           donation_type: this.state.donation_type,
-          patient_directed_name: this.state.patient_directed_name
+          patient_name: this.state.patient_directed_name
         })
         })
         .then((response) => {
@@ -241,7 +245,9 @@ export default class GiveBlood2 extends Component {
               var ssmonth = dupdate.charAt(0) + dupdate.charAt(1);
               var monthnum = Number(ssmonth);
           
-              fetch("http://192.168.43.18:3000/blooddonation/" + a)
+              //MOBILE
+              //fetch("http://192.168.43.18:3000/blooddonation/" + a)
+              fetch("http://192.168.43.210:8080/blooddonation/" + a)
                 .then((result) => result.json())
                 .then((res) => {
                   //this.setState({ data: res});
@@ -323,7 +329,9 @@ export default class GiveBlood2 extends Component {
         {this.showPatientTextInput()}
         </View>
         <Button onPress={()=>{
-          fetch("http://192.168.43.18:3000/users/getId/"+this.state.userid)
+          //MOBILE
+          //fetch("http://192.168.43.18:3000/users/getId/"+this.state.userid)
+          fetch("http://192.168.43.210:8080/users/getId/"+this.state.userid)
           .then((result) => result.json())
           .then((res) => {
             try{

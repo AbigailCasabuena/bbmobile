@@ -538,7 +538,9 @@ export default class SignUp extends React.Component {
             }else{
               dbefore = true;
             }
-            fetch('http://192.168.43.18:3000/users/signup', {
+            //MOBILE
+            /**
+             * fetch('http://192.168.43.18:3000/users/signup', {
                     method: 'POST',
                     headers: {
                       'Accept': 'application/json',
@@ -560,10 +562,39 @@ export default class SignUp extends React.Component {
                     })
       
             })
+             */
+            //WEB
+            //fetch('http://192.168.43.210:8080/users/signup', {
+            fetch('http://192.168.43.18:3000/users/signup', {
+                    method: 'POST',
+                    headers: {
+                      'Accept': 'application/json',
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                      user_firstname: this.state.firstname,
+                      user_middlename: this.state.middlename,
+                      user_lastname: this.state.lastname,
+                      username: this.state.username,
+                      user_emailAdd: this.state.emailadd,
+                      user_contactNum: this.state.phonenum,
+                      password: this.state.pw,
+                      donated_before: dbefore,
+                      user_gender: this.state.pickgen,
+                      user_birthday: this.state.date,
+                      is_Active: false,
+                      user_type: 'bbuser',
+                      //MOBILE
+                      user_username: this.state.username,
+                    })
+      
+            })
             .then((response) => {
               if (response.status === 200) {
                 var uname = this.state.username;
-                fetch("http://192.168.43.18:3000/users/"+uname)
+                //MOBILE
+                /**
+                 * fetch("http://192.168.43.18:3000/users/"+uname)
                 .then((result) => result.json())
                 .then((res) => {
                   //this.setState({ data: res});
@@ -575,6 +606,28 @@ export default class SignUp extends React.Component {
                     AsyncStorage.setItem('LoggedBloodType', String(res[0].user_bloodtype));
                     AsyncStorage.setItem('LoggedUser', String(res[0].user_username));
                     AsyncStorage.setItem('Logged', String(true));
+                    //alert(res[0].user_firstname);
+                  }catch(error){
+                    alert(error.message);
+                  }
+                })
+                .catch(e => e);
+                 */
+                //WEB
+                //fetch("http://192.168.43.210:8080/users/"+uname)
+                fetch("http://192.168.43.18:3000/users/"+uname)
+                .then((result) => result.json())
+                .then((res) => {
+                  //this.setState({ data: res});
+                  //alert(res[0]._id);
+                  try{
+                    AsyncStorage.setItem('LoggedUserId', String(res[0]._id));
+                    AsyncStorage.setItem('LoggedFName', String(res[0].user_firstname));
+                    AsyncStorage.setItem('LoggedLName', String(res[0].user_lastname));
+                    AsyncStorage.setItem('LoggedBloodType', String(res[0].user_bloodtype));
+                    AsyncStorage.setItem('LoggedUser', String(res[0].username));
+                    AsyncStorage.setItem('Logged', String(true));
+                    AsyncStorage.setItem('LoggedUserType', String(res[0].user_type));
                     //alert(res[0].user_firstname);
                   }catch(error){
                     alert(error.message);

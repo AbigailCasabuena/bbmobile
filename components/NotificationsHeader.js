@@ -22,6 +22,8 @@ export default class NotificationsHeader extends Component {
           await AsyncStorage.setItem('LoggedLName', String(''));
           await AsyncStorage.setItem('LoggedBloodType', String(''));
           await AsyncStorage.setItem('LoggedUserType', String(''));
+          await AsyncStorage.setItem('LoggedChapterId', String(''));
+          await AsyncStorage.setItem('LoggedChapterName', String(''));
           //alert(AsyncStorage.getItem('LoggedUser'));
           this.props.navigation.navigate('Login');
         } catch (error) {

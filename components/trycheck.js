@@ -339,10 +339,10 @@ export default class trycheck extends Component {
                 },
                 body: JSON.stringify({
                   user_name: this.state.nameinput,
-                  user_username: this.state.username,
+                  username: this.state.username,
                   user_emailAdd: this.state.emailadd,
                   user_contactNum: this.state.phonenum,
-                  user_password: this.state.pw,
+                  password: this.state.pw,
                   donated_before: dbefore,
                   user_gender: this.state.pickgen,
                   user_birthday: this.state.date,

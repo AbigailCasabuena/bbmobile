@@ -42,6 +42,7 @@ export default class BloodRequestAdmin extends Component<Props> {
     respdata: [],
     lengthx: 0,
     refreshing: false,
+    user_type: '',
 }
 
   constructor() {
@@ -92,6 +93,7 @@ export default class BloodRequestAdmin extends Component<Props> {
         //this.setState({ data: res});
         //alert(res);
             //alert(res[0].user_type);
+            this.setState({user_type: res[0].user_type});
             if(res[0].user_type == "bbadmin"){
                 fetch("http://192.168.43.18:3000/bloodrequest/pending/request")
                 .then((result) => result.json())

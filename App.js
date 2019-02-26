@@ -39,11 +39,13 @@ import App2 from './App2';
 import GiveBlood2 from './components/GiveBlood2';
 import NewsFeedAdmin from './components/NewsFeedAdmin';
 import BloodRequestAdmin from './components/BloodRequestAdmin';
+import Announcements from './components/Announcements';
 
 var username = '';
 var firstname = '';
 var lastname = '';
 var bloodtype = '';
+var usertype = '';
 
 const ForgotStack = StackNavigator({
   ForgotScreen: {
@@ -88,6 +90,30 @@ const DrawerContent = (props) => (
       </Text>
       <Text style={{ color: 'white', fontSize: 16 }}>
         {"Blood Type: " + bloodtype}
+      </Text>
+    </View>
+    <DrawerItems {...props} />
+  </View>
+)
+
+const DrawerContentAdmin = (props) => (
+  <View>
+    <View
+      style={{
+        backgroundColor: '#B81E12',
+        height: 140,
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold'}}>
+        {firstname + " " + lastname}
+      </Text>
+      <Text style={{ color: 'white', fontSize: 16 }}>
+        {"@" + username + "\n"}
+      </Text>
+      <Text style={{ color: 'white', fontSize: 16 }}>
+        {usertype}
       </Text>
     </View>
     <DrawerItems {...props} />
@@ -265,9 +291,13 @@ const Admin2 = DrawerNavigator({
     path: '/events',
     screen: Events
   },
+  'Announcements':{
+    path: '/announcements',
+    screen: Announcements
+  },
   },{
   initialRouteName: 'Login',
-  contentComponent: DrawerContent,
+  contentComponent: DrawerContentAdmin,
   drawerPosition: 'left',
   contentOptions: {
     labelStyle: {
@@ -346,7 +376,21 @@ export default class App extends React.Component {
       alert('error retrieve logged');
     }*/
     AsyncStorage.getItem("LoggedUserId").then((value) => {
-      fetch("http://192.168.43.18:3000/users/getId/"+value)
+      //MOBILE
+      /**
+       * fetch("http://192.168.43.18:3000/users/getId/"+value)
+      .then((result) => result.json())
+      .then((res) => {
+        //alert(res[0].user_type);
+        //if(res[0].user_type == 'bbuser'){
+          //this.setState({type: 'bbuser'});
+        //}else{
+          //ckt = false;
+        //}
+      })
+      .catch(e => e);
+       */
+      fetch("http://192.168.43.210:8080/users/getId/"+value)
       .then((result) => result.json())
       .then((res) => {
         //alert(res[0].user_type);
@@ -376,7 +420,14 @@ export default class App extends React.Component {
     })
 
     AsyncStorage.getItem('LoggedUserType',(err, val)=>{
-        this.setState({type: val})
+        this.setState({type: val});
+        if(val == "bbadmin"){
+          usertype = "Philippine Red Cross Admin";
+        }else if(val == "bbchapteradmin"){
+          usertype = "Chapter Administrator";
+        }else if(val == "bbcoordinator"){
+          usertype = "Chapter Coordinator";
+        }  
     })
   }
 
